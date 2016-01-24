@@ -38,6 +38,16 @@
                 <groupId>org.pitest</groupId>
                 <artifactId>pitest-maven</artifactId>
                 <version>1.1.8</version>
+                <configuration>
+                    <targetClasses>
+                        <param>fi.pentago.app.*</param>
+                        <param>fi.pentago.logic.*</param>
+                    </targetClasses>
+                    <targetTests>
+                        <param>fi.pentago.app.*</param>
+                        <param>fi.pentago.logic.*</param>
+                    </targetTests>
+                </configuration>
             </plugin>
         </plugins>
     </build>
