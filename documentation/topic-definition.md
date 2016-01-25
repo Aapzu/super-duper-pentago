@@ -10,8 +10,6 @@ On every turn, the player whose turn it is must put one of their marbles into on
 
 The winner is the player, who first gets 5 of their marbles in a row, horizontally, vertically or diagonally. If the board gets full without any of the players getting 5 in line, the game is tied, and an another on can be started.
 
-More accurate rules and strategies can be seen
-
 More accurate rules and strategies can be seen [here](https://webdav.info.ucl.ac.be/webdav/ingi2261/ProblemSet3/PentagoRulesStrategy.pdf)
 
 ### The Use Cases
