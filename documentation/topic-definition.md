@@ -26,3 +26,6 @@ More accurate rules and strategies can be seen [here](https://webdav.info.ucl.ac
 * The game
     * Board
     * Indicator that shows the amount of the remaining marbles
+
+### Class Diagram
+![29-01-2016](diagrams/29-01-2016-class-diagram.png)

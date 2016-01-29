@@ -1,0 +1,9 @@
+// In yuml format
+[Start]uses-.->[PentagoGame]
+[PentagoGame]1->1[Board]
+[PentagoGame]1-2[Player]
+[Player]1-1[MarbleCollection]
+[MarbleCollection]1->18[Marble]
+[Board]1->4[Tile]
+[Tile]0..1->0..9[Marble]
+[Marble]*-1[<<enumeration>>;Symbol]
