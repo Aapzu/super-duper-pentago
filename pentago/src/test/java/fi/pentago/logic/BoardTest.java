@@ -14,15 +14,14 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Rule;
+import org.junit.rules.ExpectedException;
 
-/**
- *
- * @author Aapeli
- */
+
 public class BoardTest {
     
     Board board;
-    
+        
     public BoardTest() {}
     
     @Before
@@ -91,36 +90,106 @@ public class BoardTest {
     }
     
     @Test
-    public void setMarbleSetsMarbleToRightPlace() {
+    public void addMarbleAddsMarbleToRightPlace() {
         Marble m = new Marble(Symbol.X);
-        board.setMarble(m, 0, 0);
+        board.addMarble(m, 0, 0);
         assertEquals(board.getTileByCoordinates(0, 0)
                         .getTile()[0][0], m);
         m = new Marble(Symbol.O);
-        board.setMarble(m, 5, 1);
+        board.addMarble(m, 5, 1);
         assertEquals(board.getTileByCoordinates(5, 1)
                         .getTile()[1][2], m);
         m = new Marble(Symbol.X);
-        board.setMarble(m, 1, 4);
+        board.addMarble(m, 1, 4);
         assertEquals(board.getTileByCoordinates(1, 4)
                         .getTile()[1][1],m);
         m = new Marble(Symbol.O);
-        board.setMarble(m, 4, 4);
+        board.addMarble(m, 4, 4);
         assertEquals(board.getTileByCoordinates(4, 4)
                         .getTile()[1][1],m);
     }
     
     @Test
+    public void addMarbleReturnsTrueIfTheCoordinatesAreRight() {
+        assertTrue(board.addMarble(new Marble(Symbol.O), 0, 0));
+    }
+    
+    @Test
+    public void addMarbleReturnsFalseIfTheCoordinatesAreFalse() {
+        assertFalse(board.addMarble(new Marble(Symbol.O), -2, 0));
+        assertFalse(board.addMarble(new Marble(Symbol.O), 10, 10));
+    }
+    
+    @Test
     public void removeMarbleRemovesMarbleFromRightPlace() {
-        board.setMarble(new Marble(Symbol.X), 0, 0);
+        board.addMarble(new Marble(Symbol.X), 0, 0);
         board.removeMarble(0, 0);
         assertEquals(board.getTileByCoordinates(0, 0)
                         .getTile()[0][0], null);
-        board.setMarble(new Marble(Symbol.O), 5, 1);
+        board.addMarble(new Marble(Symbol.O), 5, 1);
         board.removeMarble(5, 1);
         assertEquals(board.getTileByCoordinates(5, 1)
                         .getTile()[1][2], null);
     }
     
+    @Test
+    public void removeMarbleReturnsRightMarble() {
+        Marble m = new Marble(Symbol.X);
+        board.addMarble(m, 0, 0);
+        assertEquals(board.removeMarble(0, 0), m);
+    }
+    
+    @Test
+    public void removeMarbleReturnsNullIfMarbleNotFound() {
+        assertNull(board.removeMarble(0, 0));
+        assertNull(board.removeMarble(-3, 0));
+        assertNull(board.removeMarble(10, 10));
+    }
+    
+    @Test
+    public void toStringReturnsRightKindOfString() {
+        Marble x = new Marble(Symbol.X);
+        Marble o = new Marble(Symbol.O);
+        board.addMarble(x, 0, 0);
+        board.addMarble(o, 1, 1);
+        board.addMarble(x, 4, 1);
+        board.addMarble(x, 0, 3);
+        board.addMarble(o, 1, 4);
+        board.addMarble(o, 4, 4);
+        
+        assertEquals("[[X], null, null][null, null, null]\n" +
+                "[null, [O], null][null, [X], null]\n" +
+                "[null, null, null][null, null, null]\n" +
+                "[[X], null, null][null, null, null]\n" +
+                "[null, [O], null][null, [O], null]\n" +
+                "[null, null, null][null, null, null]\n", board.toString());
+    }
+    
+    @Test
+    public void rotateTileWorks() {
+        Marble x = new Marble(Symbol.X);
+        Marble o = new Marble(Symbol.O);
+        board.addMarble(x, 0, 0);
+        board.addMarble(o, 1, 1);
+        board.addMarble(x, 0, 3);
+        board.addMarble(o, 1, 4);
+        board.addMarble(x, 4, 1);
+        board.addMarble(o, 4, 4);
+        board.rotateClockWise(0, 0);
+        assertEquals("[null, null, [X]][null, null, null]\n" +
+                "[null, [O], null][null, [X], null]\n" +
+                "[null, null, null][null, null, null]\n" +
+                "[[X], null, null][null, null, null]\n" +
+                "[null, [O], null][null, [O], null]\n" +
+                "[null, null, null][null, null, null]\n", board.toString());
+        
+        board.rotateCounterClockWise(0, 1);
+        assertEquals("[null, null, [X]][null, null, null]\n" +
+                "[null, [O], null][null, [X], null]\n" +
+                "[null, null, null][null, null, null]\n" +
+                "[null, null, null][null, null, null]\n" +
+                "[null, [O], null][null, [O], null]\n" +
+                "[[X], null, null][null, null, null]\n", board.toString());
+    }
     
 }

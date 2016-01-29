@@ -28,14 +28,22 @@ public class Board {
         return tiles[y / tileSideLength][x / tileSideLength];
     }
     
-    public boolean setMarble(Marble marble, int x, int y) {
-        Tile tile = getTileByCoordinates(x, y);
-        return tile.setMarble(marble, x % tileSideLength, y % tileSideLength);
+    public boolean addMarble(Marble marble, int x, int y) {
+        try {
+            Tile tile = getTileByCoordinates(x, y);
+            return tile.setMarble(marble, x % tileSideLength, y % tileSideLength);
+        } catch(ArrayIndexOutOfBoundsException e) {
+            return false;
+        }
     }
     
     public Marble removeMarble(int x, int y) {
-        Tile tile = getTileByCoordinates(x, y);
-        return tile.removeMarble(x % tileSideLength, y % tileSideLength);
+        try {
+            Tile tile = getTileByCoordinates(x, y);
+            return tile.removeMarble(x % tileSideLength, y % tileSideLength);
+        } catch(ArrayIndexOutOfBoundsException e) {
+            return null;
+        }
     }
     
     public int getSideLength() {
