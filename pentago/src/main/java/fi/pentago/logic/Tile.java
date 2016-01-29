@@ -10,11 +10,11 @@ public class Tile {
     private int sideLength;
     private Marble[][] tile;
     
-    public Tile() {
+    protected Tile() {
         this(3);
     }
     
-    public Tile(int sideLength) {
+    protected Tile(int sideLength) {
         if(sideLength <= 0) 
             throw new RuntimeException("the sideLength of a Tile must be truly positive!");
         
@@ -26,14 +26,14 @@ public class Tile {
         return  x >= 0 && x < tile[0].length && y >= 0 && y < tile.length;
     }
     
-    public Marble get(int x, int y) {
+    protected Marble get(int x, int y) {
         if(validateCoordinates(x, y))
             return getTile()[y][x];
         else
             return null;
     }
     
-    public boolean setMarble(Marble marble, int x, int y) {
+    protected boolean setMarble(Marble marble, int x, int y) {
         if(validateCoordinates(x, y)) {
             tile[y][x] = marble;
             return true;
@@ -41,7 +41,7 @@ public class Tile {
             return false;
     }
     
-    public Marble removeMarble(int x, int y) {
+    protected Marble removeMarble(int x, int y) {
         if(validateCoordinates(x, y)) {
             Marble marble = tile[y][x];
             setMarble(null, x, y);
@@ -51,11 +51,11 @@ public class Tile {
         
     }
     
-    public void rotateClockWise() {
+    protected void rotateClockWise() {
         rotate(true);
     }
     
-    public void rotateCounterClockWise() {
+    protected void rotateCounterClockWise() {
         rotate(false);
     }
     
@@ -88,11 +88,11 @@ public class Tile {
         return result;
     }
     
-    public String rowToString(int rowNumber) {
+    protected String rowToString(int rowNumber) {
         return Arrays.toString(tile[rowNumber]);
     }
     
-    public int getSideLength() {
+    protected int getSideLength() {
         return sideLength;
     }
     

@@ -1,27 +1,24 @@
 
 package fi.pentago.app;
 
-import fi.pentago.logic.marble.Symbol;
-import fi.pentago.logic.Tile;
+import fi.pentago.logic.Board;
 import fi.pentago.logic.marble.Marble;
+import fi.pentago.logic.marble.Symbol;
 
 public class Start {
     
     public static void main(String[] args) {
-        Tile t = new Tile();
-        t.setMarble(new Marble(Symbol.O), 0, 0);
-        t.setMarble(new Marble(Symbol.X), 0, 1);
-        t.setMarble(new Marble(Symbol.O), 0, 2);
-        t.setMarble(new Marble(Symbol.X), 1, 0);
-        t.setMarble(new Marble(Symbol.O), 1, 1);
-        t.setMarble(new Marble(Symbol.X), 2, 1);
-        t.setMarble(new Marble(Symbol.O), 2, 2);
-        System.out.println(t.toString());
-        System.out.println("");
-        t.rotateClockWise();
-        System.out.println(t.toString());
-        System.out.println("");
-        t.rotateClockWise();
-        System.out.println(t.toString());
+        Board b = new Board();
+        Marble x = new Marble(Symbol.X);
+        Marble o = new Marble(Symbol.O);
+        b.setMarble(x, 0, 0);
+        b.setMarble(o, 1, 1);
+        b.setMarble(x, 0, 3);
+        b.setMarble(o, 1, 4);
+        b.setMarble(x, 4, 1);
+        b.setMarble(o, 4, 4);
+        System.out.println(b.toString());
+        b.rotateClockWise(0,0);
+        System.out.println(b.toString());
     }
 }
