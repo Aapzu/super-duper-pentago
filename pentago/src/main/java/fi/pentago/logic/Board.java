@@ -2,6 +2,9 @@
 package fi.pentago.logic;
 
 import fi.pentago.logic.marble.Marble;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Board {
     
@@ -37,6 +40,15 @@ public class Board {
         }
     }
     
+    public Marble getMarble(int x, int y) {
+        try {
+            Tile tile = getTileByCoordinates(x, y);
+            return tile.get(x % tileSideLength, y % tileSideLength);
+        } catch(ArrayIndexOutOfBoundsException e) {
+            return null;
+        }
+    }
+    
     public Marble removeMarble(int x, int y) {
         try {
             Tile tile = getTileByCoordinates(x, y);
@@ -60,6 +72,132 @@ public class Board {
     
     protected Tile[][] getTiles() {
         return tiles;
+    }
+    
+    public Map<String, Object> checkForRows(int length) {
+        Map<String, Object> row;
+        
+        row = checkRowsHorizontally(length);
+        if(row != null)
+            return row;
+        
+        row = checkRowsVertically(length);
+        if(row != null)
+            return row;
+        
+        row = checkRowsDiagonally(length);
+        if(row != null)
+            return row;
+        
+        return null;
+    }
+    
+    private Map<String, Object> checkRowsHorizontally(int length) {
+        Map<String, Object> row = new HashMap<String, Object>();
+        row.put("symbol", null);
+        row.put("coordinates", new ArrayList<Integer[]>());
+        int counter = 0;
+        Marble lastMarble;
+        for(int y = 0; y < sideLength * tileSideLength; y++) {
+            lastMarble = null;
+            for(int x = 0; x < sideLength * tileSideLength; x++) {
+                Marble m = getMarble(x,y);
+                ((ArrayList<Integer[]>)row.get("coordinates")).add(new Integer[]{x, y});
+                if(lastMarble != null)
+                    if(m != null && lastMarble.equals(m)) {
+                        counter++;
+                        if(counter >= length-1) {
+                            row.put("symbol", m.getSymbol());
+                            return row;
+                        }
+                    } else {
+                        counter = 0;
+                        ((ArrayList)row.get("coordinates")).clear();
+                    }
+                lastMarble = m;
+            }
+        }
+        return null;
+    }
+    
+    private Map<String, Object> checkRowsVertically(int length) {
+        Map<String, Object> row = new HashMap<String, Object>();
+        row.put("symbol", null);
+        row.put("coordinates", new ArrayList<Integer[]>());
+        int counter = 0;
+        Marble lastMarble;
+        for(int x = 0; x < sideLength * tileSideLength; x++) {
+            lastMarble = null;
+            for(int y = 0; y < sideLength * tileSideLength; y++) {
+                Marble m = getMarble(x,y);
+                ((ArrayList<Integer[]>)row.get("coordinates")).add(new Integer[]{x, y});
+                if(lastMarble != null)
+                    if(m != null && lastMarble.equals(m)) {
+                        counter++;
+                        if(counter >= length-1) {
+                            row.put("symbol", m.getSymbol());
+                            return row;
+                        }
+                    } else {
+                        counter = 0;
+                        ((ArrayList)row.get("coordinates")).clear();
+                    }
+                lastMarble = m;
+            }
+        }
+        return null;
+    }
+    
+    // TODO: Combine these ->
+    private Map<String, Object> checkRowsDiagonally(int length) {
+        Map<String, Object> row = new HashMap<String, Object>();
+        row.put("symbol", null);
+        row.put("coordinates", new ArrayList<Integer[]>());
+        int counter = 0;
+        Marble lastMarble;
+        for(int x = -(sideLength * tileSideLength) + 1; x < sideLength * tileSideLength; x++) {
+            lastMarble = null;
+            for(int y = 0; y < sideLength * tileSideLength; y++) {
+                if(x+y >= 0 && x+y < sideLength * tileSideLength) {
+                    Marble m = getMarble(x+y,y);
+                    ((ArrayList<Integer[]>)row.get("coordinates")).add(new Integer[]{x+y, y});
+                    if(lastMarble != null)
+                        if(m != null && lastMarble.equals(m)) {
+                            counter++;
+                            if(counter >= length-1) {
+                                row.put("symbol", m.getSymbol());
+                                return row;
+                            }
+                        } else{
+                            counter = 0;
+                            ((ArrayList)row.get("coordinates")).clear();
+                        }
+                    lastMarble = m;
+                }
+            }
+        }
+        for(int y = -(sideLength * tileSideLength) + 1; y < sideLength * tileSideLength; y++) {
+            lastMarble = null;
+            for(int x = 0; x < sideLength * tileSideLength; x++) {
+                if(x+y >= 0 && x+y < sideLength * tileSideLength) {
+                    Marble m = getMarble(x,x+y);
+                    ((ArrayList<Integer[]>)row.get("coordinates")).add(new Integer[]{x, x+y});
+                    if(lastMarble != null)
+                        if(m != null && lastMarble.equals(m)) {
+                            counter++;
+                            if(counter >= length-1) {
+                                row.put("symbol", m.getSymbol());
+                                return row;
+                            }
+                        } else{
+                            counter = 0;
+                            ((ArrayList)row.get("coordinates")).clear();
+                        }
+                    lastMarble = m;
+                }
+            }
+        }
+        return null;
     }
     
     @Override
