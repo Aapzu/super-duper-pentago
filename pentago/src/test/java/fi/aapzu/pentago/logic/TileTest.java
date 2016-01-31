@@ -1,10 +1,11 @@
 
-package fi.pentago.logic;
+package fi.aapzu.pentago.logic;
 
 
 
-import fi.pentago.logic.marble.Marble;
-import fi.pentago.logic.marble.Symbol;
+import fi.aapzu.pentago.logic.Tile;
+import fi.aapzu.pentago.logic.marble.Marble;
+import fi.aapzu.pentago.logic.marble.Symbol;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

@@ -1,9 +1,9 @@
 
-package fi.pentago.app;
+package fi.aapzu.pentago.app;
 
-import fi.pentago.logic.Board;
-import fi.pentago.logic.marble.Marble;
-import fi.pentago.logic.marble.Symbol;
+import fi.aapzu.pentago.logic.Board;
+import fi.aapzu.pentago.logic.marble.Marble;
+import fi.aapzu.pentago.logic.marble.Symbol;
 import java.util.ArrayList;
 import java.util.Arrays;
 

@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.pentago</groupId>
-    <artifactId>super-duper-pentago</artifactId>
+    <groupId>fi.aapzu</groupId>
+    <artifactId>pentago</artifactId>
     <version>0.1.0</version>
 
     <packaging>jar</packaging>
@@ -40,12 +40,12 @@
                 <version>1.1.8</version>
                 <configuration>
                     <targetClasses>
-                        <param>fi.pentago.app.*</param>
-                        <param>fi.pentago.logic.*</param>
+                        <param>fi.aapzu.pentago.app.*</param>
+                        <param>fi.aapzu.pentago.logic.*</param>
                     </targetClasses>
                     <targetTests>
-                        <param>fi.pentago.app.*</param>
-                        <param>fi.pentago.logic.*</param>
+                        <param>fi.aapzu.pentago.app.*</param>
+                        <param>fi.aapzu.pentago.logic.*</param>
                     </targetTests>
                 </configuration>
             </plugin>

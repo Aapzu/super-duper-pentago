@@ -3,10 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package fi.pentago.logic;
+package fi.aapzu.pentago.logic;
 
-import fi.pentago.logic.marble.Marble;
-import fi.pentago.logic.marble.Symbol;
+import fi.aapzu.pentago.logic.Board;
+import fi.aapzu.pentago.logic.Tile;
+import fi.aapzu.pentago.logic.marble.Marble;
+import fi.aapzu.pentago.logic.marble.Symbol;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,5 +1,5 @@
 
-package fi.pentago.logic.marble;
+package fi.aapzu.pentago.logic.marble;
 
 public class Marble {
     

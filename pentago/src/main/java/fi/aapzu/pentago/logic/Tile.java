@@ -1,7 +1,7 @@
 
-package fi.pentago.logic;
+package fi.aapzu.pentago.logic;
 
-import fi.pentago.logic.marble.Marble;
+import fi.aapzu.pentago.logic.marble.Marble;
 import java.util.Arrays;
 
 public class Tile {
