@@ -5,10 +5,9 @@
  */
 package fi.aapzu.pentago.logic;
 
-import fi.aapzu.pentago.logic.Board;
-import fi.aapzu.pentago.logic.Tile;
 import fi.aapzu.pentago.logic.marble.Marble;
 import fi.aapzu.pentago.logic.marble.Symbol;
+import java.util.ArrayList;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,6 +22,9 @@ import org.junit.rules.ExpectedException;
 public class BoardTest {
     
     Board board;
+  
+    @Rule
+    public final ExpectedException exception = ExpectedException.none();
         
     public BoardTest() {}
     
@@ -192,6 +194,61 @@ public class BoardTest {
                 "[null, null, null][null, null, null]\n" +
                 "[null, [O], null][null, [O], null]\n" +
                 "[[X], null, null][null, null, null]\n", board.toString());
+    }
+    
+    @Test
+    public void checkLinesThrowsExceptionWithRightTextIfLengthIsUnder2() {
+        exception.expect(RuntimeException.class);
+        exception.expectMessage("must be between 2 and 6");
+        board.checkLines(1);
+        exception.expect(RuntimeException.class);
+        exception.expectMessage("must be between 2 and 6");
+        board.checkLines(-3);
+    }
+    
+    @Test
+    public void checkLinesThrowsExceptionWithRightTextIfLengthIsOver6() {
+        exception.expect(RuntimeException.class);
+        exception.expectMessage("must be between 2 and 6");
+        board.checkLines(7);
+    }
+            
+    @Test
+    public void checkLinesReturnsNullIfNoRows() {
+        for(int i = 2; i < 6; i++)
+            assertNull(board.checkLines(i));
+        Marble m = new Marble(Symbol.X);
+        board.addMarble(m, 0, 0);
+        board.addMarble(m, 2, 1);
+        board.addMarble(m, 0, 0);
+        board.addMarble(m, 4, 0);
+        board.addMarble(m, 4, 4);
+        board.addMarble(m, 0, 3);
+        board.addMarble(m, 0, 5);
+        for(int i = 2; i < 6; i++)
+            assertNull(board.checkLines(i));
+    }
+    
+    @Test
+    public void checkLinesReturnsRightLineHorizontally() {
+        Marble x = new Marble(Symbol.X);
+        ArrayList<Integer[]> points = new ArrayList<>();
+        points.add(new Integer[]{1,4});
+        points.add(new Integer[]{2,4});
+        points.add(new Integer[]{3,4});
+        points.add(new Integer[]{4,4});
+        points.add(new Integer[]{5,4});
+        for(Integer[] point : points) {
+            board.addMarble(x, point[0], point[1]);
+        }
+        Map<String, Object> line = board.checkLines(5);
+        assertNotNull(line);
+        assertEquals(line.get("symbol"), Symbol.X);
+        ArrayList<Integer[]> foundCoords = (ArrayList<Integer[]>) line.get("coordinates");
+        assertEquals(5, foundCoords.size());
+        for(Integer[] c : foundCoords) {
+            assertTrue(points.contains(c));
+        }        
     }
     
 }

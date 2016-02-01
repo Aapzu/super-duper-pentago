@@ -74,45 +74,52 @@ public class Board {
         return tiles;
     }
     
-    public Map<String, Object> checkForRows(int length) {
-        Map<String, Object> row;
+    public boolean booleanCheckLines(int length) {
+        return checkLines(length) != null;
+    }
+    
+    public Map<String, Object> checkLines(int length) {
+        if(length < 2 || length > sideLength*tileSideLength) {
+            throw new RuntimeException("The length of a line must be between 2 and "+sideLength*tileSideLength);
+        }
+        Map<String, Object> line;
         
-        row = checkRowsHorizontally(length);
-        if(row != null)
-            return row;
+        line = checkLinesHorizontally(length);
+        if(line != null)
+            return line;
         
-        row = checkRowsVertically(length);
-        if(row != null)
-            return row;
+        line = checkLinesVertically(length);
+        if(line != null)
+            return line;
         
-        row = checkRowsDiagonally(length);
-        if(row != null)
-            return row;
+        line = checkLinesDiagonally(length);
+        if(line != null)
+            return line;
         
         return null;
     }
     
-    private Map<String, Object> checkRowsHorizontally(int length) {
-        Map<String, Object> row = new HashMap<String, Object>();
-        row.put("symbol", null);
-        row.put("coordinates", new ArrayList<Integer[]>());
+    private Map<String, Object> checkLinesHorizontally(int length) {
+        Map<String, Object> line = new HashMap<String, Object>();
+        line.put("symbol", null);
+        line.put("coordinates", new ArrayList<Integer[]>());
         int counter = 0;
         Marble lastMarble;
         for(int y = 0; y < sideLength * tileSideLength; y++) {
             lastMarble = null;
             for(int x = 0; x < sideLength * tileSideLength; x++) {
                 Marble m = getMarble(x,y);
-                ((ArrayList<Integer[]>)row.get("coordinates")).add(new Integer[]{x, y});
+                ((ArrayList<Integer[]>)line.get("coordinates")).add(new Integer[]{x, y});
                 if(lastMarble != null)
                     if(m != null && lastMarble.equals(m)) {
                         counter++;
                         if(counter >= length-1) {
-                            row.put("symbol", m.getSymbol());
-                            return row;
+                            line.put("symbol", m.getSymbol());
+                            return line;
                         }
                     } else {
                         counter = 0;
-                        ((ArrayList)row.get("coordinates")).clear();
+                        ((ArrayList)line.get("coordinates")).clear();
                     }
                 lastMarble = m;
             }
@@ -120,27 +127,27 @@ public class Board {
         return null;
     }
     
-    private Map<String, Object> checkRowsVertically(int length) {
-        Map<String, Object> row = new HashMap<String, Object>();
-        row.put("symbol", null);
-        row.put("coordinates", new ArrayList<Integer[]>());
+    private Map<String, Object> checkLinesVertically(int length) {
+        Map<String, Object> line = new HashMap<String, Object>();
+        line.put("symbol", null);
+        line.put("coordinates", new ArrayList<Integer[]>());
         int counter = 0;
         Marble lastMarble;
         for(int x = 0; x < sideLength * tileSideLength; x++) {
             lastMarble = null;
             for(int y = 0; y < sideLength * tileSideLength; y++) {
                 Marble m = getMarble(x,y);
-                ((ArrayList<Integer[]>)row.get("coordinates")).add(new Integer[]{x, y});
+                ((ArrayList<Integer[]>)line.get("coordinates")).add(new Integer[]{x, y});
                 if(lastMarble != null)
                     if(m != null && lastMarble.equals(m)) {
                         counter++;
                         if(counter >= length-1) {
-                            row.put("symbol", m.getSymbol());
-                            return row;
+                            line.put("symbol", m.getSymbol());
+                            return line;
                         }
                     } else {
                         counter = 0;
-                        ((ArrayList)row.get("coordinates")).clear();
+                        ((ArrayList)line.get("coordinates")).clear();
                     }
                 lastMarble = m;
             }
@@ -149,10 +156,10 @@ public class Board {
     }
     
     // TODO: Combine these ->
-    private Map<String, Object> checkRowsDiagonally(int length) {
-        Map<String, Object> row = new HashMap<String, Object>();
-        row.put("symbol", null);
-        row.put("coordinates", new ArrayList<Integer[]>());
+    private Map<String, Object> checkLinesDiagonally(int length) {
+        Map<String, Object> line = new HashMap<String, Object>();
+        line.put("symbol", null);
+        line.put("coordinates", new ArrayList<Integer[]>());
         int counter = 0;
         Marble lastMarble;
         for(int x = -(sideLength * tileSideLength) + 1; x < sideLength * tileSideLength; x++) {
@@ -160,17 +167,17 @@ public class Board {
             for(int y = 0; y < sideLength * tileSideLength; y++) {
                 if(x+y >= 0 && x+y < sideLength * tileSideLength) {
                     Marble m = getMarble(x+y,y);
-                    ((ArrayList<Integer[]>)row.get("coordinates")).add(new Integer[]{x+y, y});
+                    ((ArrayList<Integer[]>)line.get("coordinates")).add(new Integer[]{x+y, y});
                     if(lastMarble != null)
                         if(m != null && lastMarble.equals(m)) {
                             counter++;
                             if(counter >= length-1) {
-                                row.put("symbol", m.getSymbol());
-                                return row;
+                                line.put("symbol", m.getSymbol());
+                                return line;
                             }
                         } else{
                             counter = 0;
-                            ((ArrayList)row.get("coordinates")).clear();
+                            ((ArrayList)line.get("coordinates")).clear();
                         }
                     lastMarble = m;
                 }
@@ -181,17 +188,17 @@ public class Board {
             for(int x = 0; x < sideLength * tileSideLength; x++) {
                 if(x+y >= 0 && x+y < sideLength * tileSideLength) {
                     Marble m = getMarble(x,x+y);
-                    ((ArrayList<Integer[]>)row.get("coordinates")).add(new Integer[]{x, x+y});
+                    ((ArrayList<Integer[]>)line.get("coordinates")).add(new Integer[]{x, x+y});
                     if(lastMarble != null)
                         if(m != null && lastMarble.equals(m)) {
                             counter++;
                             if(counter >= length-1) {
-                                row.put("symbol", m.getSymbol());
-                                return row;
+                                line.put("symbol", m.getSymbol());
+                                return line;
                             }
                         } else{
                             counter = 0;
-                            ((ArrayList)row.get("coordinates")).clear();
+                            ((ArrayList)line.get("coordinates")).clear();
                         }
                     lastMarble = m;
                 }

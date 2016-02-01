@@ -17,10 +17,10 @@ public class Start {
         b.addMarble(x, 1, 0);
         b.addMarble(x, 2, 0);
         b.addMarble(x, 3, 0);
-        System.out.println(b.checkForRows(5));
+        System.out.println(b.checkLines(5));
         b.addMarble(x, 4, 0);
-        System.out.println(b.checkForRows(5).get("symbol"));
-        ArrayList<Integer[]> c = (ArrayList<Integer[]>)b.checkForRows(5).get("coordinates");
+        System.out.println(b.checkLines(5).get("symbol"));
+        ArrayList<Integer[]> c = (ArrayList<Integer[]>)b.checkLines(5).get("coordinates");
         for(Integer[] i : c) {
             System.out.print(Arrays.toString(i));
         }
