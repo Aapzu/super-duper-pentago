@@ -18,6 +18,9 @@ public class Marble {
     }
     
     public boolean equals(Marble m) {
+        if(m == null) {
+            return false;
+        }
         return this.getSymbol().equals(m.getSymbol());
     }
 }

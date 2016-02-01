@@ -9,4 +9,5 @@
 | 30.01.2016    | 01:00         | Board.checkrows() |
 | 31.01.2016    | 01:00         | Board.checkRows() |
 | 01.02.2016	| 00:30		| BoardTest |
+| 01.02.2016	| 01:30		| BoardTest |
 ||||

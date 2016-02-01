@@ -85,126 +85,87 @@ public class Board {
         Map<String, Object> line;
         
         line = checkLinesHorizontally(length);
-        if(line != null)
-            return line;
+        if(line == null) {
+            line = checkLinesVertically(length);
+            if(line == null) {
+                line = checkLinesDiagonally(length);
+                if(line == null) {
+                    line = checkLinesDiagonally2(length);
+                }
+            }
+        }        
+        return line;
+    }
+    
+    protected Map<String, Object> checkLines(int length, int direction) {
+        if(direction < 0 || direction > 3)
+            throw new RuntimeException("The direction is incorrect!");
         
-        line = checkLinesVertically(length);
-        if(line != null)
-            return line;
+        int firstIndexFrom;
+        if(direction == 3 || direction == 4) // Diagonal
+            firstIndexFrom = -(sideLength * tileSideLength) + 1;
+        else 
+            firstIndexFrom = 0;
         
-        line = checkLinesDiagonally(length);
-        if(line != null)
-            return line;
-        
+        Map<String, Object> line = new HashMap<String, Object>();
+        line.put("symbol", null);
+        line.put("coordinates", new ArrayList<Integer[]>());
+        int counter = 0;
+        Marble lastMarble;
+        for(int i = firstIndexFrom; i < sideLength * tileSideLength; i++) {
+            lastMarble = null;
+            for(int j = 0; j < sideLength * tileSideLength; j++) {
+                int firstCoord = -1;
+                int secondCoord = -1;
+                if(direction == 0) { // Horizontal
+                    firstCoord = j;
+                    secondCoord = i;
+                } else if(direction == 1) { // Vertical
+                    firstCoord = i;
+                    secondCoord = j;
+                } else if(direction == 2) { // Diagonal like /
+                    firstCoord = i;
+                    secondCoord = i + j;
+                } else if(direction == 3) { // Diagonal like \
+                    firstCoord = i + j;
+                    secondCoord = j;
+                }
+                Marble m = getMarble(firstCoord,secondCoord);
+                ((ArrayList<Integer[]>)line.get("coordinates")).add(new Integer[]{firstCoord, secondCoord});
+                
+                if(lastMarble != null || m == null) {
+                    if(m != null && m.equals(lastMarble)) {
+                        counter++;
+                        if(counter >= length-1) {
+                            line.put("symbol", m.getSymbol());
+                            return line;
+                        }
+                    } else {
+                        counter = 0;
+                        ((ArrayList)line.get("coordinates")).clear();
+                    }
+                }
+
+                lastMarble = m;
+            }
+        }
         return null;
     }
     
     private Map<String, Object> checkLinesHorizontally(int length) {
-        Map<String, Object> line = new HashMap<String, Object>();
-        line.put("symbol", null);
-        line.put("coordinates", new ArrayList<Integer[]>());
-        int counter = 0;
-        Marble lastMarble;
-        for(int y = 0; y < sideLength * tileSideLength; y++) {
-            lastMarble = null;
-            for(int x = 0; x < sideLength * tileSideLength; x++) {
-                Marble m = getMarble(x,y);
-                ((ArrayList<Integer[]>)line.get("coordinates")).add(new Integer[]{x, y});
-                if(lastMarble != null)
-                    if(m != null && lastMarble.equals(m)) {
-                        counter++;
-                        if(counter >= length-1) {
-                            line.put("symbol", m.getSymbol());
-                            return line;
-                        }
-                    } else {
-                        counter = 0;
-                        ((ArrayList)line.get("coordinates")).clear();
-                    }
-                lastMarble = m;
-            }
-        }
-        return null;
+        return checkLines(5, 0);
     }
     
     private Map<String, Object> checkLinesVertically(int length) {
-        Map<String, Object> line = new HashMap<String, Object>();
-        line.put("symbol", null);
-        line.put("coordinates", new ArrayList<Integer[]>());
-        int counter = 0;
-        Marble lastMarble;
-        for(int x = 0; x < sideLength * tileSideLength; x++) {
-            lastMarble = null;
-            for(int y = 0; y < sideLength * tileSideLength; y++) {
-                Marble m = getMarble(x,y);
-                ((ArrayList<Integer[]>)line.get("coordinates")).add(new Integer[]{x, y});
-                if(lastMarble != null)
-                    if(m != null && lastMarble.equals(m)) {
-                        counter++;
-                        if(counter >= length-1) {
-                            line.put("symbol", m.getSymbol());
-                            return line;
-                        }
-                    } else {
-                        counter = 0;
-                        ((ArrayList)line.get("coordinates")).clear();
-                    }
-                lastMarble = m;
-            }
-        }
-        return null;
+        return checkLines(5, 1);
     }
     
-    // TODO: Combine these ->
     private Map<String, Object> checkLinesDiagonally(int length) {
-        Map<String, Object> line = new HashMap<String, Object>();
-        line.put("symbol", null);
-        line.put("coordinates", new ArrayList<Integer[]>());
-        int counter = 0;
-        Marble lastMarble;
-        for(int x = -(sideLength * tileSideLength) + 1; x < sideLength * tileSideLength; x++) {
-            lastMarble = null;
-            for(int y = 0; y < sideLength * tileSideLength; y++) {
-                if(x+y >= 0 && x+y < sideLength * tileSideLength) {
-                    Marble m = getMarble(x+y,y);
-                    ((ArrayList<Integer[]>)line.get("coordinates")).add(new Integer[]{x+y, y});
-                    if(lastMarble != null)
-                        if(m != null && lastMarble.equals(m)) {
-                            counter++;
-                            if(counter >= length-1) {
-                                line.put("symbol", m.getSymbol());
-                                return line;
-                            }
-                        } else{
-                            counter = 0;
-                            ((ArrayList)line.get("coordinates")).clear();
-                        }
-                    lastMarble = m;
-                }
-            }
-        }
-        for(int y = -(sideLength * tileSideLength) + 1; y < sideLength * tileSideLength; y++) {
-            lastMarble = null;
-            for(int x = 0; x < sideLength * tileSideLength; x++) {
-                if(x+y >= 0 && x+y < sideLength * tileSideLength) {
-                    Marble m = getMarble(x,x+y);
-                    ((ArrayList<Integer[]>)line.get("coordinates")).add(new Integer[]{x, x+y});
-                    if(lastMarble != null)
-                        if(m != null && lastMarble.equals(m)) {
-                            counter++;
-                            if(counter >= length-1) {
-                                line.put("symbol", m.getSymbol());
-                                return line;
-                            }
-                        } else{
-                            counter = 0;
-                            ((ArrayList)line.get("coordinates")).clear();
-                        }
-                    lastMarble = m;
-                }
-            }
-        }
-        return null;
+        return checkLines(5,2);
+    }
+    
+    private Map<String, Object> checkLinesDiagonally2(int length) {
+        return checkLines(5,3);
     }
     
     @Override
