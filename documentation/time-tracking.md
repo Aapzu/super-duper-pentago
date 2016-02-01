@@ -8,4 +8,5 @@
 | 29.01.2016    | 02:00         | BoardTest, Documentation and diagrams |
 | 30.01.2016    | 01:00         | Board.checkrows() |
 | 31.01.2016    | 01:00         | Board.checkRows() |
+| 01.02.2016	| 00:30		| BoardTest |
 ||||

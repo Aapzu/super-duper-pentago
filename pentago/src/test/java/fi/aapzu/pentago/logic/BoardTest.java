@@ -5,19 +5,16 @@
  */
 package fi.aapzu.pentago.logic;
 
-import fi.aapzu.pentago.logic.Board;
-import fi.aapzu.pentago.logic.Tile;
 import fi.aapzu.pentago.logic.marble.Marble;
 import fi.aapzu.pentago.logic.marble.Symbol;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ArrayList;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.junit.Rule;
-import org.junit.rules.ExpectedException;
 
 
 public class BoardTest {
@@ -192,6 +189,77 @@ public class BoardTest {
                 "[null, null, null][null, null, null]\n" +
                 "[null, [O], null][null, [O], null]\n" +
                 "[[X], null, null][null, null, null]\n", board.toString());
+    }
+    
+    public void checkLinesWorks(ArrayList<Integer[]> points) {
+        Marble o = new Marble(Symbol.O);
+        for(Integer[] point : points) {
+            board.addMarble(o, point[0], point[1]);
+        }
+        Map<String, Object> line = board.checkForRows(5);
+        assertNotNull(line);
+        assertNotNull(line.get("symbol"));
+        assertNotNull(line.get("coordinates"));
+        assertEquals(Symbol.O, line.get("symbol"));
+        assertEquals(5, ((ArrayList)line.get("coordinates")).size());
+        for(Integer[] point : (ArrayList<Integer[]>) line.get("coordinates")) {
+            assertTrue(points.contains(point));
+        }
+    }
+    
+    @Test
+    public void checkLinesWorksVertically() {
+        ArrayList<Integer[]> points = new ArrayList<>();
+        points.add(new Integer[]{3,0});
+        points.add(new Integer[]{3,1});
+        points.add(new Integer[]{3,2});
+        points.add(new Integer[]{3,3});
+        points.add(new Integer[]{3,4});
+        checkLinesWorks(points);
+    }
+    
+    @Test
+    public void checkLinesWorksDiagonallyOverTwoTiles() {
+        ArrayList<Integer[]> points = new ArrayList<>();
+        points.add(new Integer[]{1,1});
+        points.add(new Integer[]{2,2});
+        points.add(new Integer[]{3,3});
+        points.add(new Integer[]{4,4});
+        points.add(new Integer[]{5,5});
+        checkLinesWorks(points);
+    }
+    
+    @Test
+    public void checkLinesWorksDiagonallyOverThreeTiles() {
+        ArrayList<Integer[]> points = new ArrayList<>();
+        points.add(new Integer[]{1,0});
+        points.add(new Integer[]{2,1});
+        points.add(new Integer[]{3,2});
+        points.add(new Integer[]{4,3});
+        points.add(new Integer[]{5,4});
+        checkLinesWorks(points);
+    }
+    
+    @Test
+    public void checkLinesWorksDiagonallyOverTwoTiles2() {
+        ArrayList<Integer[]> points = new ArrayList<>();
+        points.add(new Integer[]{4,1});
+        points.add(new Integer[]{3,2});
+        points.add(new Integer[]{2,3});
+        points.add(new Integer[]{1,4});
+        points.add(new Integer[]{0,5});
+        checkLinesWorks(points);
+    }
+    
+    @Test
+    public void checkLinesWorksDiagonallyOverThreeTiles2() {
+        ArrayList<Integer[]> points = new ArrayList<>();
+        points.add(new Integer[]{5,1});
+        points.add(new Integer[]{4,2});
+        points.add(new Integer[]{3,3});
+        points.add(new Integer[]{2,4});
+        points.add(new Integer[]{1,5});
+        checkLinesWorks(points);
     }
     
 }
