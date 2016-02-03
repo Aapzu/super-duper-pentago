@@ -10,4 +10,5 @@
 | 31.01.2016    | 01:00         | Board.checkRows() |
 | 01.02.2016	| 00:30		| BoardTest |
 | 01.02.2016	| 01:30		| BoardTest |
+| 03.02.2016	| 02:00		| Fixing BoardTest |
 ||||

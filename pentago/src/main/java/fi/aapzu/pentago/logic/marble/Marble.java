@@ -3,7 +3,7 @@ package fi.aapzu.pentago.logic.marble;
 
 public class Marble {
     
-    Symbol symbol;
+    private final Symbol symbol;
     
     public Marble(Symbol symbol) {
         this.symbol = symbol;
@@ -13,14 +13,17 @@ public class Marble {
         return symbol;
     }
     
+    @Override
     public String toString() {
-        return "["+ symbol + "]";
+        return "["+ getSymbol() + "]";
     }
     
-    public boolean equals(Marble m) {
-        if(m == null) {
+    @Override
+    public boolean equals(Object o) {
+        if(o == null || !(o instanceof Marble)) {
             return false;
         }
-        return this.getSymbol().equals(m.getSymbol());
+        return this.getSymbol().equals(((Marble)o).getSymbol());
     }
+
 }

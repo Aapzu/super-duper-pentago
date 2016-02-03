@@ -236,7 +236,6 @@ public class BoardTest {
         for(Integer[] point : points) {
             board.addMarble(o, point[0], point[1]);
         }
-        System.out.println(board);
         Map<String, Object> line = board.checkLines(5);
         assertNotNull(line);
         assertNotNull(line.get("symbol"));
@@ -254,7 +253,7 @@ public class BoardTest {
     }
     
     @Test
-    public void checkLinesReturnsRightLineHorizontally() {
+    public void checkLinesWorksHorizontally() {
         ArrayList<Integer[]> points = new ArrayList<>();
         points.add(new Integer[]{1,4});
         points.add(new Integer[]{2,4});
@@ -298,7 +297,7 @@ public class BoardTest {
     }
     
     @Test
-    public void checkLinesWorksDiagonallyOverTwoTiles2() {
+    public void checkLinesWorksDiagonallyOverTwoTilesDirection2() {
         ArrayList<Integer[]> points = new ArrayList<>();
         points.add(new Integer[]{0,5});
         points.add(new Integer[]{1,4});
@@ -309,7 +308,7 @@ public class BoardTest {
     }
     
     @Test
-    public void checkLinesWorksDiagonallyOverThreeTiles2() {
+    public void checkLinesWorksDiagonallyOverThreeTilesDirection2() {
         ArrayList<Integer[]> points = new ArrayList<>();
         points.add(new Integer[]{1,5});
         points.add(new Integer[]{2,4});
@@ -317,6 +316,35 @@ public class BoardTest {
         points.add(new Integer[]{4,2});
         points.add(new Integer[]{5,1});
         checkLinesWorks(points);
+    }
+    
+    @Test
+    public void booleanCheckLinesReturnsTrueIfLineIsFound() {
+        ArrayList<Integer[]> points = new ArrayList<>();
+        points.add(new Integer[]{1,5});
+        points.add(new Integer[]{2,4});
+        points.add(new Integer[]{3,3});
+        points.add(new Integer[]{4,2});
+        points.add(new Integer[]{5,1});
+        for(Integer[] point : points) {
+            board.addMarble(new Marble(Symbol.O), point[0], point[1]);
+        }
+        assertTrue(board.booleanCheckLines(5));
+    }
+    
+    @Test
+    public void booleanCheckLinesReturnsFalseIfLineIsNotFound() {
+        assertFalse(board.booleanCheckLines(5));
+        ArrayList<Integer[]> points = new ArrayList<>();
+        points.add(new Integer[]{1,5});
+        points.add(new Integer[]{2,4});
+        points.add(new Integer[]{3,3});
+        points.add(new Integer[]{4,2});
+        points.add(new Integer[]{5,5});
+        for(Integer[] point : points) {
+            board.addMarble(new Marble(Symbol.O), point[0], point[1]);
+        }
+        assertFalse(board.booleanCheckLines(5));
     }
     
 }

@@ -84,13 +84,13 @@ public class Board {
         }
         Map<String, Object> line;
         
-        line = checkLinesHorizontally(length);
+        line = checkLinesHorizontally(length); // Direction: –
         if(line == null) {
-            line = checkLinesVertically(length);
+            line = checkLinesVertically(length); // Direction: |
             if(line == null) {
-                line = checkLinesDiagonally(length);
+                line = checkLinesDiagonally(length); // Direction: \
                 if(line == null) {
-                    line = checkLinesDiagonally2(length);
+                    line = checkLinesDiagonally2(length); // Direction: /
                 }
             }
         }        
@@ -101,18 +101,19 @@ public class Board {
         if(direction < 0 || direction > 3)
             throw new RuntimeException("The direction is incorrect!");
         
-        int firstIndexFrom;
-        if(direction == 3 || direction == 4) // Diagonal
+        int firstIndexFrom = 0;
+        int firstIndexTo = sideLength * tileSideLength;
+        if(direction == 2){
             firstIndexFrom = -(sideLength * tileSideLength) + 1;
-        else 
-            firstIndexFrom = 0;
+        } else if( direction == 3)
+            firstIndexTo = 2*sideLength * tileSideLength - 1;
         
-        Map<String, Object> line = new HashMap<String, Object>();
+        Map<String, Object> line = new HashMap<>();
         line.put("symbol", null);
-        line.put("coordinates", new ArrayList<Integer[]>());
+        line.put("coordinates", new ArrayList<>());
         int counter = 0;
         Marble lastMarble;
-        for(int i = firstIndexFrom; i < sideLength * tileSideLength; i++) {
+        for(int i = firstIndexFrom; i < firstIndexTo; i++) {
             lastMarble = null;
             for(int j = 0; j < sideLength * tileSideLength; j++) {
                 int firstCoord = -1;
@@ -123,11 +124,11 @@ public class Board {
                 } else if(direction == 1) { // Vertical
                     firstCoord = i;
                     secondCoord = j;
-                } else if(direction == 2) { // Diagonal like /
-                    firstCoord = i;
+                } else if(direction == 2) { // Diagonal like \
+                    firstCoord = j;
                     secondCoord = i + j;
-                } else if(direction == 3) { // Diagonal like \
-                    firstCoord = i + j;
+                } else if(direction == 3) { // Diagonal like /
+                    firstCoord = i - j;
                     secondCoord = j;
                 }
                 Marble m = getMarble(firstCoord,secondCoord);
