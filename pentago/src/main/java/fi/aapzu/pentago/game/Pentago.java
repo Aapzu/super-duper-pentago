@@ -10,7 +10,7 @@ public class Pentago {
     private Board board;
     private Player[] players;    
     private int whoseTurn;
-    private boolean marbleAdded;    
+    private boolean allowedToRotate;    
     
     public Pentago() {
         board = new Board();
@@ -18,7 +18,7 @@ public class Pentago {
         players[0] = new Player(Symbol.X);
         players[1] = new Player(Symbol.O);
         whoseTurn = 0;
-        marbleAdded = false;
+        allowedToRotate = false;
     }
     
     public void setPlayerName(int i, String name) {
@@ -27,18 +27,18 @@ public class Pentago {
     }
     
     public boolean setMarble(int x, int y) {
-        if(marbleAdded)
+        if(allowedToRotate)
             throw new RuntimeException("A tile must be rotated first!");
         Player player = playerInTurn();
         Marble m = player.takeOneMarble();
         boolean success = board.addMarble(m, x, y);
         if(success)
-           marbleAdded = true;
+           allowedToRotate = true;
         return success;
     }
     
     public void rotateTile(int x, int y, int direction) {
-        if(!marbleAdded)
+        if(!allowedToRotate)
             throw new RuntimeException("A marble must be added first!");
         if(direction == 0)
             board.rotateClockWise(x, y);
@@ -47,7 +47,7 @@ public class Pentago {
         else
             throw new RuntimeException("The direction incorrect!");
         
-        marbleAdded = false;
+        allowedToRotate = false;
     }
    
     private Player playerInTurn() {
