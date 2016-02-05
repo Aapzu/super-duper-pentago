@@ -1,0 +1,10 @@
+// In yuml format
+[Start]uses-.->1[Pentago|int whoseTurn;boolean allowedToRotate]
+[Pentago]1++->1[Board|int sideLength;int tileSideLength|checkLines()]
+[Pentago]1++->2[Player|String name]
+[Pentago]1-1[UI]
+[Player]1++->1[MarbleCollection|int maxSize]
+[MarbleCollection]1->0..18[Marble]
+[Board]1++->4[Tile|int sideLength;rotateClockWise();rotateCounterClockWise()]
+[Tile]0..1->0..9[Marble]
+[Marble]*->1[<<enumeration>>;Symbol]

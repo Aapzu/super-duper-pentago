@@ -16,7 +16,7 @@ public class Pentago {
         board = new Board();
         players = new Player[2];
         players[0] = new Player(Symbol.X);
-        players[0] = new Player(Symbol.O);
+        players[1] = new Player(Symbol.O);
         whoseTurn = 0;
         marbleAdded = false;
     }
