@@ -9,6 +9,7 @@ public class Tile {
     
     private int sideLength;
     private Marble[][] tile;
+    private Direction lastDirection;
     
     protected Tile() {
         this(3);
@@ -16,10 +17,11 @@ public class Tile {
     
     protected Tile(int sideLength) {
         if(sideLength <= 0) 
-            throw new RuntimeException("the sideLength of a Tile must be truly positive!");
+            throw new IllegalArgumentException("The sideLength of a Tile must be truly positive!");
         
         this.sideLength = sideLength;
         tile = new Marble[sideLength][sideLength];
+        lastDirection = null;
     }
     
     private boolean validateCoordinates(int x, int y) {
@@ -35,6 +37,9 @@ public class Tile {
     
     protected boolean setMarble(Marble marble, int x, int y) {
         if(validateCoordinates(x, y)) {
+            // Return null when trying to set a marble on top of another one
+            if(marble != null && tile[y][x] != null)
+                return false;
             tile[y][x] = marble;
             return true;
         } else 
@@ -51,25 +56,19 @@ public class Tile {
         
     }
     
-    protected void rotateClockWise() {
-        rotate(true);
-    }
-    
-    protected void rotateCounterClockWise() {
-        rotate(false);
-    }
-    
-    private void rotate(boolean clockWise) {
+    protected void rotate(Direction d) {
         Marble[][] rotatedTile = new Marble[tile.length][tile[0].length];
         for(int y = 0; y < tile.length; y++) {
             for(int x = 0; x < tile[0].length; x++) {
                 int newY, newX;
-                if(clockWise) {
+                if(d == Direction.CLOCKWISE) {
                     newY = x;
                     newX = sideLength - y - 1;
-                } else {
+                } else if(d == Direction.COUNTER_CLOCKWISE) {
                     newY = sideLength - x - 1;
                     newX = y;
+                } else {
+                    throw new IllegalArgumentException("Unvalid direction!");
                 }
                 rotatedTile[newY][newX] = tile[y][x];
             }
@@ -98,5 +97,9 @@ public class Tile {
     
     protected Marble[][] getTile() {
         return tile;
+    }
+    
+    protected Direction getLastDirection() {
+        return lastDirection;
     }
 }

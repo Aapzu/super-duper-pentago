@@ -49,14 +49,14 @@ public class TileTest {
     
     @Test
     public void constructorMustThrowExceptionIfSideLengthIsNegative() {
-        exception.expect(RuntimeException.class);
+        exception.expect(IllegalArgumentException.class);
         exception.expectMessage("must be truly positive");
         tile = new Tile(-2);
     }
     
     @Test
     public void constructorMustThrowExceptionIfSideLengthIsZero() {
-        exception.expect(RuntimeException.class);
+        exception.expect(IllegalArgumentException.class);
         exception.expectMessage("must be truly positive");
         tile = new Tile(0);
     }
@@ -113,7 +113,7 @@ public class TileTest {
     public void removeMarbleReturnsTheMarbleItRemoved() {
         Marble m = new Marble(Symbol.X);
         tile.setMarble(m, 0, 0);
-        assertEquals(tile.removeMarble(0, 0), m);
+        assertEquals(m, tile.removeMarble(0, 0));
     }
     
     @Test
@@ -153,7 +153,7 @@ public class TileTest {
     }
     
     @Test
-    public void rotateClockWiseWorksCorrectly() {
+    public void rotateWorksCorrectlyClockwise() {
         Marble x = new Marble(Symbol.X);
         Marble o = new Marble(Symbol.O);
         tile.setMarble(o, 0, 0);
@@ -162,7 +162,7 @@ public class TileTest {
         tile.setMarble(o, 1, 1);
         tile.setMarble(o, 2, 2);
         
-        tile.rotateClockWise();
+        tile.rotate(Direction.CLOCKWISE);
         
         
         assertEquals(tile.toString(), 
@@ -172,7 +172,7 @@ public class TileTest {
     }
     
     @Test
-    public void rotateCounterClockWiseWorksCorrectly() {
+    public void rotateWorksCorrectlyCounterClockWise() {
         Marble x = new Marble(Symbol.X);
         Marble o = new Marble(Symbol.O);
         tile.setMarble(o, 0, 0);
@@ -181,7 +181,7 @@ public class TileTest {
         tile.setMarble(o, 1, 1);
         tile.setMarble(o, 2, 2);
         
-        tile.rotateCounterClockWise();
+        tile.rotate(Direction.COUNTER_CLOCKWISE);
        
         assertEquals(tile.toString(), 
                 "[null, null, [O]]\n"
@@ -192,8 +192,8 @@ public class TileTest {
     @Test
     public void doubleRotateInDifferentDirectionsBringsBackToTheBeginning() {
         String firstToString = tile.toString();
-        tile.rotateClockWise();
-        tile.rotateCounterClockWise();
+        tile.rotate(Direction.CLOCKWISE);
+        tile.rotate(Direction.COUNTER_CLOCKWISE);
         assertEquals(tile.toString(), firstToString);
     }
     
@@ -206,8 +206,8 @@ public class TileTest {
         tile.setMarble(x, 0, 1);
         tile.setMarble(o, 1, 1);
         tile.setMarble(o, 2, 2);
-        tile.rotateClockWise();
-        tile.rotateClockWise();
+        tile.rotate(Direction.CLOCKWISE);
+        tile.rotate(Direction.CLOCKWISE);
         
         Tile tile2 = new Tile();
         tile2.setMarble(o, 0, 0);
@@ -215,8 +215,8 @@ public class TileTest {
         tile2.setMarble(x, 0, 1);
         tile2.setMarble(o, 1, 1);
         tile2.setMarble(o, 2, 2);
-        tile2.rotateCounterClockWise();
-        tile2.rotateCounterClockWise();
+        tile2.rotate(Direction.COUNTER_CLOCKWISE);
+        tile2.rotate(Direction.COUNTER_CLOCKWISE);
         
         String rotatedString = 
                 "[[O], null, null]\n"

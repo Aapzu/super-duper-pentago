@@ -120,9 +120,11 @@ public class BoardTest {
     }
     
     @Test
-    public void addMarbleReturnsFalseIfTheCoordinatesAreFalse() {
-        assertFalse(board.addMarble(new Marble(Symbol.O), -2, 0));
-        assertFalse(board.addMarble(new Marble(Symbol.O), 10, 10));
+    public void addMarbleThrowsExceptionIfTheCoordinatesAreUnvalid() {
+        exception.expect(IllegalArgumentException.class);
+        board.addMarble(new Marble(Symbol.O), -2, 0);
+        exception.expect(IllegalArgumentException.class);
+        board.addMarble(new Marble(Symbol.O), 10, 10);
     }
     
     @Test
@@ -145,10 +147,17 @@ public class BoardTest {
     }
     
     @Test
+    public void removeMarbleThrowsExceptionIfUnvalidCoordinates() {
+        exception.expect(IllegalArgumentException.class);
+        board.removeMarble(-3, 0);
+        exception.expect(IllegalArgumentException.class);
+        board.removeMarble(10, 10);
+    }
+    
+    @Test
     public void removeMarbleReturnsNullIfMarbleNotFound() {
         assertNull(board.removeMarble(0, 0));
-        assertNull(board.removeMarble(-3, 0));
-        assertNull(board.removeMarble(10, 10));
+        assertNull(board.removeMarble(2, 1));
     }
     
     @Test
@@ -180,7 +189,7 @@ public class BoardTest {
         board.addMarble(o, 1, 4);
         board.addMarble(x, 4, 1);
         board.addMarble(o, 4, 4);
-        board.rotateClockWise(0, 0);
+        board.rotateTile(0, 0, Direction.CLOCKWISE);
         assertEquals("[null, null, [X]][null, null, null]\n" +
                 "[null, [O], null][null, [X], null]\n" +
                 "[null, null, null][null, null, null]\n" +
@@ -188,7 +197,7 @@ public class BoardTest {
                 "[null, [O], null][null, [O], null]\n" +
                 "[null, null, null][null, null, null]\n", board.toString());
         
-        board.rotateCounterClockWise(0, 1);
+        board.rotateTile(0, 1, Direction.COUNTER_CLOCKWISE);
         assertEquals("[null, null, [X]][null, null, null]\n" +
                 "[null, [O], null][null, [X], null]\n" +
                 "[null, null, null][null, null, null]\n" +
@@ -199,17 +208,17 @@ public class BoardTest {
     
     @Test
     public void checkLinesThrowsExceptionWithRightTextIfLengthIsUnder2() {
-        exception.expect(RuntimeException.class);
+        exception.expect(IllegalArgumentException.class);
         exception.expectMessage("must be between 2 and 6");
         board.checkLines(1);
-        exception.expect(RuntimeException.class);
+        exception.expect(IllegalArgumentException.class);
         exception.expectMessage("must be between 2 and 6");
         board.checkLines(-3);
     }
     
     @Test
     public void checkLinesThrowsExceptionWithRightTextIfLengthIsOver6() {
-        exception.expect(RuntimeException.class);
+        exception.expect(IllegalArgumentException.class);
         exception.expectMessage("must be between 2 and 6");
         board.checkLines(7);
     }
@@ -317,34 +326,7 @@ public class BoardTest {
         points.add(new Integer[]{5,1});
         checkLinesWorks(points);
     }
-    
-    @Test
-    public void booleanCheckLinesReturnsTrueIfLineIsFound() {
-        ArrayList<Integer[]> points = new ArrayList<>();
-        points.add(new Integer[]{1,5});
-        points.add(new Integer[]{2,4});
-        points.add(new Integer[]{3,3});
-        points.add(new Integer[]{4,2});
-        points.add(new Integer[]{5,1});
-        for(Integer[] point : points) {
-            board.addMarble(new Marble(Symbol.O), point[0], point[1]);
-        }
-        assertTrue(board.booleanCheckLines(5));
-    }
-    
-    @Test
-    public void booleanCheckLinesReturnsFalseIfLineIsNotFound() {
-        assertFalse(board.booleanCheckLines(5));
-        ArrayList<Integer[]> points = new ArrayList<>();
-        points.add(new Integer[]{1,5});
-        points.add(new Integer[]{2,4});
-        points.add(new Integer[]{3,3});
-        points.add(new Integer[]{4,2});
-        points.add(new Integer[]{5,5});
-        for(Integer[] point : points) {
-            board.addMarble(new Marble(Symbol.O), point[0], point[1]);
-        }
-        assertFalse(board.booleanCheckLines(5));
-    }
+
+   
     
 }

@@ -3,6 +3,7 @@ package fi.aapzu.pentago.logic;
 
 import fi.aapzu.pentago.logic.marble.Marble;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,85 +28,72 @@ public class Board {
         this(2, 3);
     }
     
-    protected Tile getTileByCoordinates(int x, int y) {
-        return tiles[y / tileSideLength][x / tileSideLength];
+    protected Tile getTile(int tileX, int tileY) {
+        if(tileX < 0 || tileX > sideLength || tileY < 0 || tileY > sideLength)
+            throw new IllegalArgumentException("Unvalid coordinates. X: " + tileX + ", Y: " + tileY);
+        return getTiles()[tileY][tileX];
+    }
+    
+    protected Tile getTileByCoordinates(int marbleX, int marbleY) {
+        return getTile(marbleX / tileSideLength, marbleY / tileSideLength);
     }
     
     public boolean addMarble(Marble marble, int x, int y) {
-        try {
-            Tile tile = getTileByCoordinates(x, y);
-            return tile.setMarble(marble, x % tileSideLength, y % tileSideLength);
-        } catch(ArrayIndexOutOfBoundsException e) {
-            return false;
-        }
+        Tile tile = getTileByCoordinates(x, y);
+        return tile.setMarble(marble, x % tileSideLength, y % tileSideLength);
     }
     
     public Marble getMarble(int x, int y) {
-        try {
-            Tile tile = getTileByCoordinates(x, y);
-            return tile.get(x % tileSideLength, y % tileSideLength);
-        } catch(ArrayIndexOutOfBoundsException e) {
-            return null;
-        }
+        Tile tile = getTileByCoordinates(x, y);
+        return tile.get(x % tileSideLength, y % tileSideLength);
     }
     
     public Marble removeMarble(int x, int y) {
-        try {
-            Tile tile = getTileByCoordinates(x, y);
-            return tile.removeMarble(x % tileSideLength, y % tileSideLength);
-        } catch(ArrayIndexOutOfBoundsException e) {
-            return null;
-        }
+        Tile tile = getTileByCoordinates(x, y);
+        return tile.removeMarble(x % tileSideLength, y % tileSideLength);
     }
     
     public int getSideLength() {
         return sideLength;
     }
     
-    public void rotateClockWise(int tileX, int tileY) {
-        tiles[tileY][tileX].rotateClockWise();
-    }
-    
-    public void rotateCounterClockWise(int tileX, int tileY) {
-        tiles[tileY][tileX].rotateCounterClockWise();
+    public void rotateTile(int tileX, int tileY, Direction d) {
+        tiles[tileY][tileX].rotate(d);
     }
     
     protected Tile[][] getTiles() {
         return tiles;
     }
     
-    public boolean booleanCheckLines(int length) {
-        return checkLines(length) != null;
+    public Direction getLastDirection(int tileX, int tileY) {
+        return getTile(tileX, tileY).getLastDirection();
     }
     
     public Map<String, Object> checkLines(int length) {
         if(length < 2 || length > sideLength*tileSideLength) {
-            throw new RuntimeException("The length of a line must be between 2 and "+sideLength*tileSideLength);
+            throw new IllegalArgumentException("The length of a line must be between 2 and "+sideLength*tileSideLength);
         }
-        Map<String, Object> line;
+        Map<String, Object> line = null;
         
-        line = checkLinesHorizontally(length); // Direction: –
-        if(line == null) {
-            line = checkLinesVertically(length); // Direction: |
-            if(line == null) {
-                line = checkLinesDiagonally(length); // Direction: \
-                if(line == null) {
-                    line = checkLinesDiagonally2(length); // Direction: /
-                }
-            }
-        }        
+        for(Direction d : Direction.getLineDirections()) {
+            line = checkLines(length, d);
+            if(line != null)
+                break;
+        }
+        
         return line;
     }
     
-    protected Map<String, Object> checkLines(int length, int direction) {
-        if(direction < 0 || direction > 3)
-            throw new RuntimeException("The direction is incorrect!");
+    protected Map<String, Object> checkLines(int length, Direction d) {
+        if(!Arrays.asList(Direction.getLineDirections()).contains(d))
+            throw new IllegalArgumentException("The direction is incorrect!");
         
         int firstIndexFrom = 0;
         int firstIndexTo = sideLength * tileSideLength;
-        if(direction == 2){
+        
+        if(d == Direction.UPGRADING_DIAGONAL){
             firstIndexFrom = -(sideLength * tileSideLength) + 1;
-        } else if( direction == 3)
+        } else if(d == Direction.DOWNGRADING_DIAGONAL)
             firstIndexTo = 2*sideLength * tileSideLength - 1;
         
         Map<String, Object> line = new HashMap<>();
@@ -118,55 +106,41 @@ public class Board {
             for(int j = 0; j < sideLength * tileSideLength; j++) {
                 int firstCoord = -1;
                 int secondCoord = -1;
-                if(direction == 0) { // Horizontal
+                if(d == Direction.HORIZONTAL) {
                     firstCoord = j;
                     secondCoord = i;
-                } else if(direction == 1) { // Vertical
+                } else if(d == Direction.VERTICAL) {
                     firstCoord = i;
                     secondCoord = j;
-                } else if(direction == 2) { // Diagonal like \
+                } else if(d == Direction.UPGRADING_DIAGONAL) {
                     firstCoord = j;
                     secondCoord = i + j;
-                } else if(direction == 3) { // Diagonal like /
+                } else if(d == Direction.DOWNGRADING_DIAGONAL) {
                     firstCoord = i - j;
                     secondCoord = j;
                 }
-                Marble m = getMarble(firstCoord,secondCoord);
-                ((ArrayList<Integer[]>)line.get("coordinates")).add(new Integer[]{firstCoord, secondCoord});
+                if(firstCoord >= 0 && firstCoord < sideLength * tileSideLength && secondCoord >= 0 && secondCoord < sideLength * tileSideLength) {
+                    Marble m = getMarble(firstCoord,secondCoord);
+                    ((ArrayList<Integer[]>)line.get("coordinates")).add(new Integer[]{firstCoord, secondCoord});
                 
-                if(lastMarble != null || m == null) {
-                    if(m != null && m.equals(lastMarble)) {
-                        counter++;
-                        if(counter >= length-1) {
-                            line.put("symbol", m.getSymbol());
-                            return line;
+                    if(lastMarble != null || m == null) {
+                        if(m != null && m.equals(lastMarble)) {
+                            counter++;
+                            if(counter >= length-1) {
+                                line.put("symbol", m.getSymbol());
+                                return line;
+                            }
+                        } else {
+                            counter = 0;
+                            ((ArrayList)line.get("coordinates")).clear();
                         }
-                    } else {
-                        counter = 0;
-                        ((ArrayList)line.get("coordinates")).clear();
                     }
-                }
 
-                lastMarble = m;
+                    lastMarble = m;
+                }
             }
         }
         return null;
-    }
-    
-    private Map<String, Object> checkLinesHorizontally(int length) {
-        return checkLines(5, 0);
-    }
-    
-    private Map<String, Object> checkLinesVertically(int length) {
-        return checkLines(5, 1);
-    }
-    
-    private Map<String, Object> checkLinesDiagonally(int length) {
-        return checkLines(5,2);
-    }
-    
-    private Map<String, Object> checkLinesDiagonally2(int length) {
-        return checkLines(5,3);
     }
     
     @Override
