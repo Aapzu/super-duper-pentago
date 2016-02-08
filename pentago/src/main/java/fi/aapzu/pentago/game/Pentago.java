@@ -26,7 +26,7 @@ public class Pentago {
     
     public void setPlayerName(int i, String name) {
         if(i < 0 || i > 1)
-            throw new IllegalArgumentException("Unvalid player index: "+i);
+            throw new IllegalArgumentException("Invalid player index: "+i);
         PLAYERS[i].setName(name);
     }
     
@@ -45,7 +45,7 @@ public class Pentago {
         if(!allowedToRotate)
             throw new PentagoGameRuleException("A marble must be added first!");
         if(!Arrays.asList(Direction.getRotateDirections()).contains(direction))
-            throw new IllegalArgumentException("Unvalid direction!");
+            throw new IllegalArgumentException("Invalid direction!");
         if(direction == BOARD.getLastDirection(x, y))
             throw new PentagoGameRuleException("The tile cannot be rotated back to the direction it was just rotated from!");
         

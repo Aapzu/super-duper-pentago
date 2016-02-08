@@ -30,7 +30,7 @@ public class Board {
     
     protected Tile getTile(int tileX, int tileY) {
         if(tileX < 0 || tileX > sideLength || tileY < 0 || tileY > sideLength)
-            throw new IllegalArgumentException("Unvalid coordinates. X: " + tileX + ", Y: " + tileY);
+            throw new IllegalArgumentException("Invalid coordinates. X: " + tileX + ", Y: " + tileY);
         return getTiles()[tileY][tileX];
     }
     

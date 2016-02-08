@@ -23,33 +23,53 @@ public class TextUI {
         name = scanner.nextLine();
         game.setPlayerName(1, name);
         while(game.getLine() == null) {
-            System.out.println("Player in turn: " + game.whoseTurn().getName());
+            printGame();
+            for(int i = 0; i < 50; i++) System.out.println();
+            System.out.println("Player in turn: " + game.whoseTurn().getName() + "\n");
             System.out.println(game.getBoard().toString());
             boolean success = false;
             while(!success) {
                 try {
-                    System.out.println("Give coordinates for a new marble:\nX:");
-                    int x = Integer.parseInt(scanner.nextLine());
-                    System.out.println("Y:");
-                    int y = Integer.parseInt(scanner.nextLine());
+                    System.out.println("Give coordinates for a new marble(x y):");
+                    String cmd = scanner.nextLine();
+                    int x;
+                    int y;
+                    if(cmd.contains("(")) {
+                        x = Integer.parseInt(cmd.split("\\(| |\\)")[1]);
+                        y = Integer.parseInt(cmd.split("\\(| |\\)")[2]);
+                    } else {
+                        x = Integer.parseInt(cmd.split(" ")[0]);
+                        y = Integer.parseInt(cmd.split(" ")[1]);
+                    }
                     game.setMarble(x, y);
                     success = true;
                 } catch (Exception e) {
                     System.out.println("Incorrect coordinates, try again.");
                 }
             }
-            System.out.println(game.getBoard().toString());
+            printGame();
             success = false;
             while(!success) {
                 try {
-                    System.out.println("Give coordinates for the tile to be rotated:\nX:");
-                    int x = Integer.parseInt(scanner.nextLine());
-                    System.out.println("Y:");
-                    int y = Integer.parseInt(scanner.nextLine());
+                    System.out.println("Give coordinates for the tile to be rotated (x y):");
+                    String cmd = scanner.nextLine();
+                    int x;
+                    int y;
+                    if(cmd.contains("(")) {
+                        x = Integer.parseInt(cmd.split("\\(| |\\)")[1]);
+                        y = Integer.parseInt(cmd.split("\\(| |\\)")[2]);
+                    } else {
+                        x = Integer.parseInt(cmd.split(" ")[0]);
+                        y = Integer.parseInt(cmd.split(" ")[1]);
+                    }
                     int d = 0;
                     while(d != 1 && d != 2) {
                         System.out.println("Give direction (1 for clockwise, 2 for counterClockwise):");
-                        d = Integer.parseInt(scanner.nextLine());
+                        try {
+                            d = Integer.parseInt(scanner.nextLine());
+                        } catch (Exception e) {
+                            System.out.println("Incorrect direction, try again");
+                        }
                     }
                     Direction dir = Direction.CLOCKWISE;
                     if(d == 2)
@@ -57,9 +77,14 @@ public class TextUI {
                     game.rotateTile(x, y, Direction.CLOCKWISE);
                     success = true;
                 } catch (Exception e) {
-                    System.out.println("Incorrect coordinates, try again.");
+                    System.out.println("Incorrect coordinates, try again");
                 }
             }
         }
+    }
+    
+    private void printGame() {
+        for(int i = 0; i < 20; i++) System.out.println();
+        System.out.println(game.getBoard().toString());
     }
 }

@@ -1,6 +1,7 @@
 
 package fi.aapzu.pentago.logic;
 
+import fi.aapzu.pentago.game.PentagoGameRuleException;
 import fi.aapzu.pentago.logic.marble.Marble;
 import java.util.Arrays;
 
@@ -39,7 +40,7 @@ public class Tile {
         if(validateCoordinates(x, y)) {
             // Return null when trying to set a marble on top of another one
             if(marble != null && tile[y][x] != null)
-                return false;
+                throw new PentagoGameRuleException("The square is not empty!");
             tile[y][x] = marble;
             return true;
         } else 
@@ -57,6 +58,7 @@ public class Tile {
     }
     
     protected void rotate(Direction d) {
+        setLastDirection(d);
         Marble[][] rotatedTile = new Marble[tile.length][tile[0].length];
         for(int y = 0; y < tile.length; y++) {
             for(int x = 0; x < tile[0].length; x++) {
@@ -68,7 +70,7 @@ public class Tile {
                     newY = sideLength - x - 1;
                     newX = y;
                 } else {
-                    throw new IllegalArgumentException("Unvalid direction!");
+                    throw new IllegalArgumentException("Invalid direction!");
                 }
                 rotatedTile[newY][newX] = tile[y][x];
             }
@@ -101,5 +103,9 @@ public class Tile {
     
     protected Direction getLastDirection() {
         return lastDirection;
+    }
+
+    private void setLastDirection(Direction d) {
+        lastDirection = d;
     }
 }

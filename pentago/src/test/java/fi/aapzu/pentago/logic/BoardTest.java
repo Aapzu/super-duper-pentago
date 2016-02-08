@@ -5,6 +5,7 @@
  */
 package fi.aapzu.pentago.logic;
 
+import fi.aapzu.pentago.game.PentagoGameRuleException;
 import fi.aapzu.pentago.logic.marble.Marble;
 import fi.aapzu.pentago.logic.marble.Symbol;
 
@@ -59,6 +60,18 @@ public class BoardTest {
     public void constructorWithoutParametersMustUseRightDefaultValues() {
         assertEquals(board.getSideLength(), 2);
         assertEquals(board.getTiles()[0][0].getSideLength(), 3);
+    }
+    
+    @Test
+    public void getTileThrowsErrorIfCoordinatesAreInvalid() {
+        exception.expect(IllegalArgumentException.class);
+        exception.expectMessage("Invalid coordinates");
+        board.getTile(-1,0);
+        board.getTile(0,-1);
+        board.getTile(0,2);
+        board.getTile(2,0);
+        board.getTile(2,-1);
+        board.getTile(-1,2);
     }
     
     @Test
@@ -120,7 +133,7 @@ public class BoardTest {
     }
     
     @Test
-    public void addMarbleThrowsExceptionIfTheCoordinatesAreUnvalid() {
+    public void addMarbleThrowsExceptionIfTheCoordinatesAreInvalid() {
         exception.expect(IllegalArgumentException.class);
         board.addMarble(new Marble(Symbol.O), -2, 0);
         exception.expect(IllegalArgumentException.class);
@@ -147,7 +160,7 @@ public class BoardTest {
     }
     
     @Test
-    public void removeMarbleThrowsExceptionIfUnvalidCoordinates() {
+    public void removeMarbleThrowsExceptionIfInvalidCoordinates() {
         exception.expect(IllegalArgumentException.class);
         board.removeMarble(-3, 0);
         exception.expect(IllegalArgumentException.class);
@@ -211,9 +224,14 @@ public class BoardTest {
         exception.expect(IllegalArgumentException.class);
         exception.expectMessage("must be between 2 and 6");
         board.checkLines(1);
+    }
+    
+    @Test
+    public void checkLinesThrowsExceptionIfTheDirectionIsInvalid() {
         exception.expect(IllegalArgumentException.class);
-        exception.expectMessage("must be between 2 and 6");
-        board.checkLines(-3);
+        exception.expectMessage("direction is incorrect");
+        board.checkLines(5, Direction.CLOCKWISE);
+        board.checkLines(5, Direction.COUNTER_CLOCKWISE);
     }
     
     @Test
@@ -224,7 +242,8 @@ public class BoardTest {
     }
             
     @Test
-    public void checkLinesReturnsNullIfNoRows() {
+    public void checkLinesThrowsExceptionIfNoRows() {
+        exception.expect(PentagoGameRuleException.class);
         for(int i = 2; i < 6; i++)
             assertNull(board.checkLines(i));
         Marble m = new Marble(Symbol.X);
@@ -327,6 +346,17 @@ public class BoardTest {
         checkLinesWorks(points);
     }
 
-   
+    @Test
+    public void getLastDirectionReturnsTheRightDirection() {
+        assertNull(board.getLastDirection(0, 0));
+        board.rotateTile(0, 0, Direction.CLOCKWISE);
+        assertEquals(Direction.CLOCKWISE, board.getLastDirection(0, 0));
+        board.rotateTile(0, 0, Direction.COUNTER_CLOCKWISE);
+        assertEquals(Direction.COUNTER_CLOCKWISE, board.getLastDirection(0, 0));
+        board.rotateTile(1, 1, Direction.CLOCKWISE);
+        assertEquals(Direction.CLOCKWISE, board.getLastDirection(1, 1));
+        assertEquals(Direction.COUNTER_CLOCKWISE, board.getLastDirection(0, 0));
+        
+    }
     
 }

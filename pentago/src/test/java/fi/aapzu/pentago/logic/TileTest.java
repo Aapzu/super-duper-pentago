@@ -1,15 +1,10 @@
 
 package fi.aapzu.pentago.logic;
 
-
-
-import fi.aapzu.pentago.logic.Tile;
 import fi.aapzu.pentago.logic.marble.Marble;
 import fi.aapzu.pentago.logic.marble.Symbol;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Rule;
@@ -224,6 +219,19 @@ public class TileTest {
               + "[null, [X], [O]]";
         assertEquals(tile.toString(), rotatedString);
         assertEquals(tile2.toString(), rotatedString);
+    }
+    
+    @Test
+    public void getLastDirectionFirstReturnsNull() {
+        assertNull(tile.getLastDirection());
+    }
+    
+    @Test
+    public void getLastDirectionReturnsTheLastDirection() {
+        tile.rotate(Direction.CLOCKWISE);
+        assertEquals(Direction.CLOCKWISE, tile.getLastDirection());
+        tile.rotate(Direction.COUNTER_CLOCKWISE);
+        assertEquals(Direction.COUNTER_CLOCKWISE, tile.getLastDirection());
     }
     
 }
