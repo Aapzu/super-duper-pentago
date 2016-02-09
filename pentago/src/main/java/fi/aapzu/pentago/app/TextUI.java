@@ -5,16 +5,28 @@ import fi.aapzu.pentago.game.Pentago;
 import fi.aapzu.pentago.logic.Direction;
 import java.util.Scanner;
 
+/**
+ * Text form user interface for Pentago.
+ * 
+ * @author Aapeli
+ */
 public class TextUI {
     
     Pentago game;
     Scanner scanner;
     
+    /**
+     * Creates a new game and the scanner for the commands.
+     */
     public TextUI() {
         game = new Pentago();
         scanner = new Scanner(System.in);
     }
     
+    /**
+     * Starts the game.
+     * Every other time prints the board and the Player in turn, and asks for a command.
+     */
     public void startPentago() {
         System.out.println("Give name for player X:");
         String name = scanner.nextLine();
