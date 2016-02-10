@@ -28,15 +28,15 @@ public class Marble {
     
     @Override
     public String toString() {
-        return "["+ getSymbol() + "]";
+        return "[" + getSymbol() + "]";
     }
     
     @Override
     public boolean equals(Object o) {
-        if(o == null || !(o instanceof Marble)) {
+        if (o == null || !(o instanceof Marble)) {
             return false;
         }
-        return this.getSymbol().equals(((Marble)o).getSymbol());
+        return this.getSymbol().equals(((Marble) o).getSymbol());
     }
 
 }

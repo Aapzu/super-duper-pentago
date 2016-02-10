@@ -22,7 +22,7 @@ public class MarbleCollection {
     public MarbleCollection(Symbol symbol, int maxSize) {
         this.marbleList = new ArrayList<>();
         this.maxSize = maxSize;
-        for(int i = 0; i < maxSize; i++) {
+        for (int i = 0; i < maxSize; i++) {
             this.marbleList.add(new Marble(symbol));
         }
     }
@@ -43,10 +43,11 @@ public class MarbleCollection {
      * @return true if the addition succeeded, otherwise false
      */
     public boolean addMarble(Marble m) {
-        if(this.marbleList.size() < maxSize)
+        if (this.marbleList.size() < maxSize) {
             return this.marbleList.add(m);
-        else
+        } else {
             return false;
+        }
     }
     
     /**
@@ -90,10 +91,11 @@ public class MarbleCollection {
      * @return the Marble or null
      */
     public Marble getMarble(int index) {
-        if(!rangeCheck(index))
+        if (!rangeCheck(index)) {
             return null;
-        else
+        } else {
             return marbleList.get(index);
+        }
     }
     
     private boolean rangeCheck(int index) {

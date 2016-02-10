@@ -11,8 +11,7 @@ public class PentagoGameRuleException extends RuntimeException {
     /**
      * Creates a new PentagoGameRuleException.
      */
-    public PentagoGameRuleException() {
-    }
+    public PentagoGameRuleException() {}
 
     /**
      * Creates a new PentagoGameRuleException with the given message.

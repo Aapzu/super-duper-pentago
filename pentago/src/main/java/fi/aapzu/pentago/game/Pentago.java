@@ -2,6 +2,7 @@
 package fi.aapzu.pentago.game;
 
 import fi.aapzu.pentago.logic.Board;
+import fi.aapzu.pentago.logic.BoardLineChecker;
 import fi.aapzu.pentago.logic.Direction;
 import fi.aapzu.pentago.logic.marble.Marble;
 import fi.aapzu.pentago.logic.marble.Symbol;
@@ -15,8 +16,9 @@ import java.util.Map;
  */
 public class Pentago {
     
-    private final Board BOARD;
-    private final Player[] PLAYERS;    
+    private final Board board;
+    private final Player[] players;
+    private final BoardLineChecker lineChecker;
     private int whoseTurn;
     private boolean allowedToRotate;    
     
@@ -24,10 +26,11 @@ public class Pentago {
      * Creates a new game with a Board, two Players and the bookkeeping of whose turn it is.
      */
     public Pentago() {
-        BOARD = new Board();
-        PLAYERS = new Player[2];
-        PLAYERS[0] = new Player(Symbol.X);
-        PLAYERS[1] = new Player(Symbol.O);
+        board = new Board();
+        lineChecker = new BoardLineChecker(board);
+        players = new Player[2];
+        players[0] = new Player(Symbol.X);
+        players[1] = new Player(Symbol.O);
         whoseTurn = 0;
         allowedToRotate = false;
     }
@@ -39,9 +42,10 @@ public class Pentago {
      * @param name the name to be Given to the Player
      */
     public void setPlayerName(int i, String name) {
-        if(i < 0 || i > 1)
-            throw new IllegalArgumentException("Invalid player index: "+i);
-        PLAYERS[i].setName(name);
+        if (i < 0 || i > 1) {
+            throw new IllegalArgumentException("Invalid player index: " + i);
+        }
+        players[i].setName(name);
     }
     
     /**
@@ -53,13 +57,13 @@ public class Pentago {
      * @return true if succeeded, otherwise false
      */
     public boolean setMarble(int x, int y) {
-        if(allowedToRotate)
+        if (allowedToRotate) {
             throw new PentagoGameRuleException("A tile must be rotated first!");
+        }
         Player player = whoseTurn();
         Marble m = player.takeOneMarble();
-        boolean success = BOARD.addMarble(m, x, y);
-        if(success)
-           allowedToRotate = true;
+        boolean success = board.addMarble(m, x, y);
+        allowedToRotate = success;
         return success;
     }
     
@@ -72,14 +76,17 @@ public class Pentago {
      * @param d the Direction
      */
     public void rotateTile(int x, int y, Direction d) {
-        if(!allowedToRotate)
+        if (!allowedToRotate) {
             throw new PentagoGameRuleException("A marble must be added first!");
-        if(!Arrays.asList(Direction.getRotateDirections()).contains(d))
+        }
+        if (!Arrays.asList(Direction.getRotateDirections()).contains(d)) {
             throw new IllegalArgumentException("Invalid direction!");
-        if(d == BOARD.getLastDirection(x, y))
+        }
+        if (d == board.getLastDirection(x, y)) {
             throw new PentagoGameRuleException("The tile cannot be rotated back to the direction it was just rotated from!");
+        }
         
-        BOARD.rotateTile(x, y, d);
+        board.rotateTile(x, y, d);
         whoseTurn = (whoseTurn + 1) % 2;
         allowedToRotate = false;
     }
@@ -88,13 +95,14 @@ public class Pentago {
      * @return the Player whose turn it is currently
      */
     public Player whoseTurn() {
-        return PLAYERS[whoseTurn];
+        return players[whoseTurn];
     }
     
     private Player getPlayerBySymbol(Symbol symbol) {
-        for(Player p : PLAYERS) {
-            if(p.getSymbol() == symbol)
+        for (Player p : players) {
+            if (p.getSymbol() == symbol) {
                 return p;
+            }
         }
         return null;
     }
@@ -106,9 +114,9 @@ public class Pentago {
      * @return line or null
      */
     public Map<String, Object> getLine() {
-        Map<String, Object> line = BOARD.checkLines(5);
-        if(line != null && line.get("symbol") != null) {
-            line.put("player", getPlayerBySymbol((Symbol)line.get("symbol")));
+        Map<String, Object> line = lineChecker.checkLines(5);
+        if (line != null && line.get("symbol") != null) {
+            line.put("player", getPlayerBySymbol((Symbol) line.get("symbol")));
         }
         return line;
     }
@@ -117,6 +125,6 @@ public class Pentago {
      * @return board
      */
     public Board getBoard() {
-        return BOARD;
+        return board;
     }
 }

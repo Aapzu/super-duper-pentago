@@ -31,9 +31,9 @@ public class Tile {
      * @param sideLength
      */
     protected Tile(int sideLength) {
-        if(sideLength <= 0) 
+        if (sideLength <= 0) {
             throw new IllegalArgumentException("The sideLength of a Tile must be truly positive!");
-        
+        }
         this.sideLength = sideLength;
         tile = new Marble[sideLength][sideLength];
         lastDirection = null;
@@ -52,10 +52,11 @@ public class Tile {
      * @return the Marble or null
      */
     protected Marble get(int x, int y) {
-        if(validateCoordinates(x, y))
+        if (validateCoordinates(x, y)) {
             return getTile()[y][x];
-        else
+        } else {
             return null;
+        }
     }
     
     /**
@@ -69,14 +70,16 @@ public class Tile {
      * @return true if succeeded, otherwise false
      */
     protected boolean setMarble(Marble marble, int x, int y) {
-        if(validateCoordinates(x, y)) {
+        if (validateCoordinates(x, y)) {
             // Return null when trying to set a marble on top of another one
-            if(marble != null && tile[y][x] != null)
+            if (marble != null && tile[y][x] != null) {
                 throw new PentagoGameRuleException("The square is not empty!");
+            }
             tile[y][x] = marble;
             return true;
-        } else 
+        } else {
             return false;
+        }
     }
     
     /**
@@ -88,12 +91,13 @@ public class Tile {
      * @return the removed Marble or null
      */
     protected Marble removeMarble(int x, int y) {
-        if(validateCoordinates(x, y)) {
+        if (validateCoordinates(x, y)) {
             Marble marble = tile[y][x];
             setMarble(null, x, y);
             return marble;
-        } else
+        } else {
             return null;
+        }
     }
     
     /**
@@ -104,18 +108,19 @@ public class Tile {
      * @param d the Direction for the Tile to be rotated
      */
     protected void rotate(Direction d) {
-        if(!Arrays.asList(Direction.getRotateDirections()).contains(d))
+        if (!Arrays.asList(Direction.getRotateDirections()).contains(d)) {
             throw new IllegalArgumentException("Invalid direction!");
+        }
         setLastDirection(d);
         Marble[][] rotatedTile = new Marble[tile.length][tile[0].length];
-        for(int y = 0; y < tile.length; y++) {
-            for(int x = 0; x < tile[0].length; x++) {
+        for (int y = 0; y < tile.length; y++) {
+            for (int x = 0; x < tile[0].length; x++) {
                 int newY = -1;
                 int newX = -1;
-                if(d == Direction.CLOCKWISE) {
+                if (d == Direction.CLOCKWISE) {
                     newY = x;
                     newX = sideLength - y - 1;
-                } else if(d == Direction.COUNTER_CLOCKWISE) {
+                } else if (d == Direction.COUNTER_CLOCKWISE) {
                     newY = sideLength - x - 1;
                     newX = y;
                 }
@@ -128,10 +133,11 @@ public class Tile {
     @Override
     public String toString() {
         String result = "";
-        for(int i = 0; i < tile.length; i++) {
+        for (int i = 0; i < tile.length; i++) {
             result += rowToString(i);
-            if(i != tile.length - 1)
+            if (i != tile.length - 1) {
                 result += "\n";
+            }
         }
         return result;
     }

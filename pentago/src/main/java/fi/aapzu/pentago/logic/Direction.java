@@ -59,11 +59,12 @@ public enum Direction {
      * @return
      */
     public static Direction getOpposite(Direction d) {
-        if(d == CLOCKWISE)
+        if (d == CLOCKWISE) {
             return COUNTER_CLOCKWISE;
-        else if(d == COUNTER_CLOCKWISE)
+        } else if (d == COUNTER_CLOCKWISE) {
             return CLOCKWISE;
-        else
+        } else {
             return null;
+        }
     }
 }

@@ -28,8 +28,8 @@ public class Board {
         this.sideLength = sideLength;
         this.tileSideLength = tileSideLength;
         tiles = new Tile[sideLength][sideLength];
-        for(int y = 0; y < sideLength; y++) {
-            for(int x = 0; x < sideLength; x++) {
+        for (int y = 0; y < sideLength; y++) {
+            for (int x = 0; x < sideLength; x++) {
                 tiles[y][x] = new Tile(tileSideLength);
             }
         }
@@ -51,8 +51,9 @@ public class Board {
      * @return the Tile
      */
     protected Tile getTile(int tileX, int tileY) {
-        if(tileX < 0 || tileX > sideLength || tileY < 0 || tileY > sideLength)
+        if (tileX < 0 || tileX > sideLength || tileY < 0 || tileY > sideLength) {
             throw new IllegalArgumentException("Invalid coordinates. X: " + tileX + ", Y: " + tileY);
+        }
         return getTiles()[tileY][tileX];
     }
     
@@ -151,103 +152,17 @@ public class Board {
         return getTile(tileX, tileY).getLastDirection();
     }
     
-    /**
-     * Calls checkLines(length, d) with all the valid Directions
-     * (HORIZONTAL, VERTICAL, UPGRADING_DIAGONAL, DOWNGRADING_DIAGONAL).
-     * 
-     * @param length the length to be given to checkLines
-     * @return the line found or null
-     */
-    public Map<String, Object> checkLines(int length) {
-        if(length < 2 || length > sideLength*tileSideLength) {
-            throw new IllegalArgumentException("The length of a line must be between 2 and "+sideLength*tileSideLength);
-        }
-        Map<String, Object> line = null;
-        
-        for(Direction d : Direction.getLineDirections()) {
-            line = checkLines(length, d);
-            if(line != null)
-                break;
-        }
-        
-        return line;
-    }
     
-    /**
-     * Checks if there are the given amount of same symbol on the board in the given direction.
-     * If a line was found, returns a map with the symbol and the coordinates of the line.
-     * 
-     * @param length the required amount of the same symbols in a row
-     * @param d the Direction to be looked at
-     * @return the line or null
-     */
-    protected Map<String, Object> checkLines(int length, Direction d) {
-        if(!Arrays.asList(Direction.getLineDirections()).contains(d))
-            throw new IllegalArgumentException("The direction is incorrect!");
-        
-        int firstIndexFrom = 0;
-        int firstIndexTo = sideLength * tileSideLength;
-        
-        if(d == Direction.UPGRADING_DIAGONAL){
-            firstIndexFrom = -(sideLength * tileSideLength) + 1;
-        } else if(d == Direction.DOWNGRADING_DIAGONAL)
-            firstIndexTo = 2*sideLength * tileSideLength - 1;
-        
-        Map<String, Object> line = new HashMap<>();
-        line.put("symbol", null);
-        line.put("coordinates", new ArrayList<>());
-        int counter = 0;
-        Marble lastMarble;
-        for(int i = firstIndexFrom; i < firstIndexTo; i++) {
-            lastMarble = null;
-            for(int j = 0; j < sideLength * tileSideLength; j++) {
-                int firstCoord = -1;
-                int secondCoord = -1;
-                if(d == Direction.HORIZONTAL) {
-                    firstCoord = j;
-                    secondCoord = i;
-                } else if(d == Direction.VERTICAL) {
-                    firstCoord = i;
-                    secondCoord = j;
-                } else if(d == Direction.UPGRADING_DIAGONAL) {
-                    firstCoord = j;
-                    secondCoord = i + j;
-                } else if(d == Direction.DOWNGRADING_DIAGONAL) {
-                    firstCoord = i - j;
-                    secondCoord = j;
-                }
-                if(firstCoord >= 0 && firstCoord < sideLength * tileSideLength && secondCoord >= 0 && secondCoord < sideLength * tileSideLength) {
-                    Marble m = getMarble(firstCoord,secondCoord);
-                    ((ArrayList<Integer[]>)line.get("coordinates")).add(new Integer[]{firstCoord, secondCoord});
-                
-                    if(lastMarble != null || m == null) {
-                        if(m != null && m.equals(lastMarble)) {
-                            counter++;
-                            if(counter >= length-1) {
-                                line.put("symbol", m.getSymbol());
-                                return line;
-                            }
-                        } else {
-                            counter = 0;
-                            ((ArrayList)line.get("coordinates")).clear();
-                        }
-                    }
-
-                    lastMarble = m;
-                }
-            }
-        }
-        return null;
-    }
     
     @Override
     public String toString() {
         String result = "";
-        for(Tile[] t : tiles) {
-            for(int i = 0; i < t.length * t[0].getSideLength(); i++) {
+        for (Tile[] t : tiles) {
+            for (int i = 0; i < t.length * t[0].getSideLength(); i++) {
                 result += t[i % t.length].rowToString(i / t.length);
-                if((i + 1) % t.length == 0)
+                if ((i + 1) % t.length == 0) {
                     result += "\n";
+                }
             }
         }
         return result;

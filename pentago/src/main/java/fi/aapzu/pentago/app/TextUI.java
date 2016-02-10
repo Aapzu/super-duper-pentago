@@ -34,19 +34,21 @@ public class TextUI {
         System.out.println("Give name for player O:");
         name = scanner.nextLine();
         game.setPlayerName(1, name);
-        while(game.getLine() == null) {
+        while (game.getLine() == null) {
             printGame();
-            for(int i = 0; i < 50; i++) System.out.println();
+            for (int i = 0; i < 50; i++) {
+                System.out.println();
+            }
             System.out.println("Player in turn: " + game.whoseTurn().getName() + "\n");
             System.out.println(game.getBoard().toString());
             boolean success = false;
-            while(!success) {
+            while (!success) {
                 try {
                     System.out.println("Give coordinates for a new marble(x y):");
                     String cmd = scanner.nextLine();
                     int x;
                     int y;
-                    if(cmd.contains("(")) {
+                    if (cmd.contains("(")) {
                         x = Integer.parseInt(cmd.split("\\(| |\\)")[1]);
                         y = Integer.parseInt(cmd.split("\\(| |\\)")[2]);
                     } else {
@@ -61,13 +63,13 @@ public class TextUI {
             }
             printGame();
             success = false;
-            while(!success) {
+            while (!success) {
                 try {
                     System.out.println("Give coordinates for the tile to be rotated (x y):");
                     String cmd = scanner.nextLine();
                     int x;
                     int y;
-                    if(cmd.contains("(")) {
+                    if (cmd.contains("(")) {
                         x = Integer.parseInt(cmd.split("\\(| |\\)")[1]);
                         y = Integer.parseInt(cmd.split("\\(| |\\)")[2]);
                     } else {
@@ -75,7 +77,7 @@ public class TextUI {
                         y = Integer.parseInt(cmd.split(" ")[1]);
                     }
                     int d = 0;
-                    while(d != 1 && d != 2) {
+                    while (d != 1 && d != 2) {
                         System.out.println("Give direction (1 for clockwise, 2 for counterClockwise):");
                         try {
                             d = Integer.parseInt(scanner.nextLine());
@@ -84,8 +86,9 @@ public class TextUI {
                         }
                     }
                     Direction dir = Direction.CLOCKWISE;
-                    if(d == 2)
+                    if (d == 2) {
                         dir = Direction.COUNTER_CLOCKWISE;
+                    }
                     game.rotateTile(x, y, Direction.CLOCKWISE);
                     success = true;
                 } catch (Exception e) {
@@ -96,7 +99,9 @@ public class TextUI {
     }
     
     private void printGame() {
-        for(int i = 0; i < 20; i++) System.out.println();
+        for (int i = 0; i < 20; i++) {
+            System.out.println();
+        }
         System.out.println(game.getBoard().toString());
     }
 }
