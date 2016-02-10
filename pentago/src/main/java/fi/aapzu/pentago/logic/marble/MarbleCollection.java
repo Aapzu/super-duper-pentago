@@ -99,13 +99,13 @@ public class MarbleCollection {
     }
     
     private boolean rangeCheck(int index) {
-        return index >= 0 && index <= marbleList.size();
+        return index >= 0 && index < marbleList.size();
     }
     
     /**
      * @return the amount of the remaining Marbles.
      */
-    public int getSize() {
+    public int size() {
         return marbleList.size();
     }
     

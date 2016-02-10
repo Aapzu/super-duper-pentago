@@ -62,7 +62,7 @@ public class Player {
     @Override
     public String toString() {
         String plural = "";
-        int size = marbles.getSize();
+        int size = marbles.size();
         if (size != 1) {
             plural += "s";
         }

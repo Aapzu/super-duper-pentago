@@ -148,6 +148,16 @@ public class TileTest {
     }
     
     @Test
+    public void rotateThrowsExceptionIfTheDirectionIsInvalid() {
+        exception.expect(IllegalArgumentException.class);
+        exception.expectMessage("Invalid direction");
+        tile.rotate(Direction.HORIZONTAL);
+        tile.rotate(Direction.VERTICAL);
+        tile.rotate(Direction.UPGRADING_DIAGONAL);
+        tile.rotate(Direction.DOWNGRADING_DIAGONAL);
+    }
+    
+    @Test
     public void rotateWorksCorrectlyClockwise() {
         Marble x = new Marble(Symbol.X);
         Marble o = new Marble(Symbol.O);
