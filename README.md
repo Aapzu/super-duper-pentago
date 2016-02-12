@@ -7,6 +7,7 @@ This version is my University's practice work in spring 2016 (University of Hels
 * [Definition of the topic](documentation/topic-definition.md)
 * [API Documentation](https://rawgit.com/Aapzu/super-duper-pentago/master/documentation/apidocs/index.html)
 
+## DevDocs
 * [Time Tracking](documentation/time-tracking.md)
 * Testing:
     * [Pit Report](https://rawgit.com/Aapzu/super-duper-pentago/master/documentation/pitest/index.html)
