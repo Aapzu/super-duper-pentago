@@ -11,4 +11,7 @@
 | 01.02.2016	| 00:30		| BoardTest |
 | 01.02.2016	| 01:30		| BoardTest |
 | 03.02.2016	| 02:00		| Fixing BoardTest |
+| 08.02.2016	| 03:00		| TextUI, Logic changes |
+| 09.02.2016	| 01:30		| Writing JavaDocs	|
+| 10.02.2016	| 01:30		| CheckStyle changes	|
 ||||
