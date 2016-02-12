@@ -15,4 +15,11 @@
             <goal>checkstyle:checkstyle</goal>
         </goals>
     </action>
+    <action>
+        <actionName>CUSTOM-javaDoc</actionName>
+        <displayName>JavaDoc</displayName>
+        <goals>
+            <goal>javadoc:javadoc</goal>
+        </goals>
+    </action>
 </actions>

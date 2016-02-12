@@ -5,7 +5,9 @@ This version is my University's practice work in spring 2016 (University of Hels
 
 ## Documentation
 * [Definition of the topic](documentation/topic-definition.md)
+* [API Documentation](https://rawgit.com/Aapzu/super-duper-pentago/master/documentation/apidocs/index.html)
+
 * [Time Tracking](documentation/time-tracking.md)
 * Testing:
-    * [Pit Report](https://rawgit.com/Aapzu/super-duper-pentago/master/documentation/pit-report/index.html)
-    * [Checkstyle Report](https://rawgit.com/Aapzu/super-duper-pentago/master/documentation/checkstyle-report/checkstyle.html)
+    * [Pit Report](https://rawgit.com/Aapzu/super-duper-pentago/master/documentation/pitest/index.html)
+    * [Checkstyle Report](https://rawgit.com/Aapzu/super-duper-pentago/master/documentation/checkstyle/checkstyle.html)
