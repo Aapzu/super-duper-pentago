@@ -216,4 +216,16 @@ public class BoardTest {
                 "[null, [O], null][null, [O], null]\n" +
                 "[[X], null, null][null, null, null]\n", board.toString());
     }    
+
+    @Test
+    public void getLastDirectionReturnsTheRightDirection() {
+        assertNull(board.getLastDirection(0, 0));
+        board.rotateTile(0, 0, Direction.CLOCKWISE);
+        assertEquals(Direction.CLOCKWISE, board.getLastDirection(0, 0));
+        board.rotateTile(0, 0, Direction.COUNTER_CLOCKWISE);
+        assertEquals(Direction.COUNTER_CLOCKWISE, board.getLastDirection(0, 0));
+        board.rotateTile(1, 1, Direction.CLOCKWISE);
+        assertEquals(Direction.CLOCKWISE, board.getLastDirection(1, 1));
+        assertEquals(Direction.COUNTER_CLOCKWISE, board.getLastDirection(0, 0));
+    }
 }

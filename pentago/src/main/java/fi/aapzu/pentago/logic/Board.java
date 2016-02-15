@@ -2,10 +2,7 @@
 package fi.aapzu.pentago.logic;
 
 import fi.aapzu.pentago.logic.marble.Marble;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * The board of the Pentago. Contains Tiles and Marbles.
@@ -17,6 +14,7 @@ public class Board {
     private int sideLength;
     private int tileSideLength;
     private Tile[][] tiles;
+    private Tile lastRotatedTile;
     
     /**
      * Creates the Board, and the Tiles in it.
@@ -50,11 +48,20 @@ public class Board {
      * @param tileY the Y coordinate of the Tile
      * @return the Tile
      */
-    protected Tile getTile(int tileX, int tileY) {
+    public Tile getTile(int tileX, int tileY) {
         if (tileX < 0 || tileX > sideLength || tileY < 0 || tileY > sideLength) {
             throw new IllegalArgumentException("Invalid coordinates. X: " + tileX + ", Y: " + tileY);
         }
         return getTiles()[tileY][tileX];
+    }
+    
+    public boolean validateTileCoordinates(int tileX, int tileY) {
+        try {
+            getTile(tileX, tileY);
+            return true;
+        } catch (IllegalArgumentException e ) {
+            return false;
+        }
     }
     
     /**
@@ -64,7 +71,7 @@ public class Board {
      * @param marbleY the Y coordinate of the Marble
      * @return the Tile
      */
-    protected Tile getTileByCoordinates(int marbleX, int marbleY) {
+    public Tile getTileByCoordinates(int marbleX, int marbleY) {
         return getTile(marbleX / tileSideLength, marbleY / tileSideLength);
     }
     
@@ -131,7 +138,12 @@ public class Board {
      * @param d the Direction
      */
     public void rotateTile(int tileX, int tileY, Direction d) {
-        tiles[tileY][tileX].rotate(d);
+        if (!Arrays.asList(Direction.getRotateDirections()).contains(d)) {
+            throw new IllegalArgumentException("Invalid direction!");
+        }
+        Tile t = getTile(tileX, tileY);
+        t.rotate(d);
+        lastRotatedTile = t;
     }
     
     /**
@@ -139,6 +151,13 @@ public class Board {
      */
     protected Tile[][] getTiles() {
         return tiles;
+    }
+    
+    /**
+     * @return lastRotatedTile;
+     */
+    public Tile getLastRotatedTile() {
+        return lastRotatedTile;
     }
     
     /**
@@ -151,8 +170,6 @@ public class Board {
     public Direction getLastDirection(int tileX, int tileY) {
         return getTile(tileX, tileY).getLastDirection();
     }
-    
-    
     
     @Override
     public String toString() {

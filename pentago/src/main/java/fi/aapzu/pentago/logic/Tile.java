@@ -19,7 +19,7 @@ public class Tile {
     /**
      * Calls the constructor with the default sideLength 3.
      */
-    protected Tile() {
+    public Tile() {
         this(3);
     }
     
@@ -30,7 +30,7 @@ public class Tile {
      * 
      * @param sideLength
      */
-    protected Tile(int sideLength) {
+    public Tile(int sideLength) {
         if (sideLength <= 0) {
             throw new IllegalArgumentException("The sideLength of a Tile must be truly positive!");
         }

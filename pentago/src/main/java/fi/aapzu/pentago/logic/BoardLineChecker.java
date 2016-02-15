@@ -6,10 +6,7 @@
 package fi.aapzu.pentago.logic;
 
 import fi.aapzu.pentago.logic.marble.Marble;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * This is a class for checking for lines on a Board.
@@ -31,11 +28,11 @@ public class BoardLineChecker {
      * @param length the length to be given to checkLines
      * @return the line found or null
      */
-    public Map<String, Object> checkLines(int length) {
+    public Line checkLines(int length) {
         if (length < 2 || length > board.getSideLength() * board.getTileSideLength()) {
             throw new IllegalArgumentException("The length of a line must be between 2 and " + board.getSideLength() * board.getTileSideLength());
         }
-        Map<String, Object> line = null;
+        Line line = null;
         
         for (Direction d : Direction.getLineDirections()) {
             line = checkLines(length, d);
@@ -55,27 +52,25 @@ public class BoardLineChecker {
      * @param d the Direction to be looked at
      * @return the line or null
      */
-    protected Map<String, Object> checkLines(int length, Direction d) {
+    protected Line checkLines(int length, Direction d) {
+        int wholeLength = board.getSideLength() * board.getTileSideLength();
+        Line line = new Line();
         if (!Arrays.asList(Direction.getLineDirections()).contains(d)) {
             throw new IllegalArgumentException("The direction is incorrect!");
         }
         int firstIndexFrom = 0;
-        int firstIndexTo = board.getSideLength() * board.getTileSideLength();
+        int firstIndexTo = wholeLength;
         
         if (d == Direction.UPGRADING_DIAGONAL) {
-            firstIndexFrom = -(board.getSideLength() * board.getTileSideLength()) + 1;
+            firstIndexFrom = -wholeLength + 1;
         } else if (d == Direction.DOWNGRADING_DIAGONAL) {
-            firstIndexTo = 2 * board.getSideLength() * board.getTileSideLength() - 1;
+            firstIndexTo = 2 * wholeLength - 1;
         }
         
-        Map<String, Object> line = new HashMap<>();
-        line.put("symbol", null);
-        line.put("coordinates", new ArrayList<>());
-        int counter = 0;
         Marble lastMarble;
         for (int i = firstIndexFrom; i < firstIndexTo; i++) {
             lastMarble = null;
-            for (int j = 0; j < board.getSideLength() * board.getTileSideLength(); j++) {
+            for (int j = 0; j < wholeLength; j++) {
                 int firstCoord = -1;
                 int secondCoord = -1;
                 if (d == Direction.HORIZONTAL) {
@@ -91,20 +86,15 @@ public class BoardLineChecker {
                     firstCoord = i - j;
                     secondCoord = j;
                 }
-                if (firstCoord >= 0 && firstCoord < board.getSideLength() * board.getTileSideLength() && secondCoord >= 0 && secondCoord < board.getSideLength() * board.getTileSideLength()) {
+                if (firstCoord >= 0 && firstCoord < wholeLength && secondCoord >= 0 && secondCoord < wholeLength) {
                     Marble m = board.getMarble(firstCoord, secondCoord);
-                    ((ArrayList<Integer[]>) line.get("coordinates")).add(new Integer[]{firstCoord, secondCoord});
+                    line.addCoordinate(new Integer[]{firstCoord, secondCoord});
                 
-                    if (lastMarble != null || m == null) {
-                        if (m != null && m.equals(lastMarble)) {
-                            counter++;
-                        } else {
-                            counter = 0;
-                            ((ArrayList) line.get("coordinates")).clear();
-                        }
+                    if (m == null || (lastMarble != null && !lastMarble.equals(m))) {
+                        line.clear();
                     }
-                    if (counter >= length - 1) {
-                        line.put("symbol", m.getSymbol());
+                    if (line.length() >= length) {
+                        line.setSymbol(m.getSymbol());
                         return line;
                     }
 

@@ -4,10 +4,10 @@ package fi.aapzu.pentago.game;
 import fi.aapzu.pentago.logic.Board;
 import fi.aapzu.pentago.logic.BoardLineChecker;
 import fi.aapzu.pentago.logic.Direction;
+import fi.aapzu.pentago.logic.Line;
 import fi.aapzu.pentago.logic.marble.Marble;
 import fi.aapzu.pentago.logic.marble.Symbol;
 import java.util.Arrays;
-import java.util.Map;
 
 /**
  * The mother class of the game.
@@ -79,10 +79,7 @@ public class Pentago {
         if (!allowedToRotate) {
             throw new PentagoGameRuleException("A marble must be added first!");
         }
-        if (!Arrays.asList(Direction.getRotateDirections()).contains(d)) {
-            throw new IllegalArgumentException("Invalid direction!");
-        }
-        if (d == board.getLastDirection(x, y)) {
+        if (board.getTile(x, y) == board.getLastRotatedTile() && d == Direction.getOpposite(board.getLastDirection(x, y))) {
             throw new PentagoGameRuleException("The tile cannot be rotated back to the direction it was just rotated from!");
         }
         
@@ -113,14 +110,14 @@ public class Pentago {
      * 
      * @return line or null
      */
-    public Map<String, Object> getLine() {
-        Map<String, Object> line = lineChecker.checkLines(5);
-        if (line != null && line.get("symbol") != null) {
-            line.put("player", getPlayerBySymbol((Symbol) line.get("symbol")));
+    public Line getLine() {
+        Line line = lineChecker.checkLines(5);
+        if (line != null && line.getSymbol() != null) {
+            line.setPlayer(getPlayerBySymbol((Symbol) line.getSymbol()));
         }
         return line;
     }
-    
+        
     /**
      * @return board
      */

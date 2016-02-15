@@ -85,18 +85,18 @@ public class BoardLineCheckerTest {
         for (Integer[] point : points) {
             board.addMarble(o, point[0], point[1]);
         }
-        Map<String, Object> line = lineChecker.checkLines(5);
+        Line line = lineChecker.checkLines(5);
         assertNotNull(line);
-        assertNotNull(line.get("symbol"));
-        assertNotNull(line.get("coordinates"));
-        assertEquals(Symbol.O, line.get("symbol"));
-        assertEquals(5, ((ArrayList)line.get("coordinates")).size());
+        assertNotNull(line.getSymbol());
+        assertNotNull(line.getCoordinates());
+        assertEquals(Symbol.O, line.getSymbol());
+        assertEquals(5, ((ArrayList)line.getCoordinates()).size());
         
         // Needed because ArrayList.contains(T[]) doesn't work
         ArrayList<ArrayList<Integer>> copyOfPoints = new ArrayList<>();
         for (Integer[] point : points) copyOfPoints.add(new ArrayList<>(Arrays.asList(point)));
         
-        for (Integer[] point : (ArrayList<Integer[]>) line.get("coordinates")) {
+        for (Integer[] point : (ArrayList<Integer[]>) line.getCoordinates()) {
             assertTrue(copyOfPoints.contains(new ArrayList<>(Arrays.asList(point))));
         }
     }
@@ -165,18 +165,5 @@ public class BoardLineCheckerTest {
         points.add(new Integer[]{4,2});
         points.add(new Integer[]{5,1});
         checkLinesWorks(points);
-    }
-
-    @Test
-    public void getLastDirectionReturnsTheRightDirection() {
-        assertNull(board.getLastDirection(0, 0));
-        board.rotateTile(0, 0, Direction.CLOCKWISE);
-        assertEquals(Direction.CLOCKWISE, board.getLastDirection(0, 0));
-        board.rotateTile(0, 0, Direction.COUNTER_CLOCKWISE);
-        assertEquals(Direction.COUNTER_CLOCKWISE, board.getLastDirection(0, 0));
-        board.rotateTile(1, 1, Direction.CLOCKWISE);
-        assertEquals(Direction.CLOCKWISE, board.getLastDirection(1, 1));
-        assertEquals(Direction.COUNTER_CLOCKWISE, board.getLastDirection(0, 0));
-        
     }
 }
