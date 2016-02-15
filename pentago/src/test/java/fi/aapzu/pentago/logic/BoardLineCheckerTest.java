@@ -10,7 +10,6 @@ import fi.aapzu.pentago.logic.marble.Marble;
 import fi.aapzu.pentago.logic.marble.Symbol;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Map;
 import org.junit.After;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -85,7 +84,7 @@ public class BoardLineCheckerTest {
         for (Integer[] point : points) {
             board.addMarble(o, point[0], point[1]);
         }
-        Line line = lineChecker.checkLines(5);
+        Line line = (Line) lineChecker.checkLines(5);
         assertNotNull(line);
         assertNotNull(line.getSymbol());
         assertNotNull(line.getCoordinates());
