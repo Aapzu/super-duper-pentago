@@ -7,7 +7,6 @@ import fi.aapzu.pentago.logic.Direction;
 import fi.aapzu.pentago.logic.Line;
 import fi.aapzu.pentago.logic.marble.Marble;
 import fi.aapzu.pentago.logic.marble.Symbol;
-import java.util.Arrays;
 
 /**
  * The mother class of the game.
@@ -56,15 +55,17 @@ public class Pentago {
      * @param y the Y coordinate of the Marble
      * @return true if succeeded, otherwise false
      */
-    public boolean setMarble(int x, int y) {
+    public void setMarble(int x, int y) {
         if (allowedToRotate) {
             throw new PentagoGameRuleException("A tile must be rotated first!");
         }
         Player player = whoseTurn();
-        Marble m = player.takeOneMarble();
+        Marble m = new Marble(player.getSymbol());
         boolean success = board.addMarble(m, x, y);
-        allowedToRotate = success;
-        return success;
+        if(!success) {
+            throw new IllegalArgumentException("the coordinates outside the board!");
+        }
+        allowedToRotate = true;
     }
     
     /**

@@ -12,7 +12,7 @@ import fi.aapzu.pentago.logic.marble.Symbol;
 public class Player {
 
     private Symbol symbol;
-    private MarbleCollection marbles;
+//    private MarbleCollection marbles;
     private String name;
 
     /**
@@ -23,7 +23,7 @@ public class Player {
      */
     public Player(Symbol symbol) {
         this.symbol = symbol;
-        this.marbles = new MarbleCollection(symbol);
+//        this.marbles = new MarbleCollection(symbol);
         this.name = "new_player";
     }
 
@@ -48,9 +48,9 @@ public class Player {
      * 
      * @return Marble
      */
-    public Marble takeOneMarble() {
-        return marbles.getMarble();
-    }
+//    public Marble takeOneMarble() {
+//        return marbles.getMarble();
+//    }
     
     /**
      * @return symbol
@@ -61,11 +61,12 @@ public class Player {
 
     @Override
     public String toString() {
-        String plural = "";
-        int size = marbles.size();
-        if (size != 1) {
-            plural += "s";
-        }
-        return "Player " + getName() + ": " + size + " marble" + plural + " left.";
+//        String plural = "";
+//        int size = marbles.size();
+//        if (size != 1) {
+//            plural += "s";
+//        }
+//        return "Player " + getName() + ": " + size + " marble" + plural + " left.";
+        return name;
     }
 }

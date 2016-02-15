@@ -1,6 +1,7 @@
 
 package fi.aapzu.pentago.logic;
 
+import fi.aapzu.pentago.game.PentagoGameRuleException;
 import fi.aapzu.pentago.logic.marble.Marble;
 import fi.aapzu.pentago.logic.marble.Symbol;
 import org.junit.After;
@@ -77,6 +78,13 @@ public class TileTest {
         assertFalse(tile.setMarble(m, -1, 2));
         assertFalse(tile.setMarble(m, 3, 0));
         assertFalse(tile.setMarble(m, 3, 15));
+    }
+    
+    @Test
+    public void setMarbleThrowsExceptionIfPlaceIsNotEmpty() {
+        tile.setMarble(new Marble(Symbol.O), 1, 1);
+        exception.expect(PentagoGameRuleException.class);
+        tile.setMarble(new Marble(Symbol.O), 1, 1);
     }
     
     @Test

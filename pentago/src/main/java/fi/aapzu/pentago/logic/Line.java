@@ -8,7 +8,7 @@ package fi.aapzu.pentago.logic;
 import fi.aapzu.pentago.game.Player;
 import fi.aapzu.pentago.logic.marble.Symbol;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 
 /**
  * A line on a Board.
@@ -84,9 +84,13 @@ public class Line {
     
     @Override
     public String toString() {
-        return "Player: " + getPlayer()
+        String line = "Player: " + getPlayer()
                 +"\nSymbol: " + getSymbol()
-                +"\nLine: " + coordinates.toString();
+                +"\nLine: ";
+        for(Integer[] a : coordinates) {
+            line += "\n\t" + Arrays.toString(a);
+        }
+        return line;
     }
     
 }

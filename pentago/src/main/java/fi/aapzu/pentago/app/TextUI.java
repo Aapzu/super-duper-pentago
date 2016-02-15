@@ -56,66 +56,64 @@ public class TextUI {
 
     public void trySetMarble() {
         boolean success = false;
-        while (!success) {
+        while(!success) {
+            System.out.println("Give coordinates for the new marble! (x y)");
+            String cmd = scanner.nextLine();
+            int x = parse(cmd)[0];
+            int y = parse(cmd)[1];
             try {
-                System.out.println("Give coordinates for a new marble(x y):");
-                String cmd = scanner.nextLine();
-                int x;
-                int y;
-                if (cmd.contains("(")) {
-                    x = Integer.parseInt(cmd.split("\\(| |\\)")[1]);
-                    y = Integer.parseInt(cmd.split("\\(| |\\)")[2]);
-                } else {
-                    x = Integer.parseInt(cmd.split(" ")[0]);
-                    y = Integer.parseInt(cmd.split(" ")[1]);
-                }
                 game.setMarble(x, y);
                 success = true;
             } catch (Exception e) {
-                System.out.println("Incorrect coordinates, try again.");
+                if (e instanceof IllegalArgumentException) {
+                    System.out.println("Invalid coordinates! Try again:");
+                } else if (e instanceof PentagoGameRuleException) {
+                    System.out.println("The place is not empty! Try again:");
+                }
             }
         }
     }
 
     public void tryRotateTile() {
-        int x = 0;
-        int y = 0;
         boolean success = false;
         boolean success2 = false;
-        while(!success2) {
-            while (!success) {
+        boolean success3 = false;
+        int x = -1;
+        int y = -1;
+        int d = -1;
+        while(!success) {
+            while(!success2) {
                 System.out.println("Give coordinates for the tile to be rotated (x y):");
                 String cmd = scanner.nextLine();
-                if (cmd.contains("(")) {
-                    x = Integer.parseInt(cmd.split("\\(| |\\)")[1]);
-                    y = Integer.parseInt(cmd.split("\\(| |\\)")[2]);
-                } else {
-                    x = Integer.parseInt(cmd.split(" ")[0]);
-                    y = Integer.parseInt(cmd.split(" ")[1]);
-                }
-                if (game.getBoard().validateTileCoordinates(x, y)) {
-                    success = true;
-                } else {
-                    System.out.println("Incorrect tile coordinates! Try again:");
-                }
+                x = parse(cmd)[0];
+                y = parse(cmd)[1];
+                success2 = game.getBoard().validateTileCoordinates(x, y);
             }
-            int d = 0;
-            while (d != 1 && d != 2) {
-                System.out.println("Give direction (1 for clockwise, 2 for counterClockwise):");
+            while(!success3) {
+                System.out.println("Give the direction (1 for CLOCKWISE, 2 for COUNTER CLOCKWISE):");
+                
                 try {
                     d = Integer.parseInt(scanner.nextLine());
+                    if(d == 1 || d == 2) {
+                        success3 = true;
+                    } else {
+                        System.out.println("Invalid direction, try again");
+                    }
                 } catch (Exception e) {
-                    System.out.println("Incorrect direction, try again");
+                    System.out.println("Invalid direction, try again");
                 }
             }
-            Direction dir = Direction.CLOCKWISE;
-            if (d == 2) {
-                dir = Direction.COUNTER_CLOCKWISE;
+            Direction direction = Direction.CLOCKWISE;
+            if(d == 2) {
+                direction = Direction.COUNTER_CLOCKWISE;
             }
             try {
-                game.rotateTile(x, y, dir);
+                game.rotateTile(x, y, direction);
+                success = true;
             } catch (PentagoGameRuleException e) {
-                System.out.println("The tile cannot be rotated back to the direction it was just rotated from!");
+                success2 = false;
+                success3 = false;
+                System.out.println("A tile cannot be rotated back to the direction it was just rotated from! Try again:");
             }
         }
     }
@@ -131,5 +129,13 @@ public class TextUI {
             System.out.println();
         }
         System.out.println(game.getBoard().toString());
+    }
+    
+    private int[] parse(String cmd) {
+        if(!cmd.matches("^[0-9] [0-9]$"))
+            throw new RuntimeException("Invalid coordinates!");
+        else {
+            return new int[]{Integer.parseInt(cmd.split(" ")[0]), Integer.parseInt(cmd.split(" ")[1])};
+        }   
     }
 }
