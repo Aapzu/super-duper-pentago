@@ -14,4 +14,7 @@
 | 08.02.2016	| 03:00		| TextUI, Logic changes |
 | 09.02.2016	| 01:30		| Writing JavaDocs	|
 | 10.02.2016	| 01:30		| CheckStyle changes	|
+| 12.02.2016  | 00:45   | javaDoc   |
+| 15.02.2016  | 01:00   | First tries of GUI  |
+| 16.02.2016  | 01:00   | First better version of GUI |
 ||||
