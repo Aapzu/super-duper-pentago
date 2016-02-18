@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -8,9 +13,9 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.shape.Circle?>
 
-<AnchorPane fx:id="AnchorPane" prefHeight="600.0" prefWidth="600.0" styleClass="mainFxmlClass" stylesheets="@../styles/game.css" xmlns="http://javafx.com/javafx/8.0.72" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="AnchorPane" prefHeight="700.0" prefWidth="680.0" styleClass="mainFxmlClass" stylesheets="@../styles/game.css" xmlns="http://javafx.com/javafx/8.0.72" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <GridPane fx:id="tile0" gridLinesVisible="true" layoutX="5.0" layoutY="5.0" prefHeight="290.0" prefWidth="290.0" styleClass="tile" stylesheets="@../styles/game.css">
+      <GridPane fx:id="tile0" gridLinesVisible="true" layoutX="45.0" layoutY="45.0" prefHeight="290.0" prefWidth="290.0" styleClass="tile" stylesheets="@../styles/game.css">
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -40,7 +45,7 @@
             <Circle fill="#ffffff1a" radius="40.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
          </children>
       </GridPane>
-      <GridPane fx:id="tile1" gridLinesVisible="true" layoutX="305.0" layoutY="5.0" prefHeight="290.0" prefWidth="290.0" styleClass="tile" stylesheets="@../styles/game.css">
+      <GridPane fx:id="tile1" gridLinesVisible="true" layoutX="345.0" layoutY="45.0" prefHeight="290.0" prefWidth="290.0" styleClass="tile" stylesheets="@../styles/game.css">
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -66,7 +71,7 @@
             <Circle fill="#ffffff1a" radius="40.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
          </children>
       </GridPane>
-      <GridPane fx:id="tile2" gridLinesVisible="true" layoutX="5.0" layoutY="305.0" prefHeight="290.0" prefWidth="290.0" styleClass="tile" stylesheets="@../styles/game.css">
+      <GridPane fx:id="tile2" gridLinesVisible="true" layoutX="45.0" layoutY="345.0" prefHeight="290.0" prefWidth="290.0" styleClass="tile" stylesheets="@../styles/game.css">
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -92,7 +97,7 @@
             <Circle fill="#ffffff1a" radius="40.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
          </children>
       </GridPane>
-      <GridPane fx:id="tile3" gridLinesVisible="true" layoutX="305.0" layoutY="305.0" prefHeight="290.0" prefWidth="290.0" styleClass="tile" stylesheets="@../styles/game.css">
+      <GridPane fx:id="tile3" gridLinesVisible="true" layoutX="345.0" layoutY="345.0" prefHeight="290.0" prefWidth="290.0" styleClass="tile" stylesheets="@../styles/game.css">
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -118,5 +123,20 @@
             <Circle fill="#ffffff1a" radius="40.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
          </children>
       </GridPane>
+      <ToolBar layoutX="45.0" layoutY="640.0" prefHeight="60.0" prefWidth="590.0">
+         <items>
+            <Label id="helpLabel" prefHeight="26.0" prefWidth="382.0" styleClass="helpLabel" />
+            <ButtonBar id="rotateButtonBar" prefWidth="100.0">
+               <buttons>
+                  <ChoiceBox id="tileChoiceBox" accessibleRole="TEXT_AREA" prefWidth="60.0" styleClass="directionChoiceBox" />
+                  <ChoiceBox id="directionChoiceBox" accessibleRole="TEXT_AREA" prefWidth="60.0" styleClass="directionChoiceBox" />
+                  <Button mnemonicParsing="false" text="Rotate" />
+               </buttons>
+            </ButtonBar>
+         </items>
+      </ToolBar>
    </children>
+   <opaqueInsets>
+      <Insets />
+   </opaqueInsets>
 </AnchorPane>

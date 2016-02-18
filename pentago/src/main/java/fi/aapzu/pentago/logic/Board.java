@@ -171,6 +171,22 @@ public class Board {
         return getTile(tileX, tileY).getLastDirection();
     }
     
+    public Marble[][] toMarbleArray() {
+        Marble[][] mArr = new Marble[sideLength * tileSideLength][sideLength * tileSideLength];
+        for(int tileY = 0; tileY < tiles.length; tileY++) {
+            for(int tileX = 0; tileX < tiles[0].length; tileX++) {
+                for(int marbleX = 0; marbleX < tiles[tileY][tileX].getTile().length; marbleX++) {
+                    for(int marbleY = 0; marbleY < tiles[tileY][tileX].getTile().length; marbleY++) {
+                        int y = tileY * tileSideLength + marbleY;
+                        int x = tileX * tileSideLength + marbleX;
+                        mArr[y][x] = tiles[tileY][tileX].getTile()[marbleY][marbleX];
+                    }
+                }
+            }
+        }
+        return mArr;
+    }
+    
     @Override
     public String toString() {
         String result = "";

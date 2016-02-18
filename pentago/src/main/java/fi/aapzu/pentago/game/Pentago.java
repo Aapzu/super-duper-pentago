@@ -125,4 +125,8 @@ public class Pentago {
     public Board getBoard() {
         return board;
     }
+    
+    public boolean getAllowedToRotate() {
+        return allowedToRotate;
+    }
 }

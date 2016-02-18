@@ -2,6 +2,24 @@
  * Empty Stylesheet file.
  */
 
+.background {
+    -fx-background-color: rgba(0,0,0,0);
+}
+
 .mainFxmlClass {
     -fx-background-color: #db9356;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 0);
+}
+
+.tile {
+    -fx-background-color: #fadabf;
+    -fx-background-radius: 5;
+}
+
+Circle {
+    -fx-cursor: hand;
+}
+
+ToolBar {
+    -fx-background-color: inherit;
 }
