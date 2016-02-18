@@ -53,8 +53,7 @@ public class GUI extends Application {
         primaryStage.show();
         
         rotateButtonBar = (ButtonBar)(baseScene.getRoot().lookup("#rotateButtonBar"));
-        // TODO: Change searching for id
-        rotateButton = (Button)(rotateButtonBar.lookup("Button"));
+        rotateButton = (Button)(rotateButtonBar.lookup("#rotateButton"));
         
         directionChoiceBox = (ChoiceBox)(baseScene.getRoot().lookup("#directionChoiceBox"));
         directionChoiceBox.setItems(FXCollections.observableArrayList(

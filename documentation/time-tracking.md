@@ -17,4 +17,5 @@
 | 12.02.2016  | 00:45   | javaDoc   |
 | 15.02.2016  | 01:00   | First tries of GUI  |
 | 16.02.2016  | 01:00   | First better version of GUI |
+| 18.02.2016  | 02:00	| Almost complete app |
 ||||
