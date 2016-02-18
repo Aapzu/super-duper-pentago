@@ -130,7 +130,7 @@
                <buttons>
                   <ChoiceBox id="tileChoiceBox" accessibleRole="TEXT_AREA" prefWidth="60.0" styleClass="directionChoiceBox" />
                   <ChoiceBox id="directionChoiceBox" accessibleRole="TEXT_AREA" prefWidth="60.0" styleClass="directionChoiceBox" />
-                  <Button mnemonicParsing="false" text="Rotate" />
+                  <Button id="rotateButton" mnemonicParsing="false" text="Rotate" />
                </buttons>
             </ButtonBar>
          </items>
