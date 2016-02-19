@@ -1,0 +1,18 @@
+title Pentago.setMarble(int x, int y)
+
+opt allowedToRotate
+    Pentago->Pentago: throws PentagoGameRuleException
+end
+
+Pentago->Pentago: Player p = whoseTurn()
+Pentago->+Player: p.getSymbol()
+Player-->-Pentago: Symbol s
+Pentago->+Marble: new Marble(s)
+Marble-->-Pentago: Marble m
+Pentago->+Board: addMarble(m, x, y):
+Board-->-Pentago: boolean success
+
+opt !success
+    Pentago->Pentago: throws IllegalArgumentException
+end
+Pentago->Pentago: allowedToRotate = true

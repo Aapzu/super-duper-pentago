@@ -1,0 +1,15 @@
+title Pentago.rotateTile(int x, int y, Direction d)
+
+opt !allowedToRotate
+    Pentago->Pentago: throws PentagoGameRuleException
+end
+
+opt illegalDirection
+    Pentago->Pentago: throws PentagoGameRuleException
+end
+
+Pentago->+Board: rotateTile(x, y, d)
+Board-->-Pentago: boolean success
+
+Pentago->Pentago: whoseTurn = (whoseTurn + 1) % 2
+Pentago->Pentago: allowedToRotate = false
