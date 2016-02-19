@@ -228,4 +228,59 @@ public class BoardTest {
         assertEquals(Direction.CLOCKWISE, board.getLastDirection(1, 1));
         assertEquals(Direction.COUNTER_CLOCKWISE, board.getLastDirection(0, 0));
     }
+    
+    @Test
+    public void validateTileCoordinatesWorksRight() {
+        assertTrue(board.validateTileCoordinates(0, 0));
+        assertTrue(board.validateTileCoordinates(0, 1));
+        assertTrue(board.validateTileCoordinates(1, 0));
+        assertTrue(board.validateTileCoordinates(1, 1));
+        
+        assertFalse(board.validateTileCoordinates(-1, 0));
+        assertFalse(board.validateTileCoordinates(2, 0));
+        assertFalse(board.validateTileCoordinates(0, -1));
+        assertFalse(board.validateTileCoordinates(0, 2));
+        assertFalse(board.validateTileCoordinates(-1, -1));
+        assertFalse(board.validateTileCoordinates(2, 2));
+        assertFalse(board.validateTileCoordinates(-1, 2));
+        assertFalse(board.validateTileCoordinates(2, -1));
+    }
+    
+    @Test
+    public void getLastRotatedTileWorks() {
+        Tile t1 = board.getTile(0, 0);
+        Tile t2 = board.getTile(0, 1);
+        board.rotateTile(0, 0, Direction.CLOCKWISE);
+        assertEquals(t1, board.getLastRotatedTile());
+        assertNotEquals(t2, board.getLastRotatedTile());
+        board.rotateTile(0, 1, Direction.CLOCKWISE);
+        assertEquals(t2, board.getLastRotatedTile());
+        assertNotEquals(t1, board.getLastRotatedTile());
+    }
+    
+    @Test
+    public void toMarbleArrayReturnsRight() {
+        Marble x = new Marble(Symbol.X);
+        Marble o = new Marble(Symbol.O);
+        board.addMarble(x, 0, 0);
+        board.addMarble(o, 2, 0);
+        board.addMarble(x, 4, 1);
+        board.addMarble(o, 0, 4);
+        board.addMarble(x, 5, 5);
+        Marble[][] arr = board.toMarbleArray();
+        
+        assertEquals(6, arr.length);
+        assertEquals(6, arr[0].length);
+        
+        assertEquals(x, arr[0][0]);
+        assertEquals(o, arr[0][2]);
+        assertEquals(x, arr[1][4]);
+        assertEquals(o, arr[4][0]);
+        assertEquals(x, arr[5][5]);
+        
+        assertNull(arr[1][0]);
+        assertNull(arr[4][2]);
+        assertNull(arr[1][3]);
+    }
+    
 }

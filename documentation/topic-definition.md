@@ -28,4 +28,4 @@ More accurate rules and strategies can be seen [here](https://webdav.info.ucl.ac
     * Indicator that shows the amount of the remaining marbles
 
 ### Class Diagram
-![05-02-2016](diagrams/05-02-2016-class-diagram.png)
+![19–02-2016](diagrams/19–02-2016-class-diagram.png)

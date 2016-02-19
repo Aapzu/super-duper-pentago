@@ -44,15 +44,6 @@ public class Player {
     }
 
     /**
-     * Gives the last Marble in the Player's MarbleCollection.
-     * 
-     * @return Marble
-     */
-//    public Marble takeOneMarble() {
-//        return marbles.getMarble();
-//    }
-    
-    /**
      * @return symbol
      */
     public Symbol getSymbol() {
@@ -61,12 +52,15 @@ public class Player {
 
     @Override
     public String toString() {
-//        String plural = "";
-//        int size = marbles.size();
-//        if (size != 1) {
-//            plural += "s";
-//        }
-//        return "Player " + getName() + ": " + size + " marble" + plural + " left.";
         return name;
+    }
+
+    /**
+     * Sets symbol.
+     * 
+     * @param symbol 
+     */
+    public void setSymbol(Symbol symbol) {
+        this.symbol = symbol;
     }
 }

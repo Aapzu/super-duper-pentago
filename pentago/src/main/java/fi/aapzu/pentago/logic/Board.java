@@ -59,7 +59,7 @@ public class Board {
         try {
             getTile(tileX, tileY);
             return true;
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             return false;
         }
     }

@@ -35,15 +35,6 @@ public class Line {
     public ArrayList<Integer[]> getCoordinates() {
         return coordinates;
     }
-    
-    /**
-     * Removes the Symbol and Player, clears coordinates.
-     */
-    public void clear() {
-        symbol = null;
-        player = null;
-        coordinates.clear();
-    }
 
     /**
      * Gives the current length of the Line.
@@ -86,11 +77,19 @@ public class Line {
     public String toString() {
         String line = "Player: " + getPlayer()
                 +"\nSymbol: " + getSymbol()
-                +"\nLine: ";
+                +"\nLine:";
         for(Integer[] a : coordinates) {
             line += "\n\t" + Arrays.toString(a);
         }
         return line;
     }
     
+    /**
+     * Removes the Symbol and Player, clears coordinates.
+     */
+    public void clear() {
+        symbol = null;
+        player = null;
+        coordinates.clear();
+    }
 }

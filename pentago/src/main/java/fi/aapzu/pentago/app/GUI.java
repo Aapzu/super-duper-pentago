@@ -47,10 +47,28 @@ public class GUI extends Application {
     public void start(Stage primaryStage) throws IOException {
         this.primaryStage = primaryStage;
         primaryStage.setTitle("Pentago");
+        primaryStage.show();
+        
+//        loadGame();
+        
+        game = new Pentago();
+        loadStartMenu();
+        
+        
+        game.setPlayerName(0, "Player0");
+        game.setPlayerName(1, "Player1");
+        
+        
+    }
+    
+    public void loadStartMenu() {
+        
+    }
+    
+    private void loadGame() throws IOException {
         Pane basePane = (Pane)FXMLLoader.load(getClass().getClassLoader().getResource("fxml/Game.fxml"));
         baseScene = new Scene(basePane);
         primaryStage.setScene(baseScene);
-        primaryStage.show();
         
         rotateButtonBar = (ButtonBar)(baseScene.getRoot().lookup("#rotateButtonBar"));
         rotateButton = (Button)(rotateButtonBar.lookup("#rotateButton"));
@@ -72,11 +90,6 @@ public class GUI extends Application {
         initTiles();
         initCircles();
         initRotating();
-        
-        game = new Pentago();
-        
-        game.setPlayerName(0, "Player0");
-        game.setPlayerName(1, "Player1");
         
         readyToSetMarble();
     }
