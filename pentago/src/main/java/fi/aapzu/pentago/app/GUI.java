@@ -5,12 +5,14 @@ import fi.aapzu.pentago.game.PentagoGameRuleException;
 import fi.aapzu.pentago.logic.Direction;
 import fi.aapzu.pentago.logic.Line;
 import fi.aapzu.pentago.logic.marble.Marble;
+import fi.aapzu.pentago.logic.marble.Symbol;
 import static fi.aapzu.pentago.logic.marble.Symbol.O;
 import static fi.aapzu.pentago.logic.marble.Symbol.X;
 import java.io.IOException;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.animation.RotateTransition;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXMLLoader;
@@ -24,11 +26,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
+import javafx.util.Duration;
  
 public class GUI extends Application {
     
@@ -69,8 +73,8 @@ public class GUI extends Application {
             try {
                 TextField whitePlayerName = (TextField)(baseScene.getRoot().lookup("#whitePlayerName"));
                 TextField blackPlayerName = (TextField)(baseScene.getRoot().lookup("#blackPlayerName"));
-                game.setPlayerName(0, !whitePlayerName.getText().equals("") ? whitePlayerName.getText() : "Player0");
-                game.setPlayerName(1, !blackPlayerName.getText().equals("") ? blackPlayerName.getText() : "Player1");
+                game.setPlayerName(0, !whitePlayerName.getText().equals("") ? whitePlayerName.getText() : "Player 0");
+                game.setPlayerName(1, !blackPlayerName.getText().equals("") ? blackPlayerName.getText() : "Player 1");
                 loadGame();
             } catch (IOException ex) {
                 Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
@@ -204,6 +208,17 @@ public class GUI extends Application {
     
     public void rotateTile(int x, int y, Direction d) {
         try {
+//            RotateTransition rt = new RotateTransition(Duration.millis(1000), tiles[y][x]);
+//            rt.setByAngle(90);
+//            int rate;
+//            if(d == Direction.CLOCKWISE) {
+//                rate = 1;
+//            } else {
+//                rate = -1;
+//            }
+//            rt.setRate(rate);
+//            rt.play();
+            
             game.rotateTile(x, y, d);
             errorLabel.setText("");
             Line line = game.getLine();
@@ -231,8 +246,14 @@ public class GUI extends Application {
         for(Integer[] coords : line.getCoordinates()) {
             int x = coords[0];
             int y = coords[1];
-            circles[y][x].setStyle("-fx-border-width: 5");
-            circles[y][x].setStyle("-fx-border-color: #ffd700");
+            circles[y][x].strokeWidthProperty().setValue(5);
+            circles[y][x].strokeProperty().setValue(Paint.valueOf("#ffd700"));
+            String color;
+            if(line.getSymbol().equals(Symbol.O))
+                color = "#FFFFFF";
+            else 
+                color = "#000000";
+            circles[y][x].setFill(Paint.valueOf(color));
         }
         
         Text text = new Text(game.whoseTurn() + " won!");
@@ -240,5 +261,14 @@ public class GUI extends Application {
         TextFlow textFlow = (TextFlow)(baseScene.getRoot().lookup("#winText"));
         textFlow.setVisible(true);    
         textFlow.getChildren().add(text);
+        
+        ((Button)(baseScene.getRoot().lookup("#mainMenuButton"))).addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event) -> {
+            try {
+                game.clear();
+                loadStartMenu();
+            } catch (IOException ex) {
+                Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
     }
 }

@@ -135,7 +135,7 @@
             </ButtonBar>
          </items>
       </ToolBar>
-      <Label id="helpLabel" layoutX="19.0" layoutY="12.0" prefHeight="27.5" prefWidth="590.0" styleClass="helpLabel" />
+      <Label id="helpLabel" layoutX="27.0" layoutY="12.0" prefHeight="28.0" prefWidth="590.0" styleClass="helpLabel" />
    </children>
    <opaqueInsets>
       <Insets />

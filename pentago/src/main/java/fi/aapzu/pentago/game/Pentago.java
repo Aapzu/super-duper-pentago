@@ -35,6 +35,17 @@ public class Pentago {
     }
     
     /**
+     * Clears everything in the game. Starts new game.
+     */
+    public void clear() {
+        board.clear();
+        players[0] = new Player(Symbol.O);
+        players[1] = new Player(Symbol.X);
+        whoseTurn = 0;
+        allowedToRotate = false;
+    }
+    
+    /**
      * Sets the given name to the given Player.
      * 
      * @param i the index of the Player

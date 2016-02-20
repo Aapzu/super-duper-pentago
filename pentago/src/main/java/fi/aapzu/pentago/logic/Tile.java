@@ -174,4 +174,15 @@ public class Tile {
     private void setLastDirection(Direction d) {
         lastDirection = d;
     }
+
+    /**
+     * Removes every Marble.
+     */
+    protected void clear() {
+        for(int y = 0; y < getTile().length; y++) {
+            for(int x = 0; x < getTile()[0].length; x++) {
+                setMarble(null, x, y);
+            }
+        }
+    }
 }

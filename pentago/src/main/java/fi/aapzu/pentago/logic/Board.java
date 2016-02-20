@@ -200,4 +200,15 @@ public class Board {
         }
         return result;
     }
+    
+    /**
+     * Clears the Board.
+     */
+    public void clear() {
+        for(int y = 0; y < getTiles().length; y++) {
+            for(int x = 0; x < getTiles()[0].length; x++) {
+                getTiles()[y][x].clear();
+            }
+        }
+    }
 }
