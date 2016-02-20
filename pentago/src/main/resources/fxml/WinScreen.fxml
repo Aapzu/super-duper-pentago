@@ -1,17 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ButtonBar?>
-<?import javafx.scene.control.ChoiceBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.TextFlow?>
 
 <AnchorPane fx:id="AnchorPane" prefHeight="700.0" prefWidth="645.0" styleClass="mainFxmlClass" stylesheets="@../styles/game.css" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
    <children>
@@ -123,19 +119,7 @@
             <Circle fill="#ffffff1a" radius="40.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
          </children>
       </GridPane>
-      <ToolBar layoutX="23.0" layoutY="647.0" prefHeight="49.0" prefWidth="590.0">
-         <items>
-            <Label id="errorLabel" prefHeight="26.0" prefWidth="382.0" />
-            <ButtonBar id="rotateButtonBar" prefWidth="100.0">
-               <buttons>
-                  <ChoiceBox id="tileChoiceBox" accessibleRole="TEXT_AREA" prefWidth="60.0" styleClass="directionChoiceBox" />
-                  <ChoiceBox id="directionChoiceBox" accessibleRole="TEXT_AREA" prefWidth="60.0" styleClass="directionChoiceBox" />
-                  <Button id="rotateButton" mnemonicParsing="false" text="Rotate" />
-               </buttons>
-            </ButtonBar>
-         </items>
-      </ToolBar>
-      <Label id="helpLabel" layoutX="19.0" layoutY="12.0" prefHeight="27.5" prefWidth="590.0" styleClass="helpLabel" />
+      <TextFlow id="winText" layoutX="123.0" layoutY="246.0" prefHeight="204.0" prefWidth="397.0" visible="false" />
    </children>
    <opaqueInsets>
       <Insets />

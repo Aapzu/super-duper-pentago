@@ -53,7 +53,6 @@ public class Pentago {
      * 
      * @param x the X coordinate of the Marble
      * @param y the Y coordinate of the Marble
-     * @return true if succeeded, otherwise false
      */
     public void setMarble(int x, int y) {
         if (allowedToRotate) {
@@ -85,7 +84,6 @@ public class Pentago {
         }
         
         board.rotateTile(x, y, d);
-        whoseTurn = (whoseTurn + 1) % 2;
         allowedToRotate = false;
     }
    
@@ -94,6 +92,13 @@ public class Pentago {
      */
     public Player whoseTurn() {
         return players[whoseTurn];
+    }
+    
+    /**
+     * Changes the turn from other player to another.
+     */
+    public void nextTurn() {
+        whoseTurn = (whoseTurn + 1) % 2;
     }
     
     private Player getPlayerBySymbol(Symbol symbol) {

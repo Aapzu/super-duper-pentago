@@ -1,6 +1,7 @@
 package fi.aapzu.pentago.app;
 
 import fi.aapzu.pentago.game.Pentago;
+import fi.aapzu.pentago.game.PentagoGameRuleException;
 import fi.aapzu.pentago.logic.Direction;
 import fi.aapzu.pentago.logic.Line;
 import fi.aapzu.pentago.logic.marble.Marble;
@@ -8,9 +9,10 @@ import static fi.aapzu.pentago.logic.marble.Symbol.O;
 import static fi.aapzu.pentago.logic.marble.Symbol.X;
 import java.io.IOException;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -18,10 +20,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
  
 public class GUI extends Application {
@@ -38,6 +44,7 @@ public class GUI extends Application {
     private Button rotateButton;
     
     private Label helpLabel;
+    private Label errorLabel;
     
     public void startGUI(String[] args) {
         launch(args);
@@ -48,21 +55,27 @@ public class GUI extends Application {
         this.primaryStage = primaryStage;
         primaryStage.setTitle("Pentago");
         primaryStage.show();
-        
-//        loadGame();
-        
+                
         game = new Pentago();
         loadStartMenu();
-        
-        
-        game.setPlayerName(0, "Player0");
-        game.setPlayerName(1, "Player1");
-        
-        
     }
     
-    public void loadStartMenu() {
-        
+    public void loadStartMenu() throws IOException {
+        Pane basePane = (Pane)FXMLLoader.load(getClass().getClassLoader().getResource("fxml/StartMenu.fxml"));
+        baseScene = new Scene(basePane);
+        primaryStage.setScene(baseScene);
+        Button startButton = (Button)(baseScene.getRoot().lookup("#startButton"));
+        startButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event) -> {
+            try {
+                TextField whitePlayerName = (TextField)(baseScene.getRoot().lookup("#whitePlayerName"));
+                TextField blackPlayerName = (TextField)(baseScene.getRoot().lookup("#blackPlayerName"));
+                game.setPlayerName(0, !whitePlayerName.getText().equals("") ? whitePlayerName.getText() : "Player0");
+                game.setPlayerName(1, !blackPlayerName.getText().equals("") ? blackPlayerName.getText() : "Player1");
+                loadGame();
+            } catch (IOException ex) {
+                Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
     }
     
     private void loadGame() throws IOException {
@@ -86,10 +99,12 @@ public class GUI extends Application {
         tileChoiceBox.getSelectionModel().selectFirst();
         
         helpLabel = (Label)(baseScene.getRoot().lookup("#helpLabel"));
+        errorLabel = (Label)(baseScene.getRoot().lookup("#errorLabel"));
         
         initTiles();
         initCircles();
         initRotating();
+        addCircleClickHandlers();
         
         readyToSetMarble();
     }
@@ -126,13 +141,22 @@ public class GUI extends Application {
                     int cX = x*3 + i % 3;
                     int cY = y*3 + i / 3;
                     circles[cY][cX] = (Circle)n;
-                    n.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event) -> {
-                        if(!game.getAllowedToRotate()) {
-                            setMarble(cX, cY);
-                        }
-                    });
                     i++;
                 }
+            }
+        }
+    }
+    
+    private void addCircleClickHandlers() {
+        for(int y = 0; y < circles.length; y++) {
+            for(int x = 0; x < circles[0].length; x++) {
+                final int cX = x;
+                final int cY = y;
+                circles[y][x].addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event) -> {
+                    if(!game.getAllowedToRotate()) {
+                        setMarble(cX, cY);
+                    }
+                });
             }
         }
     }
@@ -181,18 +205,40 @@ public class GUI extends Application {
     public void rotateTile(int x, int y, Direction d) {
         try {
             game.rotateTile(x, y, d);
+            errorLabel.setText("");
             Line line = game.getLine();
             if(line != null) {
-                winGame();
+                winGame(line);
             } else {
+                game.nextTurn();
                 readyToSetMarble();
             }
         } catch (Exception e){
-            System.out.println(e);
+            if(e instanceof PentagoGameRuleException) {
+                errorLabel.setText("Illegal direction!");
+            }
         }
     }
         
-    private void winGame() {
-        System.out.println(game.whoseTurn() + " won!");
+    private void winGame(Line line) throws IOException {
+        Pane basePane = (Pane)FXMLLoader.load(getClass().getClassLoader().getResource("fxml/WinScreen.fxml"));
+        baseScene = new Scene(basePane);
+        primaryStage.setScene(baseScene);
+        initTiles();
+        initCircles();
+        fillCircles();
+        
+        for(Integer[] coords : line.getCoordinates()) {
+            int x = coords[0];
+            int y = coords[1];
+            circles[y][x].setStyle("-fx-border-width: 5");
+            circles[y][x].setStyle("-fx-border-color: #ffd700");
+        }
+        
+        Text text = new Text(game.whoseTurn() + " won!");
+        text.setFont(new Font("Arial", 80));
+        TextFlow textFlow = (TextFlow)(baseScene.getRoot().lookup("#winText"));
+        textFlow.setVisible(true);    
+        textFlow.getChildren().add(text);
     }
 }
