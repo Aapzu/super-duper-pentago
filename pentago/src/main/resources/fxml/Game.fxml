@@ -13,9 +13,9 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.shape.Circle?>
 
-<AnchorPane fx:id="AnchorPane" prefHeight="700.0" prefWidth="645.0" styleClass="mainFxmlClass" stylesheets="@../styles/game.css" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="AnchorPane" prefHeight="630.0" prefWidth="575.0" styleClass="mainFxmlClass" stylesheets="@../styles/game.css" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <GridPane fx:id="tile0" gridLinesVisible="true" layoutX="27.5" layoutY="52.5" prefHeight="290.0" prefWidth="290.0" styleClass="tile" stylesheets="@../styles/game.css">
+      <GridPane fx:id="tile0" gridLinesVisible="true" layoutX="25.0" layoutY="50.0" prefHeight="250.0" prefWidth="250.0" styleClass="tile" stylesheets="@../styles/game.css">
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -45,7 +45,7 @@
             <Circle fill="#ffffff1a" radius="40.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
          </children>
       </GridPane>
-      <GridPane fx:id="tile1" gridLinesVisible="true" layoutX="327.5" layoutY="52.5" prefHeight="290.0" prefWidth="290.0" styleClass="tile" stylesheets="@../styles/game.css">
+      <GridPane fx:id="tile1" gridLinesVisible="true" layoutX="300.0" layoutY="50.0" prefHeight="250.0" prefWidth="250.0" styleClass="tile" stylesheets="@../styles/game.css">
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -71,7 +71,7 @@
             <Circle fill="#ffffff1a" radius="40.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
          </children>
       </GridPane>
-      <GridPane fx:id="tile2" gridLinesVisible="true" layoutX="27.5" layoutY="352.5" prefHeight="290.0" prefWidth="290.0" styleClass="tile" stylesheets="@../styles/game.css">
+      <GridPane fx:id="tile2" gridLinesVisible="true" layoutX="25.0" layoutY="325.0" prefHeight="250.0" prefWidth="250.0" styleClass="tile" stylesheets="@../styles/game.css">
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -97,7 +97,7 @@
             <Circle fill="#ffffff1a" radius="40.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
          </children>
       </GridPane>
-      <GridPane fx:id="tile3" gridLinesVisible="true" layoutX="327.5" layoutY="352.5" prefHeight="290.0" prefWidth="290.0" styleClass="tile" stylesheets="@../styles/game.css">
+      <GridPane fx:id="tile3" gridLinesVisible="true" layoutX="300.0" layoutY="325.0" prefHeight="250.0" prefWidth="250.0" styleClass="tile" stylesheets="@../styles/game.css">
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -123,7 +123,7 @@
             <Circle fill="#ffffff1a" radius="40.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
          </children>
       </GridPane>
-      <ToolBar layoutX="23.0" layoutY="647.0" prefHeight="49.0" prefWidth="590.0">
+      <ToolBar layoutX="25.0" layoutY="577.0" prefHeight="49.0" prefWidth="525.0">
          <items>
             <Label id="errorLabel" prefHeight="26.0" prefWidth="382.0" />
             <ButtonBar id="rotateButtonBar" prefWidth="100.0">
@@ -135,7 +135,7 @@
             </ButtonBar>
          </items>
       </ToolBar>
-      <Label id="helpLabel" layoutX="27.0" layoutY="12.0" prefHeight="28.0" prefWidth="590.0" styleClass="helpLabel" />
+      <Label id="helpLabel" layoutX="27.0" layoutY="12.0" prefHeight="28.0" prefWidth="525.0" styleClass="helpLabel" />
    </children>
    <opaqueInsets>
       <Insets />

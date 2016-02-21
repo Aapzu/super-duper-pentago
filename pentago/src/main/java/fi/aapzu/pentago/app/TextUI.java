@@ -20,7 +20,7 @@ public class TextUI {
     /**
      * Creates a new game and the scanner for the commands.
      */
-    public TextUI() {
+    protected TextUI() {
         game = new Pentago();
         scanner = new Scanner(System.in);
     }
@@ -29,7 +29,7 @@ public class TextUI {
      * Starts the game. Every other time prints the board and the Player in
      * turn, and asks for a command.
      */
-    public void startPentago() {
+    protected void startPentago() {
         System.out.println("Give name for player X:");
         String name = scanner.nextLine();
         game.setPlayerName(0, name);
@@ -46,7 +46,7 @@ public class TextUI {
         winGame(line);
     }
 
-    public void doTurn() {
+    private void doTurn() {
         printGame();
         System.out.println("Player in turn: " + game.whoseTurn().getName() + "\n");
         trySetMarble();
@@ -54,13 +54,13 @@ public class TextUI {
         tryRotateTile();
     }
 
-    public void trySetMarble() {
+    private void trySetMarble() {
         boolean success = false;
-        while(!success) {
+        while (!success) {
             System.out.println("Give coordinates for the new marble! (x y)");
             String cmd = scanner.nextLine();
-            int x = parse(cmd)[0];
-            int y = parse(cmd)[1];
+            int x = parseCoordinates(cmd)[0];
+            int y = parseCoordinates(cmd)[1];
             try {
                 game.setMarble(x, y);
                 success = true;
@@ -74,27 +74,27 @@ public class TextUI {
         }
     }
 
-    public void tryRotateTile() {
+    private void tryRotateTile() {
         boolean success = false;
         boolean success2 = false;
         boolean success3 = false;
         int x = -1;
         int y = -1;
         int d = -1;
-        while(!success) {
-            while(!success2) {
+        while (!success) {
+            while (!success2) {
                 System.out.println("Give coordinates for the tile to be rotated (x y):");
                 String cmd = scanner.nextLine();
-                x = parse(cmd)[0];
-                y = parse(cmd)[1];
+                x = parseCoordinates(cmd)[0];
+                y = parseCoordinates(cmd)[1];
                 success2 = game.getBoard().validateTileCoordinates(x, y);
             }
-            while(!success3) {
+            while (!success3) {
                 System.out.println("Give the direction (1 for CLOCKWISE, 2 for COUNTER CLOCKWISE):");
-                
+
                 try {
                     d = Integer.parseInt(scanner.nextLine());
-                    if(d == 1 || d == 2) {
+                    if (d == 1 || d == 2) {
                         success3 = true;
                     } else {
                         System.out.println("Invalid direction, try again");
@@ -104,7 +104,7 @@ public class TextUI {
                 }
             }
             Direction direction = Direction.CLOCKWISE;
-            if(d == 2) {
+            if (d == 2) {
                 direction = Direction.COUNTER_CLOCKWISE;
             }
             try {
@@ -118,7 +118,7 @@ public class TextUI {
         }
     }
 
-    public void winGame(Line line) {
+    private void winGame(Line line) {
         Player p = line.getPlayer();
         System.out.println("Congratulations " + p.getName() + "! You won the game!");
         System.out.println("The winning line: " + line.toString());
@@ -130,12 +130,12 @@ public class TextUI {
         }
         System.out.println(game.getBoard().toString());
     }
-    
-    private int[] parse(String cmd) {
-        if(!cmd.matches("^[0-9] [0-9]$"))
+
+    private int[] parseCoordinates(String cmd) {
+        if (!cmd.matches("^[0-9] [0-9]$")) {
             throw new RuntimeException("Invalid coordinates!");
-        else {
+        } else {
             return new int[]{Integer.parseInt(cmd.split(" ")[0]), Integer.parseInt(cmd.split(" ")[1])};
-        }   
+        }
     }
 }

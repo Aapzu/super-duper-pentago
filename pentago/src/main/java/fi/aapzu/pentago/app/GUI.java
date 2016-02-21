@@ -9,10 +9,10 @@ import fi.aapzu.pentago.logic.marble.Symbol;
 import static fi.aapzu.pentago.logic.marble.Symbol.O;
 import static fi.aapzu.pentago.logic.marble.Symbol.X;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.animation.RotateTransition;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXMLLoader;
@@ -32,7 +32,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
-import javafx.util.Duration;
  
 public class GUI extends Application {
     
@@ -50,7 +49,7 @@ public class GUI extends Application {
     private Label helpLabel;
     private Label errorLabel;
     
-    public void startGUI(String[] args) {
+    protected void startGUI(String[] args) {
         launch(args);
     }
     
@@ -64,10 +63,9 @@ public class GUI extends Application {
         loadStartMenu();
     }
     
-    public void loadStartMenu() throws IOException {
-        Pane basePane = (Pane)FXMLLoader.load(getClass().getClassLoader().getResource("fxml/StartMenu.fxml"));
-        baseScene = new Scene(basePane);
-        primaryStage.setScene(baseScene);
+    private void loadStartMenu() throws IOException {
+        replaceSceneContent("fxml/StartMenu.fxml");
+        
         Button startButton = (Button)(baseScene.getRoot().lookup("#startButton"));
         startButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event) -> {
             try {
@@ -83,9 +81,7 @@ public class GUI extends Application {
     }
     
     private void loadGame() throws IOException {
-        Pane basePane = (Pane)FXMLLoader.load(getClass().getClassLoader().getResource("fxml/Game.fxml"));
-        baseScene = new Scene(basePane);
-        primaryStage.setScene(baseScene);
+        replaceSceneContent("fxml/Game.fxml");
         
         rotateButtonBar = (ButtonBar)(baseScene.getRoot().lookup("#rotateButtonBar"));
         rotateButton = (Button)(rotateButtonBar.lookup("#rotateButton"));
@@ -197,7 +193,7 @@ public class GUI extends Application {
         helpLabel.setText(game.whoseTurn() + " - First select the direction and then the tile you want to rotate");
     }
     
-    public void setMarble(int x, int y) {
+    private void setMarble(int x, int y) {
         try {
             game.setMarble(x, y);
             readyToRotate();
@@ -206,7 +202,7 @@ public class GUI extends Application {
         }
     }
     
-    public void rotateTile(int x, int y, Direction d) {
+    private void rotateTile(int x, int y, Direction d) {
         try {
 //            RotateTransition rt = new RotateTransition(Duration.millis(1000), tiles[y][x]);
 //            rt.setByAngle(90);
@@ -236,9 +232,8 @@ public class GUI extends Application {
     }
         
     private void winGame(Line line) throws IOException {
-        Pane basePane = (Pane)FXMLLoader.load(getClass().getClassLoader().getResource("fxml/WinScreen.fxml"));
-        baseScene = new Scene(basePane);
-        primaryStage.setScene(baseScene);
+        replaceSceneContent("fxml/WinScreen.fxml");
+        
         initTiles();
         initCircles();
         fillCircles();
@@ -257,7 +252,8 @@ public class GUI extends Application {
         }
         
         Text text = new Text(game.whoseTurn() + " won!");
-        text.setFont(new Font("Arial", 80));
+        text.setFont(new Font("Arial", 72));
+        text.setFill(Paint.valueOf("#FF0000"));
         TextFlow textFlow = (TextFlow)(baseScene.getRoot().lookup("#winText"));
         textFlow.setVisible(true);    
         textFlow.getChildren().add(text);
@@ -270,5 +266,19 @@ public class GUI extends Application {
                 Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
+    }
+    
+    private Pane replaceSceneContent(String fxml) throws IOException {
+        Pane page = (Pane) FXMLLoader.load(getClass().getClassLoader().getResource(fxml));
+        baseScene = primaryStage.getScene();
+        if (baseScene == null) {
+            baseScene = new Scene(page);
+            primaryStage.setScene(baseScene);
+        } else {
+            baseScene.setRoot(page);
+        }
+        primaryStage.sizeToScene();
+        
+        return page;
     }
 }

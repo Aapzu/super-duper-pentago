@@ -10,21 +10,26 @@ import java.util.Arrays;
 
 /**
  * This is a class for checking for lines on a Board.
- * 
+ *
  * @author Aapeli
  */
 public class BoardLineChecker {
-    
+
     private Board board;
-    
+
+    /**
+     * Creates a new BoardLineChecker for the given Board.
+     *
+     * @param board
+     */
     public BoardLineChecker(Board board) {
         this.board = board;
     }
-    
+
     /**
-     * Calls checkLines(length, d) with all the valid Directions
-     * (HORIZONTAL, VERTICAL, UPGRADING_DIAGONAL, DOWNGRADING_DIAGONAL).
-     * 
+     * Calls checkLines(length, d) with all the valid Directions (HORIZONTAL,
+     * VERTICAL, UPGRADING_DIAGONAL, DOWNGRADING_DIAGONAL).
+     *
      * @param length the length to be given to checkLines
      * @return the line found or null
      */
@@ -33,21 +38,22 @@ public class BoardLineChecker {
             throw new IllegalArgumentException("The length of a line must be between 2 and " + board.getSideLength() * board.getTileSideLength());
         }
         Line line = null;
-        
+
         for (Direction d : Direction.getLineDirections()) {
             line = checkLines(length, d);
             if (line != null) {
                 break;
             }
         }
-        
+
         return line;
     }
-    
+
     /**
-     * Checks if there are the given amount of same symbol on the board in the given direction.
-     * If a line was found, returns a map with the symbol and the coordinates of the line.
-     * 
+     * Checks if there are the given amount of same symbol on the board in the
+     * given direction. If a line was found, returns a map with the symbol and
+     * the coordinates of the line.
+     *
      * @param length the required amount of the same symbols in a row
      * @param d the Direction to be looked at
      * @return the line or null
@@ -60,13 +66,13 @@ public class BoardLineChecker {
         }
         int firstIndexFrom = 0;
         int firstIndexTo = wholeLength;
-        
+
         if (d == Direction.UPGRADING_DIAGONAL) {
             firstIndexFrom = -wholeLength + 1;
         } else if (d == Direction.DOWNGRADING_DIAGONAL) {
             firstIndexTo = 2 * wholeLength - 1;
         }
-        
+
         Marble lastMarble;
         for (int i = firstIndexFrom; i < firstIndexTo; i++) {
             lastMarble = null;
@@ -89,7 +95,7 @@ public class BoardLineChecker {
                 if (firstCoord >= 0 && firstCoord < wholeLength && secondCoord >= 0 && secondCoord < wholeLength) {
                     Marble m = board.getMarble(firstCoord, secondCoord);
                     line.addCoordinate(new Integer[]{firstCoord, secondCoord});
-                
+
                     if (m == null || (lastMarble != null && !lastMarble.equals(m))) {
                         line.clear();
                     }

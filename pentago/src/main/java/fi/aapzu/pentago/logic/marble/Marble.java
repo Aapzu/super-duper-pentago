@@ -20,6 +20,8 @@ public class Marble {
     }
     
     /**
+     * Gives the Symbol of the Marble.
+     * 
      * @return symbol
      */
     public Symbol getSymbol() {

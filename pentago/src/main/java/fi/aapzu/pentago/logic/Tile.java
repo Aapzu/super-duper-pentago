@@ -1,4 +1,3 @@
-
 package fi.aapzu.pentago.logic;
 
 import fi.aapzu.pentago.game.PentagoGameRuleException;
@@ -7,27 +6,27 @@ import java.util.Arrays;
 
 /**
  * One of the main instruments in the game. Can contain Marbles and be rotated.
- * 
+ *
  * @author Aapeli
  */
 public class Tile {
-    
+
     private int sideLength;
     private Marble[][] tile;
     private Direction lastDirection;
-    
+
     /**
      * Calls the constructor with the default sideLength 3.
      */
     public Tile() {
         this(3);
     }
-    
+
     /**
-     * Creates the Tile with the given sideLength (for the Marbles).
-     * Throws IllegalArgumentException if the sideLength is negative or 0.
-     * Sets the lastDirection to null.
-     * 
+     * Creates the Tile with the given sideLength (for the Marbles). Throws
+     * IllegalArgumentException if the sideLength is negative or 0. Sets the
+     * lastDirection to null.
+     *
      * @param sideLength
      */
     public Tile(int sideLength) {
@@ -38,15 +37,15 @@ public class Tile {
         tile = new Marble[sideLength][sideLength];
         lastDirection = null;
     }
-    
+
     private boolean validateCoordinates(int x, int y) {
-        return  x >= 0 && x < tile[0].length && y >= 0 && y < tile.length;
+        return x >= 0 && x < tile[0].length && y >= 0 && y < tile.length;
     }
-    
+
     /**
-     * Gives the Marble in the given coordinates. 
-     * Returns null if the coordinates are invalid or there is no Marble in the specified place.
-     * 
+     * Gives the Marble in the given coordinates. Returns null if the
+     * coordinates are invalid or there is no Marble in the specified place.
+     *
      * @param x the X coordinate
      * @param y the Y coordinate
      * @return the Marble or null
@@ -58,12 +57,12 @@ public class Tile {
             return null;
         }
     }
-    
+
     /**
-     * Sets the given Marble to the given place.
-     * Returns false if the coordinates are invalid.
-     * Throws PentagoGameRuleException if there is already a Marble in the specified place.
-     * 
+     * Sets the given Marble to the given place. Returns false if the
+     * coordinates are invalid. Throws PentagoGameRuleException if there is
+     * already a Marble in the specified place.
+     *
      * @param marble
      * @param x the X coordinate
      * @param y the Y coordinate
@@ -81,11 +80,11 @@ public class Tile {
             return false;
         }
     }
-    
+
     /**
-     * Removes and gives the marble in the specified place.
-     * If the coordinates are invalid, or the place is empty, returns null.
-     * 
+     * Removes and gives the marble in the specified place. If the coordinates
+     * are invalid, or the place is empty, returns null.
+     *
      * @param x the X coordinate
      * @param y the Y coordinate
      * @return the removed Marble or null
@@ -99,12 +98,12 @@ public class Tile {
             return null;
         }
     }
-    
+
     /**
-     * Rotates the Tile to the given Direction.
-     * Throws exception if the Direction is not CLOCKWISE or COUNTER_CLOCKWISE.
-     * Sets the Direction for the lastDirection.
-     * 
+     * Rotates the Tile to the given Direction. Throws exception if the
+     * Direction is not CLOCKWISE or COUNTER_CLOCKWISE. Sets the Direction for
+     * the lastDirection.
+     *
      * @param d the Direction for the Tile to be rotated
      */
     protected void rotate(Direction d) {
@@ -129,7 +128,7 @@ public class Tile {
         }
         tile = rotatedTile;
     }
-    
+
     @Override
     public String toString() {
         String result = "";
@@ -141,7 +140,7 @@ public class Tile {
         }
         return result;
     }
-    
+
     /**
      * @param rowNumber the row to be toStringed
      * @return the String representation of only one row
@@ -149,21 +148,21 @@ public class Tile {
     protected String rowToString(int rowNumber) {
         return Arrays.toString(tile[rowNumber]);
     }
-    
+
     /**
      * @return sideLength
      */
     protected int getSideLength() {
         return sideLength;
     }
-    
+
     /**
      * @return tile
      */
     protected Marble[][] getTile() {
         return tile;
     }
-    
+
     /**
      * @return lastDirection
      */
@@ -179,8 +178,8 @@ public class Tile {
      * Removes every Marble.
      */
     protected void clear() {
-        for(int y = 0; y < getTile().length; y++) {
-            for(int x = 0; x < getTile()[0].length; x++) {
+        for (int y = 0; y < getTile().length; y++) {
+            for (int x = 0; x < getTile()[0].length; x++) {
                 setMarble(null, x, y);
             }
         }
