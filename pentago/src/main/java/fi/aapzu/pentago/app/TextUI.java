@@ -41,7 +41,7 @@ public class TextUI {
         Line line = null;
         while (line == null) {
             doTurn();
-            line = game.getLine();
+            line = game.checkLines();
         }
         winGame(line);
     }

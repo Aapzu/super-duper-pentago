@@ -226,7 +226,7 @@ public class GUI extends Application {
             
             game.rotateTile(x, y, d);
             errorLabel.setText("");
-            Line line = game.getLine();
+            Line line = game.checkLines();
             if(line != null) {
                 winGame(line);
             } else {

@@ -252,4 +252,22 @@ public class TileTest {
         assertEquals(Direction.COUNTER_CLOCKWISE, tile.getLastDirection());
     }
     
+    @Test
+    public void clearClearsTheTile() {
+        Marble x = new Marble(Symbol.X);
+        Marble o = new Marble(Symbol.O);
+        tile.setMarble(o, 0, 0);
+        tile.setMarble(x, 1, 0);
+        tile.setMarble(x, 0, 1);
+        tile.setMarble(o, 1, 1);
+        tile.setMarble(o, 2, 2);
+        
+        tile.clear();
+        for(Marble[] row : tile.getTile()) {
+            for(Marble m : row) {
+                assertNull(m);
+            }
+        }
+    }
+    
 }

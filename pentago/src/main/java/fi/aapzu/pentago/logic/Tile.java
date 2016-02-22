@@ -184,4 +184,15 @@ public class Tile {
             }
         }
     }
+
+    protected boolean isEmpty() {
+        for(Marble[] row : tile) {
+            for(Marble m : row) {
+                if(m != null) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 }

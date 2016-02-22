@@ -222,4 +222,15 @@ public class Board {
             }
         }
     }
+    
+    public boolean isEmpty() {
+        for(Tile[] row : tiles) {
+            for(Tile t : row) {
+                if(!t.isEmpty()) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 }

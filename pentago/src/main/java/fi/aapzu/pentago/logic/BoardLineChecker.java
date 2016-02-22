@@ -111,4 +111,8 @@ public class BoardLineChecker {
         }
         return null;
     }
+    
+    public Board getBoard() {
+        return board;
+    }
 }

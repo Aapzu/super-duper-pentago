@@ -216,6 +216,12 @@ public class BoardTest {
                 "[null, [O], null][null, [O], null]\n" +
                 "[[X], null, null][null, null, null]\n", board.toString());
     }    
+    
+    @Test
+    public void rotateTileThrowsExceptionIfTheDirectionIsIllegal() {
+        exception.expect(IllegalArgumentException.class);
+        board.rotateTile(0, 0, Direction.VERTICAL);
+    }
 
     @Test
     public void getLastDirectionReturnsTheRightDirection() {
@@ -281,6 +287,25 @@ public class BoardTest {
         assertNull(arr[1][0]);
         assertNull(arr[4][2]);
         assertNull(arr[1][3]);
+    }
+    
+    @Test
+    public void clearClearsTheBoard() {
+        Marble x = new Marble(Symbol.X);
+        Marble o = new Marble(Symbol.O);
+        board.addMarble(x, 0, 0);
+        board.addMarble(o, 2, 0);
+        board.addMarble(x, 4, 1);
+        board.addMarble(o, 0, 4);
+        board.addMarble(x, 5, 5);
+        board.clear();
+        
+        Marble[][] arr = board.toMarbleArray();
+        for(Marble[] row : arr) {
+            for(Marble m : row) {
+                assertNull(m);
+            }
+        }                   
     }
     
 }

@@ -115,7 +115,7 @@ public class Pentago {
         whoseTurn = (whoseTurn + 1) % 2;
     }
 
-    private Player getPlayerBySymbol(Symbol symbol) {
+    protected Player getPlayerBySymbol(Symbol symbol) {
         for (Player p : players) {
             if (p.getSymbol() == symbol) {
                 return p;
@@ -130,7 +130,7 @@ public class Pentago {
      *
      * @return line or null
      */
-    public Line getLine() {
+    public Line checkLines() {
         Line line = lineChecker.checkLines(5);
         if (line != null && line.getSymbol() != null) {
             line.setPlayer(getPlayerBySymbol((Symbol) line.getSymbol()));
@@ -145,4 +145,13 @@ public class Pentago {
     public boolean getAllowedToRotate() {
         return allowedToRotate;
     }
+
+    public BoardLineChecker getLineChecker() {
+        return lineChecker;
+    }
+
+    public Player[] getPlayers() {
+        return players;
+    }
+    
 }
