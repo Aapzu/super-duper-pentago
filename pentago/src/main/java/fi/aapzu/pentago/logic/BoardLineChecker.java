@@ -79,18 +79,25 @@ public class BoardLineChecker {
             for (int j = 0; j < wholeLength; j++) {
                 int firstCoord = -1;
                 int secondCoord = -1;
-                if (d == Direction.HORIZONTAL) {
-                    firstCoord = j;
-                    secondCoord = i;
-                } else if (d == Direction.VERTICAL) {
-                    firstCoord = i;
-                    secondCoord = j;
-                } else if (d == Direction.UPGRADING_DIAGONAL) {
-                    firstCoord = j;
-                    secondCoord = i + j;
-                } else if (d == Direction.DOWNGRADING_DIAGONAL) {
-                    firstCoord = i - j;
-                    secondCoord = j;
+                if (null != d) switch (d) {
+                    case HORIZONTAL:
+                        firstCoord = j;
+                        secondCoord = i;
+                        break;
+                    case VERTICAL:
+                        firstCoord = i;
+                        secondCoord = j;
+                        break;
+                    case UPGRADING_DIAGONAL:
+                        firstCoord = j;
+                        secondCoord = i + j;
+                        break;
+                    case DOWNGRADING_DIAGONAL:
+                        firstCoord = i - j;
+                        secondCoord = j;
+                        break;
+                    default:
+                        break;
                 }
                 if (firstCoord >= 0 && firstCoord < wholeLength && secondCoord >= 0 && secondCoord < wholeLength) {
                     Marble m = board.getMarble(firstCoord, secondCoord);

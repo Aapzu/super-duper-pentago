@@ -10,6 +10,7 @@ import static fi.aapzu.pentago.logic.marble.Symbol.O;
 import static fi.aapzu.pentago.logic.marble.Symbol.X;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -239,6 +240,7 @@ public class GUI extends Application {
         fillCircles();
         
         for(Integer[] coords : line.getCoordinates()) {
+            System.out.println(Arrays.toString(coords));
             int x = coords[0];
             int y = coords[1];
             circles[y][x].strokeWidthProperty().setValue(5);
