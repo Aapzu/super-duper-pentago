@@ -5,7 +5,9 @@
  */
 package fi.aapzu.pentago.logic;
 
+import fi.aapzu.pentago.logic.line.Line;
 import fi.aapzu.pentago.game.PentagoGameRuleException;
+import fi.aapzu.pentago.logic.line.LinePoint;
 import fi.aapzu.pentago.logic.marble.Marble;
 import fi.aapzu.pentago.logic.marble.Symbol;
 import java.util.ArrayList;
@@ -87,16 +89,16 @@ public class BoardLineCheckerTest {
         Line line = (Line) lineChecker.checkLines(5);
         assertNotNull(line);
         assertNotNull(line.getSymbol());
-        assertNotNull(line.getCoordinates());
+        assertNotEquals(0, line.getLinePoints().size());
         assertEquals(Symbol.O, line.getSymbol());
-        assertEquals(5, ((ArrayList)line.getCoordinates()).size());
+        assertEquals(5, line.length());
         
         // Needed because ArrayList.contains(T[]) doesn't work
         ArrayList<ArrayList<Integer>> copyOfPoints = new ArrayList<>();
         for (Integer[] point : points) copyOfPoints.add(new ArrayList<>(Arrays.asList(point)));
         
-        for (Integer[] point : (ArrayList<Integer[]>) line.getCoordinates()) {
-            assertTrue(copyOfPoints.contains(new ArrayList<>(Arrays.asList(point))));
+        for (LinePoint lp : line.getLinePoints()) {
+            assertTrue(copyOfPoints.contains(new ArrayList<>(Arrays.asList(lp.getCoords()))));
         }
     }
     
@@ -110,8 +112,8 @@ public class BoardLineCheckerTest {
             }  else {
                 m = new Marble(Symbol.X);
             }
-            System.out.println(board.toString());
             board.addMarble(m, point[0], point[1]);
+            System.out.println(board.toString());
         }
         Line line = (Line) lineChecker.checkLines(5);
         assertNull(line);
@@ -183,31 +185,58 @@ public class BoardLineCheckerTest {
         checkLinesWorks(points);
     }
     
-    @Test
-    public void whenTheLineGoesPastTheBoardCheckLinesReturnsNull() {
-        ArrayList<Integer[]> points = new ArrayList<>();
-        points.add(new Integer[]{1,3});
-        points.add(new Integer[]{1,3});
-        points.add(new Integer[]{1,5});
-        points.add(new Integer[]{2,0});
-        points.add(new Integer[]{2,1});
-        checkLinesReturnsNull(points, null);
-    }
-    
-    @Test
-    public void checkLinesReturnsNullWhenTheLineHasDifferentSymbols() {
-        ArrayList<Integer[]> points = new ArrayList<>();
-        points.add(new Integer[]{1,3});
-        points.add(new Integer[]{1,3});
-        points.add(new Integer[]{1,5});
-        points.add(new Integer[]{2,0});
-        points.add(new Integer[]{2,1});
-        ArrayList<Symbol> symbols = new ArrayList<>();
-        symbols.add(Symbol.O);
-        symbols.add(Symbol.O);
-        symbols.add(Symbol.O);
-        symbols.add(Symbol.X);
-        symbols.add(Symbol.X);
-        checkLinesReturnsNull(points, symbols);
-    }
+//    @Test
+//    public void checkLinesReturnsNullWhenTheLineHasDifferentSymbols() {
+//        ArrayList<Integer[]> points = new ArrayList<>();
+//        points.add(new Integer[]{0,1});
+//        points.add(new Integer[]{1,1});
+//        points.add(new Integer[]{2,1});
+//        points.add(new Integer[]{3,1});
+//        points.add(new Integer[]{4,1});
+//        ArrayList<Symbol> symbols = new ArrayList<>();
+//        symbols.add(Symbol.O);
+//        symbols.add(Symbol.X);
+//        symbols.add(Symbol.O);
+//        symbols.add(Symbol.X);
+//        symbols.add(Symbol.O);
+//        checkLinesReturnsNull(points, symbols);
+//    }
+//    
+//    @Test
+//    public void checkLinesReturnsNullWhenTheLineIsNotLongEnough() {
+//        ArrayList<Integer[]> points = new ArrayList<>();
+//        points.add(new Integer[]{0,1});
+//        points.add(new Integer[]{1,1});
+//        points.add(new Integer[]{2,1});
+//        points.add(new Integer[]{3,1});
+//        checkLinesReturnsNull(points, null);
+//    }
+//    
+//    @Test
+//    public void checkLinesReturnsNullWhenTheLineGoesPastTheBoard() {
+//        ArrayList<Integer[]> points = new ArrayList<>();
+//        points.add(new Integer[]{1,3});
+//        points.add(new Integer[]{1,4});
+//        points.add(new Integer[]{1,5});
+//        points.add(new Integer[]{2,0});
+//        points.add(new Integer[]{2,1});
+//        checkLinesReturnsNull(points, null);
+//    }
+//    
+//    @Test
+//    public void checkLinesReturnsNullWhenTheLineHasDifferentSymbolsPastTheBoard() {
+//        ArrayList<Integer[]> points = new ArrayList<>();
+//        points.add(new Integer[]{1,3});
+//        points.add(new Integer[]{1,4});
+//        points.add(new Integer[]{1,5});
+//        points.add(new Integer[]{2,0});
+//        points.add(new Integer[]{2,1});
+//        ArrayList<Symbol> symbols = new ArrayList<>();
+//        symbols.add(Symbol.O);
+//        symbols.add(Symbol.O);
+//        symbols.add(Symbol.O);
+//        symbols.add(Symbol.X);
+//        symbols.add(Symbol.X);
+//        checkLinesReturnsNull(points, symbols);
+//    }
 }

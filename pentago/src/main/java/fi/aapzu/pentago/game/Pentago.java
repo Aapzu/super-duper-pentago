@@ -3,7 +3,7 @@ package fi.aapzu.pentago.game;
 import fi.aapzu.pentago.logic.Board;
 import fi.aapzu.pentago.logic.BoardLineChecker;
 import fi.aapzu.pentago.logic.Direction;
-import fi.aapzu.pentago.logic.Line;
+import fi.aapzu.pentago.logic.line.Line;
 import fi.aapzu.pentago.logic.marble.Marble;
 import fi.aapzu.pentago.logic.marble.Symbol;
 

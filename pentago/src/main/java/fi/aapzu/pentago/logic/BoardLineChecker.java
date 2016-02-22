@@ -5,6 +5,8 @@
  */
 package fi.aapzu.pentago.logic;
 
+import fi.aapzu.pentago.logic.line.Line;
+import fi.aapzu.pentago.logic.line.LinePoint;
 import fi.aapzu.pentago.logic.marble.Marble;
 import java.util.Arrays;
 
@@ -66,17 +68,21 @@ public class BoardLineChecker {
         }
         int firstIndexFrom = 0;
         int firstIndexTo = wholeLength;
-
-        if (d == Direction.UPGRADING_DIAGONAL) {
-            firstIndexFrom = -wholeLength + 1;
-        } else if (d == Direction.DOWNGRADING_DIAGONAL) {
-            firstIndexTo = 2 * wholeLength - 1;
+        
+        switch(d) {
+            case UPGRADING_DIAGONAL:
+                firstIndexFrom = -wholeLength + 1;
+                break;
+            case DOWNGRADING_DIAGONAL:
+                firstIndexTo = 2 * wholeLength - 1;
+                break;
+            default:
+                break;
         }
 
-        Marble lastMarble;
         for (int i = firstIndexFrom; i < firstIndexTo; i++) {
-            lastMarble = null;
             for (int j = 0; j < wholeLength; j++) {
+                line.clear();
                 int firstCoord = -1;
                 int secondCoord = -1;
                 if (null != d) switch (d) {
@@ -101,17 +107,15 @@ public class BoardLineChecker {
                 }
                 if (firstCoord >= 0 && firstCoord < wholeLength && secondCoord >= 0 && secondCoord < wholeLength) {
                     Marble m = board.getMarble(firstCoord, secondCoord);
-                    line.addCoordinate(new Integer[]{firstCoord, secondCoord});
-
-                    if (m == null || (lastMarble != null && !lastMarble.equals(m))) {
+                    
+                    if (m == null) {
                         line.clear();
+                    } else {
+                        line.addLinePoint(new LinePoint(m, new Integer[]{firstCoord, secondCoord}));
                     }
-                    if (line.length() >= length) {
-                        line.setSymbol(m.getSymbol());
+                    if(line.length() > length) {
                         return line;
                     }
-
-                    lastMarble = m;
                 }
             }
         }

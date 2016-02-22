@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package fi.aapzu.pentago.logic;
+package fi.aapzu.pentago.logic.line;
 
 import fi.aapzu.pentago.game.Player;
+import fi.aapzu.pentago.logic.marble.Marble;
 import fi.aapzu.pentago.logic.marble.Symbol;
 import java.util.Arrays;
 import org.junit.After;
@@ -34,27 +35,25 @@ public class LineTest {
     }
 
     @Test
-    public void addCoordinateAddsCoordinate() {
-        line.addCoordinate(new Integer[]{0,0});
-        assertEquals(1, line.getCoordinates().size());
-        assertTrue(Arrays.equals(new Integer[]{0,0}, line.getCoordinates().get(0)));
+    public void addLinePointAddsLinePoint() {
+        line.addLinePoint(new LinePoint(new Marble(Symbol.O), new Integer[]{0,0}));
+        assertEquals(1, line.getLinePoints().size());
     }
     
     @Test
     public void lengthReturnsRight() {
-        line.addCoordinate(new Integer[]{0,0});
-        line.addCoordinate(new Integer[]{1,0});
-        line.addCoordinate(new Integer[]{2,0});
+        line.addLinePoint(new LinePoint(new Marble(Symbol.O), new Integer[]{0,0}));
+        line.addLinePoint(new LinePoint(new Marble(Symbol.O), new Integer[]{1,0}));
+        line.addLinePoint(new LinePoint(new Marble(Symbol.O), new Integer[]{2,0}));
         assertEquals(3, line.length());
     }
     
     @Test
     public void clearClearsAll() {
         line.setPlayer(new Player(Symbol.O));
-        line.setSymbol(Symbol.O);
-        line.addCoordinate(new Integer[]{0,0});
+        line.addLinePoint(new LinePoint(new Marble(Symbol.O), new Integer[]{0,0}));
         line.clear();
-        assertTrue(line.getCoordinates().isEmpty());
+        assertTrue(line.getLinePoints().isEmpty());
         assertNull(line.getPlayer());
         assertNull(line.getSymbol());
     }
@@ -65,8 +64,7 @@ public class LineTest {
         p.setName("test");
         line.setPlayer(p);
         
-        line.setSymbol(Symbol.O);
-        line.addCoordinate(new Integer[]{0,0});
+        line.addLinePoint(new LinePoint(new Marble(Symbol.O), new Integer[]{0,0}));
         String expected = "" +
                 "Player: test\n" +
                 "Symbol: O\n" +

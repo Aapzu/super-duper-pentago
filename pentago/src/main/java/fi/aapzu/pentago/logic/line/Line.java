@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package fi.aapzu.pentago.logic;
+package fi.aapzu.pentago.logic.line;
 
 import fi.aapzu.pentago.game.Player;
 import fi.aapzu.pentago.logic.marble.Symbol;
@@ -18,7 +18,7 @@ import java.util.Arrays;
 public class Line {
 
     private Symbol symbol;
-    private ArrayList<Integer[]> coordinates = new ArrayList<>();
+    private ArrayList<LinePoint> linePoints = new ArrayList<>();
     private Player player;
 
     /**
@@ -26,8 +26,11 @@ public class Line {
      *
      * @param c the coordinate to be added
      */
-    public void addCoordinate(Integer[] c) {
-        coordinates.add(c);
+    public void addLinePoint(LinePoint lp) {
+        if(!linePoints.isEmpty() && !linePoints.get(0).getMarble().getSymbol().equals(lp.getMarble().getSymbol())) {
+            linePoints.remove(0);
+        }
+        linePoints.add(lp);
     }
 
     /**
@@ -35,8 +38,8 @@ public class Line {
      *
      * @return coordinates
      */
-    public ArrayList<Integer[]> getCoordinates() {
-        return coordinates;
+    public ArrayList<LinePoint> getLinePoints() {
+        return linePoints;
     }
 
     /**
@@ -45,16 +48,7 @@ public class Line {
      * @return length
      */
     public int length() {
-        return coordinates.size();
-    }
-
-    /**
-     * Sets the Symbol of the Line.
-     * 
-     * @param s symbol
-     */
-    public void setSymbol(Symbol s) {
-        symbol = s;
+        return linePoints.size();
     }
 
     /**
@@ -63,7 +57,10 @@ public class Line {
      * @return symbol
      */
     public Symbol getSymbol() {
-        return symbol;
+        if(linePoints.isEmpty()) {
+            return null;
+        }
+        return linePoints.get(0).getMarble().getSymbol();
     }
 
     /**
@@ -89,8 +86,8 @@ public class Line {
         String line = "Player: " + getPlayer()
                 + "\nSymbol: " + getSymbol()
                 + "\nLine:";
-        for (Integer[] a : coordinates) {
-            line += "\n\t" + Arrays.toString(a);
+        for (LinePoint l : linePoints) {
+            line += "\n\t" + Arrays.toString(l.getCoords());
         }
         return line;
     }
@@ -101,6 +98,6 @@ public class Line {
     public void clear() {
         symbol = null;
         player = null;
-        coordinates.clear();
+        linePoints.clear();
     }
 }

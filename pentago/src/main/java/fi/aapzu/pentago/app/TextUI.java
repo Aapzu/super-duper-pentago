@@ -4,7 +4,7 @@ import fi.aapzu.pentago.game.Pentago;
 import fi.aapzu.pentago.game.PentagoGameRuleException;
 import fi.aapzu.pentago.game.Player;
 import fi.aapzu.pentago.logic.Direction;
-import fi.aapzu.pentago.logic.Line;
+import fi.aapzu.pentago.logic.line.Line;
 import java.util.Scanner;
 
 /**

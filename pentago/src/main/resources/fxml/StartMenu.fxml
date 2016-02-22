@@ -10,7 +10,7 @@
    <children>
       <Text fontSmoothingType="LCD" layoutX="16.0" layoutY="242.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-pref-width: 575;" text="Pentago" textAlignment="CENTER" wrappingWidth="539.0193939208984">
          <font>
-            <Font name="Apple Chancery" size="140.0" />
+            <Font name="Apple Chancery" size="100.0" />
          </font>
       </Text>
       <TextField id="whitePlayerName" layoutX="275.0" layoutY="430.0" prefWidth="180.0" />
