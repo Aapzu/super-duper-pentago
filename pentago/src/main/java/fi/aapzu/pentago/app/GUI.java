@@ -260,7 +260,7 @@ public class GUI extends Application {
             circles[y][x].setFill(Paint.valueOf(color));
         }
         
-        Text text = new Text(game.whoseTurn() + " won!");
+        Text text = new Text(line.getPlayer() + " won!");
         text.setFont(new Font("Arial", 72));
         text.setFill(Paint.valueOf("#FF0000"));
         TextFlow textFlow = (TextFlow)(baseScene.getRoot().lookup("#winText"));

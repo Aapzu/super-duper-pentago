@@ -95,16 +95,16 @@ public class BoardLineChecker {
                 }
                 if (firstCoord >= 0 && firstCoord < wholeLength && secondCoord >= 0 && secondCoord < wholeLength) {
                     Marble m = board.getMarble(firstCoord, secondCoord);
-                    line.addCoordinate(new Integer[]{firstCoord, secondCoord});
-
-                    if (m == null || (lastMarble != null && !lastMarble.equals(m))) {
+                    if(m == null || (!m.equals(lastMarble) && lastMarble != null)) {
                         line.clear();
                     }
-                    if (line.length() >= length) {
-                        line.setSymbol(m.getSymbol());
-                        return line;
+                    if(m != null) {
+                        line.addCoordinate(new Integer[]{firstCoord, secondCoord});
+                        if (line.length() >= length) {
+                            line.setSymbol(m.getSymbol());
+                            return line;
+                        }
                     }
-
                     lastMarble = m;
                 }
             }
