@@ -100,7 +100,7 @@ public class BoardLineCheckerTest {
         }
     }
     
-    // This is not meant to be a test. This is just a help-method for the tests below.
+        // This is not meant to be a test. This is just a help-method for the tests below.
     public void checkLinesReturnsNull(ArrayList<Integer[]> points, ArrayList<Symbol> symbols) {
         for (int i = 0; i < points.size(); i++) {
             Integer[] point = points.get(i);
@@ -110,8 +110,8 @@ public class BoardLineCheckerTest {
             }  else {
                 m = new Marble(Symbol.X);
             }
-            System.out.println(board.toString());
             board.addMarble(m, point[0], point[1]);
+            System.out.println(board.toString());
         }
         Line line = (Line) lineChecker.checkLines(5);
         assertNull(line);
@@ -184,10 +184,37 @@ public class BoardLineCheckerTest {
     }
     
     @Test
-    public void whenTheLineGoesPastTheBoardCheckLinesReturnsNull() {
+    public void checkLinesReturnsNullWhenTheLineHasDifferentSymbols() {
+        ArrayList<Integer[]> points = new ArrayList<>();
+        points.add(new Integer[]{0,1});
+        points.add(new Integer[]{1,1});
+        points.add(new Integer[]{2,1});
+        points.add(new Integer[]{3,1});
+        points.add(new Integer[]{4,1});
+        ArrayList<Symbol> symbols = new ArrayList<>();
+        symbols.add(Symbol.O);
+        symbols.add(Symbol.X);
+        symbols.add(Symbol.O);
+        symbols.add(Symbol.X);
+        symbols.add(Symbol.O);
+        checkLinesReturnsNull(points, symbols);
+    }
+    
+    @Test
+    public void checkLinesReturnsNullWhenTheLineIsNotLongEnough() {
+        ArrayList<Integer[]> points = new ArrayList<>();
+        points.add(new Integer[]{0,1});
+        points.add(new Integer[]{1,1});
+        points.add(new Integer[]{2,1});
+        points.add(new Integer[]{3,1});
+        checkLinesReturnsNull(points, null);
+    }
+    
+    @Test
+    public void checkLinesReturnsNullWhenTheLineGoesPastTheBoard() {
         ArrayList<Integer[]> points = new ArrayList<>();
         points.add(new Integer[]{1,3});
-        points.add(new Integer[]{1,3});
+        points.add(new Integer[]{1,4});
         points.add(new Integer[]{1,5});
         points.add(new Integer[]{2,0});
         points.add(new Integer[]{2,1});
@@ -195,10 +222,10 @@ public class BoardLineCheckerTest {
     }
     
     @Test
-    public void checkLinesReturnsNullWhenTheLineHasDifferentSymbols() {
+    public void checkLinesReturnsNullWhenTheLineHasDifferentSymbolsPastTheBoard() {
         ArrayList<Integer[]> points = new ArrayList<>();
         points.add(new Integer[]{1,3});
-        points.add(new Integer[]{1,3});
+        points.add(new Integer[]{1,4});
         points.add(new Integer[]{1,5});
         points.add(new Integer[]{2,0});
         points.add(new Integer[]{2,1});

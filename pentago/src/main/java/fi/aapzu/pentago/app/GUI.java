@@ -9,13 +9,13 @@ import fi.aapzu.pentago.logic.marble.Symbol;
 import static fi.aapzu.pentago.logic.marble.Symbol.O;
 import static fi.aapzu.pentago.logic.marble.Symbol.X;
 import java.io.IOException;
-import java.net.URL;
-import java.util.Arrays;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -24,6 +24,8 @@ import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -66,19 +68,25 @@ public class GUI extends Application {
     
     private void loadStartMenu() throws IOException {
         replaceSceneContent("fxml/StartMenu.fxml");
-        
+        TextField whitePlayerName = (TextField)(baseScene.getRoot().lookup("#whitePlayerName"));
+        TextField blackPlayerName = (TextField)(baseScene.getRoot().lookup("#blackPlayerName"));
         Button startButton = (Button)(baseScene.getRoot().lookup("#startButton"));
-        startButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event) -> {
-            try {
-                TextField whitePlayerName = (TextField)(baseScene.getRoot().lookup("#whitePlayerName"));
-                TextField blackPlayerName = (TextField)(baseScene.getRoot().lookup("#blackPlayerName"));
-                game.setPlayerName(0, !whitePlayerName.getText().equals("") ? whitePlayerName.getText() : "Player 0");
-                game.setPlayerName(1, !blackPlayerName.getText().equals("") ? blackPlayerName.getText() : "Player 1");
-                loadGame();
-            } catch (IOException ex) {
-                Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+        
+        EnterClickEventHandler handler = new EnterClickEventHandler() {
+            @Override
+            public void handleEvent() {
+                try {
+                    game.setPlayerName(0, !whitePlayerName.getText().equals("") ? whitePlayerName.getText() : "White");
+                    game.setPlayerName(1, !blackPlayerName.getText().equals("") ? blackPlayerName.getText() : "Black");
+                    loadGame();
+                } catch (IOException ex) {
+                    Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
-        });
+        };
+        whitePlayerName.addEventHandler(KeyEvent.KEY_PRESSED, handler);
+        blackPlayerName.addEventHandler(KeyEvent.KEY_PRESSED, handler);
+        startButton.addEventHandler(MouseEvent.MOUSE_CLICKED, handler);
     }
     
     private void loadGame() throws IOException {
@@ -240,7 +248,6 @@ public class GUI extends Application {
         fillCircles();
         
         for(Integer[] coords : line.getCoordinates()) {
-            System.out.println(Arrays.toString(coords));
             int x = coords[0];
             int y = coords[1];
             circles[y][x].strokeWidthProperty().setValue(5);
@@ -282,5 +289,30 @@ public class GUI extends Application {
         primaryStage.sizeToScene();
         
         return page;
+    }
+    
+    private class EnterClickEventHandler implements EventHandler<Event>{
+
+        public void handleKeyEvent(KeyEvent e){
+            if (e.getCode().equals(KeyCode.ENTER)) {
+                handleEvent();
+            }
+        }
+
+        public void handleMouseEvent(MouseEvent e){
+            handleEvent();
+        }
+
+        @Override
+        public void handle(Event event) {
+            if (event instanceof KeyEvent) {
+                handleKeyEvent((KeyEvent) event);
+            } else if (event instanceof MouseEvent) {
+                handleMouseEvent((MouseEvent) event);
+            }
+        }
+        
+        public void handleEvent() {}
+
     }
 }
