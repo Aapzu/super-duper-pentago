@@ -16,7 +16,7 @@
     -fx-background-radius: 5;
 }
 
-Circle {
+Circle,.clockwise, .counterClockwise {
     -fx-cursor: hand;
 }
 

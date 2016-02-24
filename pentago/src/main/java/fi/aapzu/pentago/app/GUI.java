@@ -9,6 +9,8 @@ import fi.aapzu.pentago.logic.marble.Symbol;
 import static fi.aapzu.pentago.logic.marble.Symbol.O;
 import static fi.aapzu.pentago.logic.marble.Symbol.X;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,7 +22,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -44,7 +45,7 @@ public class GUI extends Application {
     private Scene baseScene;
     private Stage primaryStage;
     
-    private ButtonBar rotateButtonBar; 
+    private List<Node> rotateButtons; 
     private ChoiceBox directionChoiceBox;
     private ChoiceBox tileChoiceBox;
     private Button rotateButton;
@@ -92,27 +93,14 @@ public class GUI extends Application {
     private void loadGame() throws IOException {
         replaceSceneContent("fxml/Game.fxml");
         
-        rotateButtonBar = (ButtonBar)(baseScene.getRoot().lookup("#rotateButtonBar"));
-        rotateButton = (Button)(rotateButtonBar.lookup("#rotateButton"));
-        
-        directionChoiceBox = (ChoiceBox)(baseScene.getRoot().lookup("#directionChoiceBox"));
-        directionChoiceBox.setItems(FXCollections.observableArrayList(
-            "Clockwise", "Counter Clockwise")
-        );
-        directionChoiceBox.getSelectionModel().selectFirst();
-        
-        tileChoiceBox = (ChoiceBox)(baseScene.getRoot().lookup("#tileChoiceBox"));
-        tileChoiceBox.setItems(FXCollections.observableArrayList(
-            1, 2, 3, 4)
-        );
-        tileChoiceBox.getSelectionModel().selectFirst();
+        rotateButtons = new ArrayList<>();
+        rotateButtons.addAll(baseScene.getRoot().lookupAll(".counterClockwise"));
         
         helpLabel = (Label)(baseScene.getRoot().lookup("#helpLabel"));
         errorLabel = (Label)(baseScene.getRoot().lookup("#errorLabel"));
         
         initTiles();
         initCircles();
-        initRotating();
         addCircleClickHandlers();
         
         readyToSetMarble();
@@ -125,19 +113,24 @@ public class GUI extends Application {
             final int x = i % 2;
             final int y = i / 2;
             tiles[y][x] = (GridPane)(n);
+            Node clockwise = n.lookup("#clockwise" + x + y);
+            Node counterClockwise = n.lookup("#counterClockwise" + x + y);
+            if(clockwise != null && counterClockwise != null) {
+                rotateButtons.add(clockwise);
+                rotateButtons.add(counterClockwise);
+                clockwise.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event) -> {
+                    if(game.getAllowedToRotate()) {
+                        rotateTile(x, y, Direction.CLOCKWISE);
+                    }
+                });
+                counterClockwise.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event) -> {
+                    if(game.getAllowedToRotate()) {
+                        rotateTile(x, y, Direction.COUNTER_CLOCKWISE);
+                    }
+                });
+            }
             i++;
         }
-    }
-    
-    private void initRotating() {
-        rotateButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event) -> {
-            if(game.getAllowedToRotate()) {
-                final int x = ((int)tileChoiceBox.getValue() - 1) % 2;
-                final int y = ((int)tileChoiceBox.getValue() - 1) / 2;
-                final Direction d = directionChoiceBox.getValue().equals("Clockwise") ? Direction.CLOCKWISE : Direction.COUNTER_CLOCKWISE;
-                rotateTile(x, y, d);
-            }
-        });
     }
     
     private void initCircles() {
@@ -191,15 +184,23 @@ public class GUI extends Application {
     }
     
     private void readyToSetMarble() {
+        baseScene.getRoot().lookup("AnchorPane").getStyleClass().add("readyToSetMarble");
+        baseScene.getRoot().lookup("AnchorPane").getStyleClass().remove("readyToRotate");
         fillCircles();
-        rotateButtonBar.setVisible(false);
+        for(Node n : rotateButtons) {
+            n.setVisible(false);
+        }
         helpLabel.setText(game.whoseTurn() + " - Click where you'd want to put the marble");
     }
     
     private void readyToRotate() {
+        baseScene.getRoot().lookup("AnchorPane").getStyleClass().add("readyToRotate");
+        baseScene.getRoot().lookup("AnchorPane").getStyleClass().remove("readyToSetMarble");
         fillCircles();
-        rotateButtonBar.setVisible(true);
-        helpLabel.setText(game.whoseTurn() + " - First select the direction and then the tile you want to rotate");
+        for(Node n : rotateButtons) {
+            n.setVisible(true);
+        }
+        helpLabel.setText(game.whoseTurn() + " - Click the button on the tile you want to rotate");
     }
     
     private void setMarble(int x, int y) {
@@ -212,18 +213,7 @@ public class GUI extends Application {
     }
     
     private void rotateTile(int x, int y, Direction d) {
-        try {
-//            RotateTransition rt = new RotateTransition(Duration.millis(1000), tiles[y][x]);
-//            rt.setByAngle(90);
-//            int rate;
-//            if(d == Direction.CLOCKWISE) {
-//                rate = 1;
-//            } else {
-//                rate = -1;
-//            }
-//            rt.setRate(rate);
-//            rt.play();
-            
+        try {            
             game.rotateTile(x, y, d);
             errorLabel.setText("");
             Line line = game.checkLines();
