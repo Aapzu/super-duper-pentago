@@ -290,6 +290,13 @@ public class BoardTest {
     }
     
     @Test
+    public void clearSetsLastRotatedTileToNull() {
+        board.rotateTile(0, 0, Direction.CLOCKWISE);
+        board.clear();
+        assertNull(board.getLastRotatedTile());
+    }
+    
+    @Test
     public void clearClearsTheBoard() {
         Marble x = new Marble(Symbol.X);
         Marble o = new Marble(Symbol.O);
