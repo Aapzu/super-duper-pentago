@@ -14,8 +14,8 @@ More accurate rules and strategies can be seen [here](https://webdav.info.ucl.ac
 
 1. Start the app. On the start screen, give names for the players. Start the game by clicking 'Start' or press enter.
 2. The game starts. On the top of the screen can always be read the player in turn, and the game operation waited to be done.
-	*. If the game says 'Click where you'd want to put the marble', the player in turn must click any free circle on the board, and their marble is put there. Think carefully, there is no undo!
-	*. If the game says 'Click the button on the tile you want to rotate', the player in turn must click any of the red buttons on the boards. The rotating direction of the button and the tile on which the button is define the tile and direction. After rotating the turn is given to the other player.
-	*. If after rotating a text saying 'Illegal direction!' appears, see the rules of Pentago. It means, you cannot rotate a tile back to the direction it was just rotated from on the next turn.
+	* If the game says 'Click where you'd want to put the marble', the player in turn must click any free circle on the board, and their marble is put there. Think carefully, there is no undo!
+	* If the game says 'Click the button on the tile you want to rotate', the player in turn must click any of the red buttons on the boards. The rotating direction of the button and the tile on which the button is define the tile and direction. After rotating the turn is given to the other player.
+	* If after rotating a text saying 'Illegal direction!' appears, see the rules of Pentago. It means, you cannot rotate a tile back to the direction it was just rotated from on the next turn.
 3. After one of the player get a five-in-line, they win and the game shows a 'Main Menu' button. From menu, a new game can be started.
-	*. If the board gets full without any of the players getting a line, the game is drawn even and a new game can be started from the menu.
+	* If the board gets full without any of the players getting a line, the game is drawn even and a new game can be started from the menu.
