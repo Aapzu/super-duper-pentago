@@ -1,16 +1,8 @@
 ## Topic
 A programmed version of the two-player-game named Pentago. This version only should have the working graphical version of the game with the possibility to play against another human.
 
-### Rules of Pentago
-Pentago board consists of 4 tiles in a square form, each of which has 9 squares in a square. So the board has 6x6 squares in 4 tiles.
-
-The game has two players. One with black and on with white marbles. It doesn't matter, whom of the players starts.
-
-On every turn, the player whose turn it is must put one of their marbles into one of the 36 squares and rotate one of the 4 tiles 90° into a direction of one's choice. The tile doesn't have to be the same, where the marble was just put in. After that the another player gets the turn and does the same with their marbles. However, the player is not allowed to rotate the same tile which was just rotated back to the opposite direction. Rotating the same tile to the same direction is allowed.
-
-The winner is the player, who first gets 5 of their marbles in a row, horizontally, vertically or diagonally. If the board gets full without any of the players getting 5 in line, the game is tied, and an another on can be started.
-
-More accurate rules and strategies can be seen [here](https://webdav.info.ucl.ac.be/webdav/ingi2261/ProblemSet3/PentagoRulesStrategy.pdf)
+### Rules and User Guide
+[Are found from here](user-guide-and-rules.md)
 
 ### The Use Cases
 * A player
@@ -25,7 +17,12 @@ More accurate rules and strategies can be seen [here](https://webdav.info.ucl.ac
     * Start new game
 * The game
     * Board
-    * Indicator that shows the amount of the remaining marbles
+    * Buttons to rotate a tile to the selected direction
+
+### Class Structure Explained a Bit
+When started, Start checks arguments and starts whether GUI or TextUI. Both of the UIs do the same: create a new Pentago, and start it. 
+Pentago creates a new Board, and two Player instances. While Player only contains the name and symbol of the Player, Board consists of four Tiles. Each of the Tiles consist of 0...sideLength^2 Marbles. A Marble has only a Symbol. Symbol is an enum, which has two different constants, O and X.
+This way each of the Marbles can be connected to a single Player.
 
 ### Class Diagram
 ![Newest (19-02.2016)](diagrams/19-02-2016-class-diagram.png)
