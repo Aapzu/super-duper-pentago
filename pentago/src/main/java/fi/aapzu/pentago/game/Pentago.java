@@ -98,6 +98,15 @@ public class Pentago {
         board.rotateTile(x, y, d);
         allowedToRotate = false;
     }
+    
+    /**
+     * Tells if the game has no any possible moves anymore.
+     * 
+     * @return true or false
+     */
+    public boolean isEven() {
+        return board.isFull();
+    }
 
     /**
      * Tells whose turn it is.

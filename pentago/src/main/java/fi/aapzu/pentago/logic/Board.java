@@ -223,10 +223,31 @@ public class Board {
         }
     }
     
+    /**
+     * Tells if the whole Board only has empty squares in it.
+     * 
+     * @return true or false
+     */
     public boolean isEmpty() {
         for(Tile[] row : tiles) {
             for(Tile t : row) {
                 if(!t.isEmpty()) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    
+    /**
+     * Tells if the whole Board has no any empty squares in it.
+     * 
+     * @return true or false
+     */
+    public boolean isFull() {
+        for(Tile[] row : tiles) {
+            for(Tile t : row) {
+                if(!t.isFull()) {
                     return false;
                 }
             }

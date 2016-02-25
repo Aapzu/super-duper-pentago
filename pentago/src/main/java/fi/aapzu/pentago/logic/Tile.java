@@ -185,10 +185,31 @@ public class Tile {
         }
     }
 
+    /**
+     * Tells if the Tile has only empty squares in it.
+     * 
+     * @return true or false
+     */
     protected boolean isEmpty() {
         for(Marble[] row : tile) {
             for(Marble m : row) {
                 if(m != null) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Tells if the Tile has no any empty squares in it.
+     * 
+     * @return true or false
+     */
+    protected boolean isFull() {
+        for(Marble[] row : tile) {
+            for(Marble m : row) {
+                if(m == null) {
                     return false;
                 }
             }

@@ -35,43 +35,43 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
- 
+
 public class GUI extends Application {
-    
+
     private Pentago game;
     private GridPane[][] tiles = new GridPane[2][2];
     private Circle[][] circles = new Circle[6][6];
     private Scene baseScene;
     private Stage primaryStage;
-    
-    private ButtonBar rotateButtonBar; 
+
+    private ButtonBar rotateButtonBar;
     private ChoiceBox directionChoiceBox;
     private ChoiceBox tileChoiceBox;
     private Button rotateButton;
-    
+
     private Label helpLabel;
     private Label errorLabel;
-    
+
     protected void startGUI(String[] args) {
         launch(args);
     }
-    
+
     @Override
     public void start(Stage primaryStage) throws IOException {
         this.primaryStage = primaryStage;
         primaryStage.setTitle("Pentago");
         primaryStage.show();
-                
+
         game = new Pentago();
         loadStartMenu();
     }
-    
+
     private void loadStartMenu() throws IOException {
         replaceSceneContent("fxml/StartMenu.fxml");
-        TextField whitePlayerName = (TextField)(baseScene.getRoot().lookup("#whitePlayerName"));
-        TextField blackPlayerName = (TextField)(baseScene.getRoot().lookup("#blackPlayerName"));
-        Button startButton = (Button)(baseScene.getRoot().lookup("#startButton"));
-        
+        TextField whitePlayerName = (TextField) (baseScene.getRoot().lookup("#whitePlayerName"));
+        TextField blackPlayerName = (TextField) (baseScene.getRoot().lookup("#blackPlayerName"));
+        Button startButton = (Button) (baseScene.getRoot().lookup("#startButton"));
+
         EnterClickEventHandler handler = new EnterClickEventHandler() {
             @Override
             public void handleEvent() {
@@ -79,7 +79,8 @@ public class GUI extends Application {
                     game.setPlayerName(0, !whitePlayerName.getText().equals("") ? whitePlayerName.getText() : "White");
                     game.setPlayerName(1, !blackPlayerName.getText().equals("") ? blackPlayerName.getText() : "Black");
                     loadGame();
-                } catch (IOException ex) {
+                }
+                catch (IOException ex) {
                     Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
@@ -88,94 +89,94 @@ public class GUI extends Application {
         blackPlayerName.addEventHandler(KeyEvent.KEY_PRESSED, handler);
         startButton.addEventHandler(MouseEvent.MOUSE_CLICKED, handler);
     }
-    
+
     private void loadGame() throws IOException {
         replaceSceneContent("fxml/Game.fxml");
-        
-        rotateButtonBar = (ButtonBar)(baseScene.getRoot().lookup("#rotateButtonBar"));
-        rotateButton = (Button)(rotateButtonBar.lookup("#rotateButton"));
-        
-        directionChoiceBox = (ChoiceBox)(baseScene.getRoot().lookup("#directionChoiceBox"));
+
+        rotateButtonBar = (ButtonBar) (baseScene.getRoot().lookup("#rotateButtonBar"));
+        rotateButton = (Button) (rotateButtonBar.lookup("#rotateButton"));
+
+        directionChoiceBox = (ChoiceBox) (baseScene.getRoot().lookup("#directionChoiceBox"));
         directionChoiceBox.setItems(FXCollections.observableArrayList(
-            "Clockwise", "Counter Clockwise")
+                "Clockwise", "Counter Clockwise")
         );
         directionChoiceBox.getSelectionModel().selectFirst();
-        
-        tileChoiceBox = (ChoiceBox)(baseScene.getRoot().lookup("#tileChoiceBox"));
+
+        tileChoiceBox = (ChoiceBox) (baseScene.getRoot().lookup("#tileChoiceBox"));
         tileChoiceBox.setItems(FXCollections.observableArrayList(
-            1, 2, 3, 4)
+                1, 2, 3, 4)
         );
         tileChoiceBox.getSelectionModel().selectFirst();
-        
-        helpLabel = (Label)(baseScene.getRoot().lookup("#helpLabel"));
-        errorLabel = (Label)(baseScene.getRoot().lookup("#errorLabel"));
-        
+
+        helpLabel = (Label) (baseScene.getRoot().lookup("#helpLabel"));
+        errorLabel = (Label) (baseScene.getRoot().lookup("#errorLabel"));
+
         initTiles();
         initCircles();
         initRotating();
         addCircleClickHandlers();
-        
+
         readyToSetMarble();
     }
-    
+
     private void initTiles() {
         Set<Node> tileSet = baseScene.getRoot().lookupAll(".tile");
         int i = 0;
-        for(Node n : tileSet) {
+        for (Node n : tileSet) {
             final int x = i % 2;
             final int y = i / 2;
-            tiles[y][x] = (GridPane)(n);
+            tiles[y][x] = (GridPane) (n);
             i++;
         }
     }
-    
+
     private void initRotating() {
         rotateButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event) -> {
-            if(game.getAllowedToRotate()) {
-                final int x = ((int)tileChoiceBox.getValue() - 1) % 2;
-                final int y = ((int)tileChoiceBox.getValue() - 1) / 2;
+            if (game.getAllowedToRotate()) {
+                final int x = ((int) tileChoiceBox.getValue() - 1) % 2;
+                final int y = ((int) tileChoiceBox.getValue() - 1) / 2;
                 final Direction d = directionChoiceBox.getValue().equals("Clockwise") ? Direction.CLOCKWISE : Direction.COUNTER_CLOCKWISE;
                 rotateTile(x, y, d);
             }
         });
     }
-    
+
     private void initCircles() {
-        for(int y = 0; y < 2; y++) {
-            for(int x = 0; x < 2; x++) {
+        for (int y = 0; y < 2; y++) {
+            for (int x = 0; x < 2; x++) {
                 GridPane tile = tiles[y][x];
                 Set<Node> circleSet = tile.lookupAll("Circle");
                 int i = 0;
-                for(Node n : circleSet) {
-                    int cX = x*3 + i % 3;
-                    int cY = y*3 + i / 3;
-                    circles[cY][cX] = (Circle)n;
+                for (Node n : circleSet) {
+                    int cX = x * 3 + i % 3;
+                    int cY = y * 3 + i / 3;
+                    circles[cY][cX] = (Circle) n;
                     i++;
                 }
             }
         }
     }
-    
+
     private void addCircleClickHandlers() {
-        for(int y = 0; y < circles.length; y++) {
-            for(int x = 0; x < circles[0].length; x++) {
+        for (int y = 0; y < circles.length; y++) {
+            for (int x = 0; x < circles[0].length; x++) {
                 final int cX = x;
                 final int cY = y;
                 circles[y][x].addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event) -> {
-                    if(!game.getAllowedToRotate()) {
+                    if (!game.getAllowedToRotate()) {
                         setMarble(cX, cY);
                     }
                 });
             }
         }
     }
-    
+
     private void fillCircles() {
         Marble[][] mArr = game.getBoard().toMarbleArray();
-        for(int y = 0; y < mArr.length; y++) {
-            for(int x = 0; x < mArr[0].length; x++) {
-                if(mArr[y][x] != null) {
-                    switch(mArr[y][x].getSymbol()) {
+        for (int y = 0; y < mArr.length; y++) {
+            for (int x = 0; x < mArr[0].length; x++) {
+                if (mArr[y][x] != null) {
+                    switch (mArr[y][x].getSymbol()) {
                         case X:
                             circles[y][x].setStyle("-fx-fill:#000000");
                             break;
@@ -189,94 +190,103 @@ public class GUI extends Application {
             }
         }
     }
-    
+
     private void readyToSetMarble() {
         fillCircles();
         rotateButtonBar.setVisible(false);
         helpLabel.setText(game.whoseTurn() + " - Click where you'd want to put the marble");
     }
-    
+
     private void readyToRotate() {
         fillCircles();
         rotateButtonBar.setVisible(true);
         helpLabel.setText(game.whoseTurn() + " - First select the direction and then the tile you want to rotate");
     }
-    
+
     private void setMarble(int x, int y) {
         try {
             game.setMarble(x, y);
             readyToRotate();
-        } catch (Exception e){
+        }
+        catch (Exception e) {
             System.out.println(e);
         }
     }
-    
+
     private void rotateTile(int x, int y, Direction d) {
         try {
-//            RotateTransition rt = new RotateTransition(Duration.millis(1000), tiles[y][x]);
-//            rt.setByAngle(90);
-//            int rate;
-//            if(d == Direction.CLOCKWISE) {
-//                rate = 1;
-//            } else {
-//                rate = -1;
-//            }
-//            rt.setRate(rate);
-//            rt.play();
-            
             game.rotateTile(x, y, d);
             errorLabel.setText("");
             Line line = game.checkLines();
-            if(line != null) {
+            if (line != null) {
                 winGame(line);
+            } else if (game.isEven()) {
+
             } else {
                 game.nextTurn();
                 readyToSetMarble();
             }
-        } catch (Exception e){
-            if(e instanceof PentagoGameRuleException) {
+        }
+        catch (Exception e) {
+            if (e instanceof PentagoGameRuleException) {
                 errorLabel.setText("Illegal direction!");
             }
         }
     }
-        
-    private void winGame(Line line) throws IOException {
-        replaceSceneContent("fxml/WinScreen.fxml");
-        
+
+    private void evenGame() throws IOException {
+        replaceSceneContent("fxml/GameOver.fxml");
+
         initTiles();
         initCircles();
         fillCircles();
-        
-        for(Integer[] coords : line.getCoordinates()) {
+
+        initMainMenu();
+    }
+
+    private void winGame(Line line) throws IOException {
+        replaceSceneContent("fxml/GameOver.fxml");
+
+        initTiles();
+        initCircles();
+        fillCircles();
+
+        for (Integer[] coords : line.getCoordinates()) {
             int x = coords[0];
             int y = coords[1];
             circles[y][x].strokeWidthProperty().setValue(5);
             circles[y][x].strokeProperty().setValue(Paint.valueOf("#ffd700"));
             String color;
-            if(line.getSymbol().equals(Symbol.O))
+            if (line.getSymbol().equals(Symbol.O)) {
                 color = "#FFFFFF";
-            else 
+            } else {
                 color = "#000000";
+            }
             circles[y][x].setFill(Paint.valueOf(color));
         }
-        
+
         Text text = new Text(line.getPlayer() + " won!");
         text.setFont(new Font("Arial", 72));
         text.setFill(Paint.valueOf("#FF0000"));
-        TextFlow textFlow = (TextFlow)(baseScene.getRoot().lookup("#winText"));
-        textFlow.setVisible(true);    
+        TextFlow textFlow = (TextFlow) (baseScene.getRoot().lookup("#winText"));
+        textFlow.setVisible(true);
         textFlow.getChildren().add(text);
-        
-        ((Button)(baseScene.getRoot().lookup("#mainMenuButton"))).addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event) -> {
+
+        initMainMenu();
+    }
+
+    public void initMainMenu() {
+        ((Button) (baseScene.getRoot().lookup("#mainMenuButton"))).addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event) -> {
             try {
                 game.clear();
                 loadStartMenu();
-            } catch (IOException ex) {
+            }
+            catch (IOException ex) {
                 Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
     }
-    
+
     private Pane replaceSceneContent(String fxml) throws IOException {
         Pane page = (Pane) FXMLLoader.load(getClass().getClassLoader().getResource(fxml));
         baseScene = primaryStage.getScene();
@@ -287,19 +297,19 @@ public class GUI extends Application {
             baseScene.setRoot(page);
         }
         primaryStage.sizeToScene();
-        
+
         return page;
     }
-    
-    private class EnterClickEventHandler implements EventHandler<Event>{
 
-        public void handleKeyEvent(KeyEvent e){
+    private class EnterClickEventHandler implements EventHandler<Event> {
+
+        public void handleKeyEvent(KeyEvent e) {
             if (e.getCode().equals(KeyCode.ENTER)) {
                 handleEvent();
             }
         }
 
-        public void handleMouseEvent(MouseEvent e){
+        public void handleMouseEvent(MouseEvent e) {
             handleEvent();
         }
 
@@ -311,8 +321,9 @@ public class GUI extends Application {
                 handleMouseEvent((MouseEvent) event);
             }
         }
-        
-        public void handleEvent() {}
+
+        public void handleEvent() {
+        }
 
     }
 }

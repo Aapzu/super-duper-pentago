@@ -308,4 +308,25 @@ public class BoardTest {
         }                   
     }
     
+    @Test
+    public void isEmptyReturnsRight() {
+        assertTrue(board.isEmpty());
+        board.addMarble(new Marble(Symbol.O), 3, 3);
+        assertFalse(board.isEmpty());
+    }
+    
+    @Test
+    public void isFullReturnsRight() {
+        for(int y = 0; y < 6; y++) {
+            for(int x = 0; x < 6; x++) {
+                if(x != 5 || y != 5) {
+                    board.addMarble(new Marble(Symbol.O), x, y);
+                    assertFalse(board.isFull());
+                }
+            }
+        }
+        board.addMarble(new Marble(Symbol.O), 5, 5);
+        assertTrue(board.isFull());
+    }
+    
 }

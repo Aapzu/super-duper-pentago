@@ -270,4 +270,25 @@ public class TileTest {
         }
     }
     
+    @Test
+    public void isEmptyReturnsRight() {
+        assertTrue(tile.isEmpty());
+        tile.setMarble(new Marble(Symbol.O), 0, 0);
+        assertFalse(tile.isEmpty());
+    }
+    
+    @Test
+    public void isFullReturnsRight() {
+        for(int y = 0; y < 3; y++) {
+            for(int x = 0; x < 3; x++) {
+                if(x != 2 || y != 2) {
+                    tile.setMarble(new Marble(Symbol.O), x, y);
+                    assertFalse(tile.isFull());
+                }
+            }
+        }
+        tile.setMarble(new Marble(Symbol.O), 2, 2);
+        assertTrue(tile.isFull());
+    }
+    
 }
