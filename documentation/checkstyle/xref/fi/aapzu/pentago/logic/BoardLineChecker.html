@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en_GB" lang="en_GB">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en_US" lang="en_US">
 <head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <title>BoardLineChecker xref</title>
 <link type="text/css" rel="stylesheet" href="../../../../stylesheet.css" />
@@ -103,16 +103,16 @@
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>                  }
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>                  <strong class="jxr_keyword">if</strong> (firstCoord &gt;= 0 &amp;&amp; firstCoord &lt; wholeLength &amp;&amp; secondCoord &gt;= 0 &amp;&amp; secondCoord &lt; wholeLength) {
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>                      <a href="../../../../fi/aapzu/pentago/logic/marble/Marble.html">Marble</a> m = board.getMarble(firstCoord, secondCoord);
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>                      line.addCoordinate(<strong class="jxr_keyword">new</strong> Integer[]{firstCoord, secondCoord});
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  
-<a class="jxr_linenumber" name="L100" href="#L100">100</a>                     <strong class="jxr_keyword">if</strong> (m == <strong class="jxr_keyword">null</strong> || (lastMarble != <strong class="jxr_keyword">null</strong> &amp;&amp; !lastMarble.equals(m))) {
-<a class="jxr_linenumber" name="L101" href="#L101">101</a>                         line.clear();
-<a class="jxr_linenumber" name="L102" href="#L102">102</a>                     }
-<a class="jxr_linenumber" name="L103" href="#L103">103</a>                     <strong class="jxr_keyword">if</strong> (line.length() &gt;= length) {
-<a class="jxr_linenumber" name="L104" href="#L104">104</a>                         line.setSymbol(m.getSymbol());
-<a class="jxr_linenumber" name="L105" href="#L105">105</a>                         <strong class="jxr_keyword">return</strong> line;
-<a class="jxr_linenumber" name="L106" href="#L106">106</a>                     }
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>                      <strong class="jxr_keyword">if</strong> (m == <strong class="jxr_keyword">null</strong> || (!m.equals(lastMarble) &amp;&amp; lastMarble != <strong class="jxr_keyword">null</strong>)) {
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>                          line.clear();
+<a class="jxr_linenumber" name="L100" href="#L100">100</a>                     }
+<a class="jxr_linenumber" name="L101" href="#L101">101</a>                     <strong class="jxr_keyword">if</strong> (m != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L102" href="#L102">102</a>                         line.addCoordinate(<strong class="jxr_keyword">new</strong> Integer[]{firstCoord, secondCoord});
+<a class="jxr_linenumber" name="L103" href="#L103">103</a>                         <strong class="jxr_keyword">if</strong> (line.length() &gt;= length) {
+<a class="jxr_linenumber" name="L104" href="#L104">104</a>                             line.setSymbol(m.getSymbol());
+<a class="jxr_linenumber" name="L105" href="#L105">105</a>                             <strong class="jxr_keyword">return</strong> line;
+<a class="jxr_linenumber" name="L106" href="#L106">106</a>                         }
+<a class="jxr_linenumber" name="L107" href="#L107">107</a>                     }
 <a class="jxr_linenumber" name="L108" href="#L108">108</a>                     lastMarble = m;
 <a class="jxr_linenumber" name="L109" href="#L109">109</a>                 }
 <a class="jxr_linenumber" name="L110" href="#L110">110</a>             }

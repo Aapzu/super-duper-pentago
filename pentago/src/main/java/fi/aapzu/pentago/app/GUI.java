@@ -209,9 +209,7 @@ public class GUI extends Application {
             game.setMarble(x, y);
             readyToRotate();
         }
-        catch (Exception e) {
-            System.out.println(e);
-        }
+        catch (Exception e) {}
     }
 
     private void rotateTile(int x, int y, Direction d) {
@@ -303,29 +301,5 @@ public class GUI extends Application {
         return page;
     }
 
-    private class EnterClickEventHandler implements EventHandler<Event> {
 
-        public void handleKeyEvent(KeyEvent e) {
-            if (e.getCode().equals(KeyCode.ENTER)) {
-                handleEvent();
-            }
-        }
-
-        public void handleMouseEvent(MouseEvent e) {
-            handleEvent();
-        }
-
-        @Override
-        public void handle(Event event) {
-            if (event instanceof KeyEvent) {
-                handleKeyEvent((KeyEvent) event);
-            } else if (event instanceof MouseEvent) {
-                handleMouseEvent((MouseEvent) event);
-            }
-        }
-
-        public void handleEvent() {
-        }
-
-    }
 }

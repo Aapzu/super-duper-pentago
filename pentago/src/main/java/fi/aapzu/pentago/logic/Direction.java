@@ -1,7 +1,8 @@
 package fi.aapzu.pentago.logic;
 
 /**
- *
+ * An enumeration for the directions in the game.
+ * 
  * @author Aapeli
  */
 public enum Direction {

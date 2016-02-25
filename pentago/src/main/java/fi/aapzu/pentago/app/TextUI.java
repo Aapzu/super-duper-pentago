@@ -20,7 +20,7 @@ public class TextUI {
     /**
      * Creates a new game and the scanner for the commands.
      */
-    protected TextUI() {
+    public TextUI() {
         game = new Pentago();
         scanner = new Scanner(System.in);
     }
@@ -29,7 +29,7 @@ public class TextUI {
      * Starts the game. Every other time prints the board and the Player in
      * turn, and asks for a command.
      */
-    protected void startPentago() {
+    public void startPentago() {
         System.out.println("Give name for player X:");
         String name = scanner.nextLine();
         game.setPlayerName(0, name);
@@ -39,11 +39,17 @@ public class TextUI {
         game.setPlayerName(1, name);
 
         Line line = null;
-        while (line == null) {
+        while (true) {
+            if (line != null) {
+                winGame(line);
+                break;
+            } else if (game.isEven()) {
+                evenGame();
+                break;
+            }
             doTurn();
             line = game.checkLines();
         }
-        winGame(line);
     }
 
     private void doTurn() {
@@ -122,6 +128,10 @@ public class TextUI {
         Player p = line.getPlayer();
         System.out.println("Congratulations " + p.getName() + "! You won the game!");
         System.out.println("The winning line: " + line.toString());
+    }
+
+    private void evenGame() {
+        System.out.println("Draw! No possible moves anymore.");
     }
 
     private void printGame() {

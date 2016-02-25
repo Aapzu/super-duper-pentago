@@ -95,10 +95,10 @@ public class BoardLineChecker {
                 }
                 if (firstCoord >= 0 && firstCoord < wholeLength && secondCoord >= 0 && secondCoord < wholeLength) {
                     Marble m = board.getMarble(firstCoord, secondCoord);
-                    if(m == null || (!m.equals(lastMarble) && lastMarble != null)) {
+                    if (m == null || (!m.equals(lastMarble) && lastMarble != null)) {
                         line.clear();
                     }
-                    if(m != null) {
+                    if (m != null) {
                         line.addCoordinate(new Integer[]{firstCoord, secondCoord});
                         if (line.length() >= length) {
                             line.setSymbol(m.getSymbol());

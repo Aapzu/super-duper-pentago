@@ -1,5 +1,7 @@
 package fi.aapzu.pentago.app;
 
+import fi.aapzu.pentago.app.GUI;
+
 /**
  * The class that starts Pentago.
  *

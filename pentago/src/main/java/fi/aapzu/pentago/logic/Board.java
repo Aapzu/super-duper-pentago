@@ -123,6 +123,8 @@ public class Board {
     }
 
     /**
+     * Gives the amount of Tiles per one side of the Board.
+     * 
      * @return sideLength
      */
     public int getSideLength() {
@@ -130,6 +132,8 @@ public class Board {
     }
 
     /**
+     * Gives the amount of Marbles per one side of a Tile.
+     * 
      * @return tileSideLength
      */
     public int getTileSideLength() {
@@ -153,6 +157,8 @@ public class Board {
     }
 
     /**
+     * Gives the Tile array.
+     * 
      * @return tiles
      */
     protected Tile[][] getTiles() {
@@ -160,6 +166,8 @@ public class Board {
     }
 
     /**
+     * Gives the tile that was last rotated.
+     * 
      * @return lastRotatedTile;
      */
     public Tile getLastRotatedTile() {
@@ -184,15 +192,9 @@ public class Board {
      */
     public Marble[][] toMarbleArray() {
         Marble[][] mArr = new Marble[sideLength * tileSideLength][sideLength * tileSideLength];
-        for (int tileY = 0; tileY < tiles.length; tileY++) {
-            for (int tileX = 0; tileX < tiles[0].length; tileX++) {
-                for (int marbleX = 0; marbleX < tiles[tileY][tileX].getTile().length; marbleX++) {
-                    for (int marbleY = 0; marbleY < tiles[tileY][tileX].getTile().length; marbleY++) {
-                        int y = tileY * tileSideLength + marbleY;
-                        int x = tileX * tileSideLength + marbleX;
-                        mArr[y][x] = tiles[tileY][tileX].getTile()[marbleY][marbleX];
-                    }
-                }
+        for (int y = 0; y < sideLength * tileSideLength; y++) {
+            for (int x = 0; x < sideLength * tileSideLength; x++) {
+                mArr[y][x] = getMarble(x, y);
             }
         }
         return mArr;
@@ -230,9 +232,9 @@ public class Board {
      * @return true or false
      */
     public boolean isEmpty() {
-        for(Tile[] row : tiles) {
-            for(Tile t : row) {
-                if(!t.isEmpty()) {
+        for (Tile[] row : tiles) {
+            for (Tile t : row) {
+                if (!t.isEmpty()) {
                     return false;
                 }
             }
@@ -246,9 +248,9 @@ public class Board {
      * @return true or false
      */
     public boolean isFull() {
-        for(Tile[] row : tiles) {
-            for(Tile t : row) {
-                if(!t.isFull()) {
+        for (Tile[] row : tiles) {
+            for (Tile t : row) {
+                if (!t.isFull()) {
                     return false;
                 }
             }

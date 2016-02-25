@@ -21,5 +21,6 @@
 | 19.02.2016	| 02:00		| More tests & diagrams	|
 | 21.02.2016	| 01:00 	| GUI and checkstyle |
 | 22.02.2016	| 03:00 	| Found a bug and fixed it. New reports. New test. |
-| 24.02.2016  | 02:00   | GUI changes, UserGuide  |
+| 24.02.2016  	| 02:00		| GUI changes, UserGuide  |
+| 25.02.2016	| 01:00		| Draw game, reports and stuff	|
 ||||
