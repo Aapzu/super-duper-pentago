@@ -14,9 +14,9 @@ import fi.aapzu.pentago.logic.marble.Symbol;
  */
 public class Pentago {
 
-    private final Board board;
-    private final Player[] players;
-    private final BoardLineChecker lineChecker;
+    private Board board;
+    private Player[] players;
+    private BoardLineChecker lineChecker;
     private int whoseTurn;
     private boolean allowedToRotate;
 
@@ -66,7 +66,7 @@ public class Pentago {
      * @param x the X coordinate of the Marble
      * @param y the Y coordinate of the Marble
      */
-    public void setMarble(int x, int y) {
+    public void addMarble(int x, int y) {
         if (allowedToRotate) {
             throw new PentagoGameRuleException("A tile must be rotated first!");
         }
@@ -149,6 +149,11 @@ public class Pentago {
 
     public Board getBoard() {
         return board;
+    }
+    
+    public void setBoard(Board board) {
+        this.board = board;
+        this.lineChecker = new BoardLineChecker(board);
     }
 
     public boolean getAllowedToRotate() {

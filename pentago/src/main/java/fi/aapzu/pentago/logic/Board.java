@@ -49,7 +49,7 @@ public class Board {
      * @return the Tile
      */
     public Tile getTile(int tileX, int tileY) {
-        if (tileX < 0 || tileX > sideLength || tileY < 0 || tileY > sideLength) {
+        if (!validateTileCoordinates(tileX, tileY)) {
             throw new IllegalArgumentException("Invalid coordinates. X: " + tileX + ", Y: " + tileY);
         }
         return getTiles()[tileY][tileX];
@@ -63,12 +63,7 @@ public class Board {
      * @return true if coordinates are valid, otherwise false
      */
     public boolean validateTileCoordinates(int tileX, int tileY) {
-        try {
-            getTile(tileX, tileY);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+        return (tileX >= 0 && tileX < sideLength && tileY >= 0 && tileY < sideLength);
     }
 
     /**
@@ -161,7 +156,7 @@ public class Board {
      * 
      * @return tiles
      */
-    protected Tile[][] getTiles() {
+    public Tile[][] getTiles() {
         return tiles;
     }
 
@@ -206,7 +201,7 @@ public class Board {
         for (Tile[] t : tiles) {
             for (int i = 0; i < t.length * t[0].getSideLength(); i++) {
                 result += t[i % t.length].rowToString(i / t.length);
-                if ((i + 1) % t.length == 0) {
+                if (i % t.length == t.length - 1) {
                     result += "\n";
                 }
             }

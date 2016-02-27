@@ -76,8 +76,11 @@ public class TileTest {
     public void setMarbleDoesNotSetMarbleOutsideTheTile() {
         Marble m = new Marble(Symbol.X);
         assertFalse(tile.setMarble(m, -1, 2));
+        assertFalse(tile.setMarble(m, 2, -1));
         assertFalse(tile.setMarble(m, 3, 0));
+        assertFalse(tile.setMarble(m, 0, 3));
         assertFalse(tile.setMarble(m, 3, 15));
+        assertFalse(tile.setMarble(m, 15, 2));
     }
     
     @Test
@@ -257,8 +260,8 @@ public class TileTest {
         Marble x = new Marble(Symbol.X);
         Marble o = new Marble(Symbol.O);
         tile.setMarble(o, 0, 0);
-        tile.setMarble(x, 1, 0);
-        tile.setMarble(x, 0, 1);
+        tile.setMarble(x, 2, 0);
+        tile.setMarble(x, 0, 2);
         tile.setMarble(o, 1, 1);
         tile.setMarble(o, 2, 2);
         

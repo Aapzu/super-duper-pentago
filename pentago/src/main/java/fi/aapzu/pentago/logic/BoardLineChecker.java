@@ -68,9 +68,9 @@ public class BoardLineChecker {
         int firstIndexTo = wholeLength;
 
         if (d == Direction.UPGRADING_DIAGONAL) {
-            firstIndexFrom = -wholeLength + 1;
+            firstIndexFrom = -wholeLength + 2;
         } else if (d == Direction.DOWNGRADING_DIAGONAL) {
-            firstIndexTo = 2 * wholeLength - 1;
+            firstIndexTo = 2 * wholeLength - 2;
         }
 
         Marble lastMarble;

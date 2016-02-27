@@ -79,7 +79,7 @@ public class BoardLineCheckerTest {
     }
     
     // This is not meant to be a test. This is just a help-method for the tests below.
-    public void checkLinesWorks(ArrayList<Integer[]> points, ArrayList<Symbol> symbols) {
+    public void checkLinesWorks(ArrayList<Integer[]> points, ArrayList<Symbol> symbols, int length) {
         for (int i = 0; i < points.size(); i++) {
             Integer[] point = points.get(i);
             Marble m;
@@ -90,12 +90,12 @@ public class BoardLineCheckerTest {
             }
             board.addMarble(m, point[0], point[1]);
         }
-        Line line = (Line) lineChecker.checkLines(5);
+        Line line = (Line) lineChecker.checkLines(length);
         assertNotNull(line);
         assertNotNull(line.getSymbol());
         assertNotNull(line.getCoordinates());
         assertEquals(Symbol.O, line.getSymbol());
-        assertEquals(5, ((ArrayList)line.getCoordinates()).size());
+        assertEquals(length, ((ArrayList)line.getCoordinates()).size());
         
         // Needed because ArrayList.contains(T[]) doesn't work
         ArrayList<ArrayList<Integer>> copyOfPoints = new ArrayList<>();
@@ -132,7 +132,7 @@ public class BoardLineCheckerTest {
         points.add(new Integer[]{3,4});
         points.add(new Integer[]{4,4});
         points.add(new Integer[]{5,4});
-        checkLinesWorks(points, null);
+        checkLinesWorks(points, null, 5);
     }
     
     @Test
@@ -151,7 +151,19 @@ public class BoardLineCheckerTest {
         symbols.add(Symbol.O);
         symbols.add(Symbol.O);
         symbols.add(Symbol.O);
-        checkLinesWorks(points, symbols);
+        checkLinesWorks(points, symbols, 5);
+    }
+    
+    @Test
+    public void checkLinesWorksHorizontally3() {
+        ArrayList<Integer[]> points = new ArrayList<>();
+        points.add(new Integer[]{0,4});
+        points.add(new Integer[]{1,4});
+        points.add(new Integer[]{2,4});
+        points.add(new Integer[]{3,4});
+        points.add(new Integer[]{4,4});
+        points.add(new Integer[]{5,4});
+        checkLinesWorks(points, null, 6);
     }
     
     @Test
@@ -162,7 +174,7 @@ public class BoardLineCheckerTest {
         points.add(new Integer[]{3,2});
         points.add(new Integer[]{3,3});
         points.add(new Integer[]{3,4});
-        checkLinesWorks(points, null);
+        checkLinesWorks(points, null, 5);
     }
     
     @Test
@@ -181,7 +193,7 @@ public class BoardLineCheckerTest {
         symbols.add(Symbol.O);
         symbols.add(Symbol.O);
         symbols.add(Symbol.O);
-        checkLinesWorks(points, symbols);
+        checkLinesWorks(points, symbols, 5);
     }
     
     @Test
@@ -192,7 +204,7 @@ public class BoardLineCheckerTest {
         points.add(new Integer[]{3,3});
         points.add(new Integer[]{4,4});
         points.add(new Integer[]{5,5});
-        checkLinesWorks(points,null);
+        checkLinesWorks(points,null, 5);
     }
     
     @Test
@@ -211,7 +223,7 @@ public class BoardLineCheckerTest {
         symbols.add(Symbol.O);
         symbols.add(Symbol.O);
         symbols.add(Symbol.O);
-        checkLinesWorks(points, symbols);
+        checkLinesWorks(points, symbols, 5);
     }
     
     @Test
@@ -222,7 +234,7 @@ public class BoardLineCheckerTest {
         points.add(new Integer[]{3,2});
         points.add(new Integer[]{4,3});
         points.add(new Integer[]{5,4});
-        checkLinesWorks(points, null);
+        checkLinesWorks(points, null, 5);
     }
     
     @Test
@@ -241,7 +253,7 @@ public class BoardLineCheckerTest {
         symbols.add(Symbol.O);
         symbols.add(Symbol.O);
         symbols.add(Symbol.O);
-        checkLinesWorks(points, symbols);
+        checkLinesWorks(points, symbols, 5);
     }
     
     @Test
@@ -252,7 +264,7 @@ public class BoardLineCheckerTest {
         points.add(new Integer[]{3,3});
         points.add(new Integer[]{4,2});
         points.add(new Integer[]{5,1});
-        checkLinesWorks(points, null);
+        checkLinesWorks(points, null, 5);
     }
     
     @Test
@@ -308,5 +320,32 @@ public class BoardLineCheckerTest {
         symbols.add(Symbol.X);
         symbols.add(Symbol.X);
         checkLinesReturnsNull(points, symbols);
+    }
+    
+    @Test
+    public void checkLinesWorksWithShorterLines() {
+        ArrayList<Integer[]> points = new ArrayList<>();
+        
+        points.add(new Integer[]{0,1});
+        points.add(new Integer[]{1,0});
+        checkLinesWorks(points, null, 2);
+        
+        board.clear();
+        points.clear();
+        points.add(new Integer[]{0,4});
+        points.add(new Integer[]{1,5});
+        checkLinesWorks(points, null, 2);
+        
+        board.clear();
+        points.clear();
+        points.add(new Integer[]{5,1});
+        points.add(new Integer[]{4,0});
+        checkLinesWorks(points, null, 2);
+        
+        board.clear();
+        points.clear();
+        points.add(new Integer[]{5,4});
+        points.add(new Integer[]{4,5});
+        checkLinesWorks(points, null, 2);
     }
 }

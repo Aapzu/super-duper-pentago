@@ -202,7 +202,7 @@ public class GUI extends Application {
 
     private void setMarble(int x, int y) {
         try {
-            game.setMarble(x, y);
+            game.addMarble(x, y);
             readyToRotate();
         }
         catch (Exception e) {}

@@ -23,4 +23,5 @@
 | 22.02.2016	| 03:00 	| Found a bug and fixed it. New reports. New test. |
 | 24.02.2016  	| 02:00		| GUI changes, UserGuide  |
 | 25.02.2016	| 01:00		| Draw game, reports and stuff	|
+| 27.02.2016	| 01:00		| Better coverage of tests	|
 ||||

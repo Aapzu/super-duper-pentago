@@ -68,7 +68,7 @@ public class TextUI {
             int x = parseCoordinates(cmd)[0];
             int y = parseCoordinates(cmd)[1];
             try {
-                game.setMarble(x, y);
+                game.addMarble(x, y);
                 success = true;
             } catch (Exception e) {
                 if (e instanceof IllegalArgumentException) {
