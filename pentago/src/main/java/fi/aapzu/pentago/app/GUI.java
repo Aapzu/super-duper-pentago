@@ -19,7 +19,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
@@ -40,12 +39,7 @@ public class GUI extends Application {
     private Circle[][] circles = new Circle[6][6];
     private Scene baseScene;
     private Stage primaryStage;
-  
-    private List<Node> rotateButtons; 
-    private ChoiceBox directionChoiceBox;
-    private ChoiceBox tileChoiceBox;
-    private Button rotateButton;
-
+    private List<Node> rotateButtons;
     private Label helpLabel;
     private Label errorLabel;
 
@@ -76,8 +70,7 @@ public class GUI extends Application {
                     game.setPlayerName(0, !whitePlayerName.getText().equals("") ? whitePlayerName.getText() : "White");
                     game.setPlayerName(1, !blackPlayerName.getText().equals("") ? blackPlayerName.getText() : "Black");
                     loadGame();
-                }
-                catch (IOException ex) {
+                } catch (IOException ex) {
                     Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
@@ -89,13 +82,13 @@ public class GUI extends Application {
 
     private void loadGame() throws IOException {
         replaceSceneContent("fxml/Game.fxml");
-        
+
         rotateButtons = new ArrayList<>();
         rotateButtons.addAll(baseScene.getRoot().lookupAll(".counterClockwise"));
-        
-        helpLabel = (Label)(baseScene.getRoot().lookup("#helpLabel"));
-        errorLabel = (Label)(baseScene.getRoot().lookup("#errorLabel"));
-        
+
+        helpLabel = (Label) (baseScene.getRoot().lookup("#helpLabel"));
+        errorLabel = (Label) (baseScene.getRoot().lookup("#errorLabel"));
+
         initTiles();
         initCircles();
         addCircleClickHandlers();
@@ -109,19 +102,19 @@ public class GUI extends Application {
         for (Node n : tileSet) {
             final int x = i % 2;
             final int y = i / 2;
-            tiles[y][x] = (GridPane)(n);
+            tiles[y][x] = (GridPane) (n);
             Node clockwise = n.lookup("#clockwise" + x + y);
             Node counterClockwise = n.lookup("#counterClockwise" + x + y);
-            if(clockwise != null && counterClockwise != null) {
+            if (clockwise != null && counterClockwise != null) {
                 rotateButtons.add(clockwise);
                 rotateButtons.add(counterClockwise);
                 clockwise.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event) -> {
-                    if(game.getAllowedToRotate()) {
+                    if (game.getAllowedToRotate()) {
                         rotateTile(x, y, Direction.CLOCKWISE);
                     }
                 });
                 counterClockwise.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event) -> {
-                    if(game.getAllowedToRotate()) {
+                    if (game.getAllowedToRotate()) {
                         rotateTile(x, y, Direction.COUNTER_CLOCKWISE);
                     }
                 });
@@ -129,7 +122,7 @@ public class GUI extends Application {
             i++;
         }
     }
-    
+
     private void initCircles() {
         for (int y = 0; y < 2; y++) {
             for (int x = 0; x < 2; x++) {
@@ -184,7 +177,7 @@ public class GUI extends Application {
         baseScene.getRoot().lookup("AnchorPane").getStyleClass().add("readyToSetMarble");
         baseScene.getRoot().lookup("AnchorPane").getStyleClass().remove("readyToRotate");
         fillCircles();
-        for(Node n : rotateButtons) {
+        for (Node n : rotateButtons) {
             n.setVisible(false);
         }
         helpLabel.setText(game.whoseTurn() + " - Click where you'd want to put the marble");
@@ -194,7 +187,7 @@ public class GUI extends Application {
         baseScene.getRoot().lookup("AnchorPane").getStyleClass().add("readyToRotate");
         baseScene.getRoot().lookup("AnchorPane").getStyleClass().remove("readyToSetMarble");
         fillCircles();
-        for(Node n : rotateButtons) {
+        for (Node n : rotateButtons) {
             n.setVisible(true);
         }
         helpLabel.setText(game.whoseTurn() + " - Click the button on the tile you want to rotate");
@@ -204,8 +197,7 @@ public class GUI extends Application {
         try {
             game.addMarble(x, y);
             readyToRotate();
-        }
-        catch (Exception e) {}
+        } catch (Exception e) { }
     }
 
     private void rotateTile(int x, int y, Direction d) {
@@ -234,7 +226,7 @@ public class GUI extends Application {
         initTiles();
         initCircles();
         fillCircles();
-        
+
         helpLabel.setText("Even! No more possible moves. Start a new game from the main menu!");
 
         initMainMenu();
@@ -270,18 +262,27 @@ public class GUI extends Application {
         initMainMenu();
     }
 
+    /**
+     * Binds the main manu button to change the view to the main menu.
+     */
     public void initMainMenu() {
         ((Button) (baseScene.getRoot().lookup("#mainMenuButton"))).addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event) -> {
             try {
                 game.clear();
                 loadStartMenu();
-            }
-            catch (IOException ex) {
+            } catch (IOException ex) {
                 Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
     }
 
+    /**
+     * Changes the view to a fxml view by the parameter 'fxml'.
+     * 
+     * @param fxml the url of the fxml file
+     * @return the page created
+     * @throws IOException if the fxml file is not found
+     */
     private Pane replaceSceneContent(String fxml) throws IOException {
         Pane page = (Pane) FXMLLoader.load(getClass().getClassLoader().getResource(fxml));
         baseScene = primaryStage.getScene();

@@ -7,6 +7,7 @@ package fi.aapzu.pentago.game;
 
 import fi.aapzu.pentago.logic.marble.Symbol;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import org.junit.Test;
 
 /**
@@ -18,9 +19,12 @@ public class PlayerTest {
     public PlayerTest() {}
 
     @Test
-    public void defaultNameForPlayerIsnew_player() {
+    public void constructorsWorksright() {
         Player p = new Player(Symbol.O);
-        assertEquals("new_player", p.getName());
+        assertNull(p.getName());
+        
+        p = new Player(Symbol.O, "test");
+        assertEquals("test", p.getName());
     }
     
     @Test

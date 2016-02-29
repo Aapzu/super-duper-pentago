@@ -18,7 +18,7 @@ public class Tile {
     /**
      * Calls the constructor with the default sideLength 3.
      */
-    public Tile() {
+    protected Tile() {
         this(3);
     }
 
@@ -27,9 +27,9 @@ public class Tile {
      * IllegalArgumentException if the sideLength is negative or 0. Sets the
      * lastDirection to null.
      *
-     * @param sideLength
+     * @param sideLength the amount of Marbles per side
      */
-    public Tile(int sideLength) {
+    protected Tile(int sideLength) {
         if (sideLength <= 0) {
             throw new IllegalArgumentException("The sideLength of a Tile must be truly positive!");
         }
@@ -63,12 +63,12 @@ public class Tile {
      * coordinates are invalid. Throws PentagoGameRuleException if there is
      * already a Marble in the specified place.
      *
-     * @param marble
+     * @param marble the Marble to be added
      * @param x the X coordinate
      * @param y the Y coordinate
      * @return true if succeeded, otherwise false
      */
-    protected boolean setMarble(Marble marble, int x, int y) {
+    protected boolean addMarble(Marble marble, int x, int y) {
         if (validateCoordinates(x, y)) {
             // Return null when trying to set a marble on top of another one
             if (marble != null && tile[y][x] != null) {
@@ -92,7 +92,7 @@ public class Tile {
     protected Marble removeMarble(int x, int y) {
         if (validateCoordinates(x, y)) {
             Marble marble = tile[y][x];
-            setMarble(null, x, y);
+            addMarble(null, x, y);
             return marble;
         } else {
             return null;
@@ -149,23 +149,14 @@ public class Tile {
         return Arrays.toString(tile[rowNumber]);
     }
 
-    /**
-     * @return sideLength
-     */
     protected int getSideLength() {
         return sideLength;
     }
 
-    /**
-     * @return tile
-     */
     protected Marble[][] getTile() {
         return tile;
     }
 
-    /**
-     * @return lastDirection
-     */
     protected Direction getLastDirection() {
         return lastDirection;
     }
@@ -180,7 +171,7 @@ public class Tile {
     protected void clear() {
         for (int y = 0; y < getTile().length; y++) {
             for (int x = 0; x < getTile()[0].length; x++) {
-                setMarble(null, x, y);
+                addMarble(null, x, y);
             }
         }
     }

@@ -20,7 +20,7 @@ public class BoardLineChecker {
     /**
      * Creates a new BoardLineChecker for the given Board.
      *
-     * @param board
+     * @param board the Board the LineChecker checks
      */
     public BoardLineChecker(Board board) {
         this.board = board;
@@ -60,13 +60,16 @@ public class BoardLineChecker {
      */
     protected Line checkLines(int length, Direction d) {
         int wholeLength = board.getSideLength() * board.getTileSideLength();
+        // An empty line
         Line line = new Line();
         if (!Arrays.asList(Direction.getLineDirections()).contains(d)) {
             throw new IllegalArgumentException("The direction is incorrect!");
         }
+        // The default values
         int firstIndexFrom = 0;
         int firstIndexTo = wholeLength;
 
+        // Must start from or continue to outside the board to get the also lowest lines
         if (d == Direction.UPGRADING_DIAGONAL) {
             firstIndexFrom = -wholeLength + 2;
         } else if (d == Direction.DOWNGRADING_DIAGONAL) {
@@ -78,28 +81,37 @@ public class BoardLineChecker {
             line.clear();
             lastMarble = null;
             for (int j = 0; j < wholeLength; j++) {
-                int firstCoord = -1;
-                int secondCoord = -1;
-                if (d == Direction.HORIZONTAL) {
-                    firstCoord = j;
-                    secondCoord = i;
-                } else if (d == Direction.VERTICAL) {
-                    firstCoord = i;
-                    secondCoord = j;
-                } else if (d == Direction.UPGRADING_DIAGONAL) {
-                    firstCoord = j;
-                    secondCoord = i + j;
-                } else if (d == Direction.DOWNGRADING_DIAGONAL) {
-                    firstCoord = i - j;
-                    secondCoord = j;
+                int x = -1;
+                int y = -1;
+                switch (d) {
+                    case HORIZONTAL:
+                        x = j;
+                        y = i;
+                        break;
+                    case VERTICAL:
+                        x = i;
+                        y = j;
+                        break;
+                    case UPGRADING_DIAGONAL:
+                        x = j;
+                        y = i + j;
+                        break;
+                    case DOWNGRADING_DIAGONAL:
+                        x = i - j;
+                        y = j;
+                        break;
                 }
-                if (firstCoord >= 0 && firstCoord < wholeLength && secondCoord >= 0 && secondCoord < wholeLength) {
-                    Marble m = board.getMarble(firstCoord, secondCoord);
+                // If we are not outside the Board
+                if (x >= 0 && x < wholeLength && y >= 0 && y < wholeLength) {
+                    Marble m = board.getMarble(x, y);
+                    // If the square is empty or the Marble is different from the last one
                     if (m == null || (!m.equals(lastMarble) && lastMarble != null)) {
                         line.clear();
                     }
+                    // The new Marble is added to the line anyway
                     if (m != null) {
-                        line.addCoordinate(new Integer[]{firstCoord, secondCoord});
+                        line.addCoordinate(new Integer[]{x, y});
+                        // If the line is long enough, we set a symbol to it and return it
                         if (line.length() >= length) {
                             line.setSymbol(m.getSymbol());
                             return line;

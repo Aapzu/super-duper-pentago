@@ -54,16 +54,16 @@ public enum Direction {
      * Gives the opposite Direction of a rotating direction. Returns null if the
      * Direction d is not a rotating direction.
      *
-     * @param d
+     * @param d the direction to get the opposite from
      * @return opposite Direction or null
      */
     public static Direction getOpposite(Direction d) {
-        if (d == CLOCKWISE) {
-            return COUNTER_CLOCKWISE;
-        } else if (d == COUNTER_CLOCKWISE) {
-            return CLOCKWISE;
-        } else {
-            return null;
+        if(d != null) switch (d) {
+            case CLOCKWISE:
+                return COUNTER_CLOCKWISE;
+            case COUNTER_CLOCKWISE:
+                return CLOCKWISE;                
         }
+        return null;
     }
 }

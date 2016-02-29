@@ -66,8 +66,8 @@ public class TileTest {
     public void setMarbleSetsRightMarbleIntoRightPlace() {
         Marble m = new Marble(Symbol.X);
         Marble m2 = new Marble(Symbol.O);
-        assertTrue(tile.setMarble(m, 0, 0));
-        assertTrue(tile.setMarble(m2, 1, 2));
+        assertTrue(tile.addMarble(m, 0, 0));
+        assertTrue(tile.addMarble(m2, 1, 2));
         assertEquals(tile.getTile()[0][0].toString(), "[X]");
         assertEquals(tile.getTile()[2][1].toString(), "[O]");
     }
@@ -75,25 +75,25 @@ public class TileTest {
     @Test
     public void setMarbleDoesNotSetMarbleOutsideTheTile() {
         Marble m = new Marble(Symbol.X);
-        assertFalse(tile.setMarble(m, -1, 2));
-        assertFalse(tile.setMarble(m, 2, -1));
-        assertFalse(tile.setMarble(m, 3, 0));
-        assertFalse(tile.setMarble(m, 0, 3));
-        assertFalse(tile.setMarble(m, 3, 15));
-        assertFalse(tile.setMarble(m, 15, 2));
+        assertFalse(tile.addMarble(m, -1, 2));
+        assertFalse(tile.addMarble(m, 2, -1));
+        assertFalse(tile.addMarble(m, 3, 0));
+        assertFalse(tile.addMarble(m, 0, 3));
+        assertFalse(tile.addMarble(m, 3, 15));
+        assertFalse(tile.addMarble(m, 15, 2));
     }
     
     @Test
     public void setMarbleThrowsExceptionIfPlaceIsNotEmpty() {
-        tile.setMarble(new Marble(Symbol.O), 1, 1);
+        tile.addMarble(new Marble(Symbol.O), 1, 1);
         exception.expect(PentagoGameRuleException.class);
-        tile.setMarble(new Marble(Symbol.O), 1, 1);
+        tile.addMarble(new Marble(Symbol.O), 1, 1);
     }
     
     @Test
     public void getReturnsMarbleCorrectly() {
         Marble m = new Marble(Symbol.X);
-        tile.setMarble(m, 0, 0);
+        tile.addMarble(m, 0, 0);
         assertEquals(tile.get(0, 0), m);
     }
     
@@ -110,7 +110,7 @@ public class TileTest {
     
     @Test
     public void removeMarbleRemovesMarble() {
-        tile.setMarble(new Marble(Symbol.X), 0, 0);
+        tile.addMarble(new Marble(Symbol.X), 0, 0);
         tile.removeMarble(0, 0);
         assertNull(tile.get(0,0));
     }
@@ -118,7 +118,7 @@ public class TileTest {
     @Test
     public void removeMarbleReturnsTheMarbleItRemoved() {
         Marble m = new Marble(Symbol.X);
-        tile.setMarble(m, 0, 0);
+        tile.addMarble(m, 0, 0);
         assertEquals(m, tile.removeMarble(0, 0));
     }
     
@@ -133,11 +133,11 @@ public class TileTest {
     public void toStringReturnsRightKindOfString() {
         Marble x = new Marble(Symbol.X);
         Marble o = new Marble(Symbol.O);
-        tile.setMarble(o, 0, 0);
-        tile.setMarble(x, 1, 0);
-        tile.setMarble(x, 0, 1);
-        tile.setMarble(o, 1, 1);
-        tile.setMarble(o, 2, 2);
+        tile.addMarble(o, 0, 0);
+        tile.addMarble(x, 1, 0);
+        tile.addMarble(x, 0, 1);
+        tile.addMarble(o, 1, 1);
+        tile.addMarble(o, 2, 2);
         assertEquals(tile.toString(), 
                 "[[O], [X], null]\n"
               + "[[X], [O], null]\n"
@@ -148,11 +148,11 @@ public class TileTest {
     public void rowToStringReturnsRightKindOfString() {
         Marble x = new Marble(Symbol.X);
         Marble o = new Marble(Symbol.O);
-        tile.setMarble(o, 0, 0);
-        tile.setMarble(x, 1, 0);
-        tile.setMarble(x, 0, 1);
-        tile.setMarble(o, 1, 1);
-        tile.setMarble(o, 2, 2);
+        tile.addMarble(o, 0, 0);
+        tile.addMarble(x, 1, 0);
+        tile.addMarble(x, 0, 1);
+        tile.addMarble(o, 1, 1);
+        tile.addMarble(o, 2, 2);
         assertEquals(tile.rowToString(0), "[[O], [X], null]");
         assertEquals(tile.rowToString(1), "[[X], [O], null]");
         assertEquals(tile.rowToString(2), "[null, null, [O]]");
@@ -172,11 +172,11 @@ public class TileTest {
     public void rotateWorksCorrectlyClockwise() {
         Marble x = new Marble(Symbol.X);
         Marble o = new Marble(Symbol.O);
-        tile.setMarble(o, 0, 0);
-        tile.setMarble(x, 1, 0);
-        tile.setMarble(x, 0, 1);
-        tile.setMarble(o, 1, 1);
-        tile.setMarble(o, 2, 2);
+        tile.addMarble(o, 0, 0);
+        tile.addMarble(x, 1, 0);
+        tile.addMarble(x, 0, 1);
+        tile.addMarble(o, 1, 1);
+        tile.addMarble(o, 2, 2);
         
         tile.rotate(Direction.CLOCKWISE);
         
@@ -191,11 +191,11 @@ public class TileTest {
     public void rotateWorksCorrectlyCounterClockWise() {
         Marble x = new Marble(Symbol.X);
         Marble o = new Marble(Symbol.O);
-        tile.setMarble(o, 0, 0);
-        tile.setMarble(x, 1, 0);
-        tile.setMarble(x, 0, 1);
-        tile.setMarble(o, 1, 1);
-        tile.setMarble(o, 2, 2);
+        tile.addMarble(o, 0, 0);
+        tile.addMarble(x, 1, 0);
+        tile.addMarble(x, 0, 1);
+        tile.addMarble(o, 1, 1);
+        tile.addMarble(o, 2, 2);
         
         tile.rotate(Direction.COUNTER_CLOCKWISE);
        
@@ -217,20 +217,20 @@ public class TileTest {
     public void doubleRotateIsTheSameInBothDirections() {
         Marble x = new Marble(Symbol.X);
         Marble o = new Marble(Symbol.O);
-        tile.setMarble(o, 0, 0);
-        tile.setMarble(x, 1, 0);
-        tile.setMarble(x, 0, 1);
-        tile.setMarble(o, 1, 1);
-        tile.setMarble(o, 2, 2);
+        tile.addMarble(o, 0, 0);
+        tile.addMarble(x, 1, 0);
+        tile.addMarble(x, 0, 1);
+        tile.addMarble(o, 1, 1);
+        tile.addMarble(o, 2, 2);
         tile.rotate(Direction.CLOCKWISE);
         tile.rotate(Direction.CLOCKWISE);
         
         Tile tile2 = new Tile();
-        tile2.setMarble(o, 0, 0);
-        tile2.setMarble(x, 1, 0);
-        tile2.setMarble(x, 0, 1);
-        tile2.setMarble(o, 1, 1);
-        tile2.setMarble(o, 2, 2);
+        tile2.addMarble(o, 0, 0);
+        tile2.addMarble(x, 1, 0);
+        tile2.addMarble(x, 0, 1);
+        tile2.addMarble(o, 1, 1);
+        tile2.addMarble(o, 2, 2);
         tile2.rotate(Direction.COUNTER_CLOCKWISE);
         tile2.rotate(Direction.COUNTER_CLOCKWISE);
         
@@ -259,11 +259,11 @@ public class TileTest {
     public void clearClearsTheTile() {
         Marble x = new Marble(Symbol.X);
         Marble o = new Marble(Symbol.O);
-        tile.setMarble(o, 0, 0);
-        tile.setMarble(x, 2, 0);
-        tile.setMarble(x, 0, 2);
-        tile.setMarble(o, 1, 1);
-        tile.setMarble(o, 2, 2);
+        tile.addMarble(o, 0, 0);
+        tile.addMarble(x, 2, 0);
+        tile.addMarble(x, 0, 2);
+        tile.addMarble(o, 1, 1);
+        tile.addMarble(o, 2, 2);
         
         tile.clear();
         for(Marble[] row : tile.getTile()) {
@@ -276,7 +276,7 @@ public class TileTest {
     @Test
     public void isEmptyReturnsRight() {
         assertTrue(tile.isEmpty());
-        tile.setMarble(new Marble(Symbol.O), 0, 0);
+        tile.addMarble(new Marble(Symbol.O), 0, 0);
         assertFalse(tile.isEmpty());
     }
     
@@ -285,12 +285,12 @@ public class TileTest {
         for(int y = 0; y < 3; y++) {
             for(int x = 0; x < 3; x++) {
                 if(x != 2 || y != 2) {
-                    tile.setMarble(new Marble(Symbol.O), x, y);
+                    tile.addMarble(new Marble(Symbol.O), x, y);
                     assertFalse(tile.isFull());
                 }
             }
         }
-        tile.setMarble(new Marble(Symbol.O), 2, 2);
+        tile.addMarble(new Marble(Symbol.O), 2, 2);
         assertTrue(tile.isFull());
     }
     

@@ -7,5 +7,13 @@ package fi.aapzu.pentago.logic.marble;
  * @author Aapeli
  */
 public enum Symbol {
-    O, X
+    /**
+     * Corresponds white color on the Board.
+     */
+    O, 
+    
+    /**
+     * Corresponds black color on the Board.
+     */
+    X
 }

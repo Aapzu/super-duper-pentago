@@ -87,7 +87,7 @@ public class Board {
      */
     public boolean addMarble(Marble marble, int x, int y) {
         Tile tile = getTileByCoordinates(x, y);
-        return tile.setMarble(marble, x % tileSideLength, y % tileSideLength);
+        return tile.addMarble(marble, x % tileSideLength, y % tileSideLength);
     }
 
     /**
@@ -117,20 +117,10 @@ public class Board {
         return tile.removeMarble(x % tileSideLength, y % tileSideLength);
     }
 
-    /**
-     * Gives the amount of Tiles per one side of the Board.
-     * 
-     * @return sideLength
-     */
     public int getSideLength() {
         return sideLength;
     }
 
-    /**
-     * Gives the amount of Marbles per one side of a Tile.
-     * 
-     * @return tileSideLength
-     */
     public int getTileSideLength() {
         return tileSideLength;
     }
@@ -151,20 +141,10 @@ public class Board {
         lastRotatedTile = t;
     }
 
-    /**
-     * Gives the Tile array.
-     * 
-     * @return tiles
-     */
     public Tile[][] getTiles() {
         return tiles;
     }
 
-    /**
-     * Gives the tile that was last rotated.
-     * 
-     * @return lastRotatedTile;
-     */
     public Tile getLastRotatedTile() {
         return lastRotatedTile;
     }

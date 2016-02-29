@@ -30,11 +30,6 @@ public class Line {
         coordinates.add(c);
     }
 
-    /**
-     * Gives the coordinates in the Line.
-     *
-     * @return coordinates
-     */
     public ArrayList<Integer[]> getCoordinates() {
         return coordinates;
     }
@@ -42,44 +37,24 @@ public class Line {
     /**
      * Gives the current length of the Line.
      *
-     * @return length
+     * @return length the length of the line
      */
     public int length() {
         return coordinates.size();
     }
 
-    /**
-     * Sets the Symbol of the Line.
-     * 
-     * @param s symbol
-     */
-    public void setSymbol(Symbol s) {
-        symbol = s;
+    public void setSymbol(Symbol symbol) {
+        this.symbol = symbol;
     }
 
-    /**
-     * Gives the Symbol of the Line.
-     * 
-     * @return symbol
-     */
     public Symbol getSymbol() {
         return symbol;
     }
 
-    /**
-     * Sets the Player who owns the Line.
-     * 
-     * @param p player
-     */
-    public void setPlayer(Player p) {
-        player = p;
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 
-    /**
-     * Returns the owner of the Line.
-     * 
-     * @return player
-     */
     public Player getPlayer() {
         return player;
     }

@@ -1,6 +1,5 @@
 package fi.aapzu.pentago.game;
 
-import fi.aapzu.pentago.logic.marble.Marble;
 import fi.aapzu.pentago.logic.marble.Symbol;
 
 /**
@@ -11,44 +10,36 @@ import fi.aapzu.pentago.logic.marble.Symbol;
 public class Player {
 
     private Symbol symbol;
-//    private MarbleCollection marbles;
     private String name;
 
     /**
-     * Creates a Player with a MarbleCollection with the given Symbol. Set the
-     * name to 'new_player'.
+     * Creates a Player with the given Symbol.
      *
-     * @param symbol
+     * @param symbol the symbol of the player
+     * @param name the name of the player
      */
-    public Player(Symbol symbol) {
+    public Player(Symbol symbol, String name) {
         this.symbol = symbol;
-//        this.marbles = new MarbleCollection(symbol);
-        this.name = "new_player";
-    }
-
-    /**
-     * Gives the name of the player.
-     *
-     * @return name
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Sets the given name for the Player.
-     *
-     * @param name
-     */
-    public void setName(String name) {
         this.name = name;
     }
 
     /**
-     * Gives the symbol of the player.
+     * Creates a Player with the given Symbol. Uses null for the name.
      *
-     * @return symbol
+     * @param symbol the symbol of the player
      */
+    public Player(Symbol symbol) {
+        this(symbol, null);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public Symbol getSymbol() {
         return symbol;
     }
@@ -58,11 +49,6 @@ public class Player {
         return name;
     }
 
-    /**
-     * Sets symbol.
-     *
-     * @param symbol
-     */
     public void setSymbol(Symbol symbol) {
         this.symbol = symbol;
     }

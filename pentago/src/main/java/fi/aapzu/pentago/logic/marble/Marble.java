@@ -19,11 +19,6 @@ public class Marble {
         this.symbol = symbol;
     }
     
-    /**
-     * Gives the Symbol of the Marble.
-     * 
-     * @return symbol
-     */
     public Symbol getSymbol() {
         return symbol;
     }

@@ -151,6 +151,11 @@ public class Pentago {
         return board;
     }
     
+    /**
+     * Sets the Board. Also replaces the new BoardLineChecker with a new one.
+     * 
+     * @param board the new Board
+     */
     public void setBoard(Board board) {
         this.board = board;
         this.lineChecker = new BoardLineChecker(board);
