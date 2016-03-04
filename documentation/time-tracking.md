@@ -24,4 +24,5 @@
 | 24.02.2016  	| 02:00		| GUI changes, UserGuide  |
 | 25.02.2016	| 01:00		| Draw game, reports and stuff	|
 | 27.02.2016	| 01:00		| Better coverage of tests	|
+| 29.02.2016  | 01:00   | A little finishing  |
 ||||
