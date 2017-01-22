@@ -4,7 +4,8 @@ Pentago is like Tic-Tac-Toe on steroids. The game created by Tomas Flodén is fa
 This version is originally made as a basic programming practice work (Javalabra) in spring 2016 (University of Helsinki). The AI is implemented as a practice work on data structures and algorithms in spring 2017 (University of Helsinki).
 
 ## Documentation
-* [Definition of the topic (Tiralabra)](documentation/tiralabra/topic-definition.md)
+* [Specification document (Tiralabra)](documentation/tiralabra/topic-definition.md)
+    * [Week Report 1](documentation/tiralabra/week-reports/week-report-1.md)
 * [Definition of the topic (Javalabra)](documentation/javalabra/topic-definition.md)
 * [API Documentation](https://rawgit.com/Aapzu/super-duper-pentago/master/documentation/apidocs/index.html)
 
