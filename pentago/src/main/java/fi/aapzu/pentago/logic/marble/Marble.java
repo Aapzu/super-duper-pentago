@@ -27,6 +27,7 @@ public class Marble {
     public String toString() {
         return "[" + getSymbol() + "]";
     }
+
     
     @Override
     public boolean equals(Object o) {
@@ -36,4 +37,8 @@ public class Marble {
         return this.getSymbol().equals(((Marble) o).getSymbol());
     }
 
+    @Override
+    public int hashCode() {
+        return symbol != null ? symbol.hashCode() : 0;
+    }
 }

@@ -66,4 +66,14 @@ public enum Direction {
         }
         return null;
     }
+
+    public static int getRotateDirectionAsNumber(Direction d) {
+        if(d != null) switch (d) {
+            case CLOCKWISE:
+                return 1;
+            case COUNTER_CLOCKWISE:
+                return 2;
+        }
+        return 0;
+    }
 }

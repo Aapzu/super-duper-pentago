@@ -207,4 +207,20 @@ public class Tile {
         }
         return true;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null || !(obj instanceof Tile)) {
+            return false;
+        }
+        Tile that = (Tile)obj;
+        return Arrays.equals(that.getTile(), getTile()) && that.getLastDirection() == getLastDirection();
+    }
+
+    @Override
+    public int hashCode() {
+        int result = sideLength;
+        result = 31 * result + Arrays.deepHashCode(tile);
+        return result;
+    }
 }

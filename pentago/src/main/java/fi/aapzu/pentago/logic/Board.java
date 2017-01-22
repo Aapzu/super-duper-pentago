@@ -14,6 +14,9 @@ public class Board {
     private int tileSideLength;
     private Tile[][] tiles;
     private Tile lastRotatedTile;
+    private Direction lastRotatedTileDirection;
+    private int lastRotatedTileY;
+    private int lastRotatedTileX;
 
     /**
      * Creates the Board, and the Tiles in it.
@@ -139,6 +142,9 @@ public class Board {
         Tile t = getTile(tileX, tileY);
         t.rotate(d);
         lastRotatedTile = t;
+        lastRotatedTileX = tileX;
+        lastRotatedTileY = tileY;
+        lastRotatedTileDirection = d;
     }
 
     public Tile[][] getTiles() {
@@ -231,5 +237,55 @@ public class Board {
             }
         }
         return true;
+    }
+
+    public int getLastRotatedTileY() {
+        return lastRotatedTileY;
+    }
+
+    public int getLastRotatedTileX() {
+        return lastRotatedTileX;
+    }
+
+    public String serialize() {
+        String res = "";
+        int sideLength = getSideLength() * getTileSideLength();
+        for (int y = 0; y < sideLength; y++) {
+            for (int x = 0; x < sideLength; x++) {
+                Marble m = getMarble(x, y);
+                res += m != null ? m.toString() : " ";
+            }
+        }
+        int lastRotatedTileNumber = getLastRotatedTileY() * getSideLength() + getLastRotatedTileX();
+        int lastRotatedTileDirection = Direction.getRotateDirectionAsNumber(getLastDirection(getLastRotatedTileX(), getLastRotatedTileY()));
+        res += lastRotatedTileNumber;
+        res += lastRotatedTileDirection;
+        return res;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Board board = (Board) o;
+
+        if (sideLength != board.sideLength) return false;
+        if (tileSideLength != board.tileSideLength) return false;
+        if (lastRotatedTileY != board.lastRotatedTileY) return false;
+        if (lastRotatedTileX != board.lastRotatedTileX) return false;
+        if (!Arrays.deepEquals(tiles, board.tiles)) return false;
+        return lastRotatedTileDirection == board.lastRotatedTileDirection;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = sideLength;
+        result = 31 * result + tileSideLength;
+        result = 31 * result + Arrays.deepHashCode(tiles);
+        result = 31 * result + (lastRotatedTileDirection != null ? lastRotatedTileDirection.hashCode() : 0);
+        result = 31 * result + lastRotatedTileY;
+        result = 31 * result + lastRotatedTileX;
+        return result;
     }
 }

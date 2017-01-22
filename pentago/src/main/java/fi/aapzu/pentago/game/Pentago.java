@@ -28,10 +28,31 @@ public class Pentago {
         board = new Board();
         lineChecker = new BoardLineChecker(board);
         players = new Player[2];
-        players[0] = new Player(Symbol.O);
-        players[1] = new Player(Symbol.X);
         whoseTurn = 0;
         allowedToRotate = false;
+    }
+
+    public void addHumanPlayer(String name) {
+        addPlayer(new Player(name));
+    }
+
+    public void addBot(String name) {
+        if (name == null) {
+            name = "Bot" + System.currentTimeMillis();
+        }
+        Bot bot = new Bot(this);
+        Player player = new Player(name, bot);
+        addPlayer(player);
+    }
+
+    private void addPlayer(Player player) {
+        int playerNumber = players[0] == null ? 0 : (players[1] == null ? 1 : 2);
+        if (playerNumber == 2) {
+            throw new PentagoGameRuleException("Game already has two players!");
+        }
+        player.setPlayerNumber(playerNumber);
+        player.setSymbol(player.getSymbolForPlayerNumber(playerNumber));
+        players[playerNumber] = player;
     }
 
     /**
@@ -39,8 +60,6 @@ public class Pentago {
      */
     public void clear() {
         board.clear();
-        players[0] = new Player(Symbol.O);
-        players[1] = new Player(Symbol.X);
         whoseTurn = 0;
         allowedToRotate = false;
     }
@@ -114,6 +133,9 @@ public class Pentago {
      * @return the Player whose turn it is currently
      */
     public Player whoseTurn() {
+        if (players[0] == null || players[1] == null) {
+            throw new PentagoGameRuleException("Not enough players!");
+        }
         return players[whoseTurn];
     }
 
@@ -172,5 +194,51 @@ public class Pentago {
     public Player[] getPlayers() {
         return players;
     }
-    
+
+    public Pentago clone() {
+        Pentago oldGame = this;
+        Board oldBoard = getBoard();
+        Pentago newGame = new Pentago();
+        Board newBoard = new Board();
+        int sideLength = oldBoard.getTileSideLength() * oldBoard.getSideLength();
+        for (int y = 0; y < sideLength; y++) {
+            for (int x = 0; x < sideLength; x++) {
+                newBoard.addMarble(oldBoard.getMarble(x, y), x, y);
+            }
+        }
+        newGame.setPlayerName(0, oldGame.getPlayers()[0].getName());
+        newGame.setPlayerName(1, oldGame.getPlayers()[1].getName());
+        newGame.setBoard(newBoard);
+        newGame.whoseTurn = oldGame.whoseTurn;
+        newGame.allowedToRotate = oldGame.getAllowedToRotate();
+
+        return newGame;
+    }
+
+    public String serialize() {
+        String res = "";
+        res += getBoard().serialize();
+        res += whoseTurn;
+        return res;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Pentago pentago = (Pentago) o;
+
+        if (whoseTurn != pentago.whoseTurn) return false;
+        if (allowedToRotate != pentago.allowedToRotate) return false;
+        return board.equals(pentago.board);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = board.hashCode();
+        result = 31 * result + whoseTurn;
+        result = 31 * result + (allowedToRotate ? 1 : 0);
+        return result;
+    }
 }
