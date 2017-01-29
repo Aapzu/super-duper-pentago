@@ -6,6 +6,7 @@
 package fi.aapzu.pentago.logic;
 
 import fi.aapzu.pentago.logic.marble.Marble;
+
 import java.util.Arrays;
 
 /**
@@ -13,17 +14,23 @@ import java.util.Arrays;
  *
  * @author Aapeli
  */
-public class BoardLineChecker {
+public class LineChecker {
 
+    private Marble[][] marbles;
     private Board board;
 
     /**
-     * Creates a new BoardLineChecker for the given Board.
+     * Creates a new LineChecker for the given Board.
      *
      * @param board the Board the LineChecker checks
      */
-    public BoardLineChecker(Board board) {
+    public LineChecker(Board board) {
+        this.marbles = board.toMarbleArray();
         this.board = board;
+    }
+
+    public LineChecker(Tile tile) {
+        this.marbles = tile.toMarbleArray();
     }
 
     /**
@@ -34,14 +41,15 @@ public class BoardLineChecker {
      * @return the line found or null
      */
     public Line checkLines(int length) {
-        if (length < 2 || length > board.getSideLength() * board.getTileSideLength()) {
-            throw new IllegalArgumentException("The length of a line must be between 2 and " + board.getSideLength() * board.getTileSideLength());
+        if (length < 2 || length > marbles.length) {
+            throw new IllegalArgumentException("The length of a line must be between 2 and " + marbles.length);
         }
         Line line = null;
 
         for (Direction d : Direction.getLineDirections()) {
             line = checkLines(length, d);
             if (line != null) {
+                line.setDirection(d);
                 break;
             }
         }
@@ -49,17 +57,18 @@ public class BoardLineChecker {
         return line;
     }
 
+
     /**
      * Checks if there are the given amount of same symbol on the board in the
      * given direction. If a line was found, returns a map with the symbol and
      * the coordinates of the line.
      *
      * @param length the required amount of the same symbols in a row
-     * @param d the Direction to be looked at
+     * @param d      the Direction to be looked at
      * @return the line or null
      */
     protected Line checkLines(int length, Direction d) {
-        int wholeLength = board.getSideLength() * board.getTileSideLength();
+        int wholeLength = marbles.length;
         // An empty line
         Line line = new Line();
         if (!Arrays.asList(Direction.getLineDirections()).contains(d)) {
@@ -69,7 +78,7 @@ public class BoardLineChecker {
         int firstIndexFrom = 0;
         int firstIndexTo = wholeLength;
 
-        // Must start from or continue to outside the board to get the also lowest lines
+        // Must start from or continue to outside the board to getMarble the also lowest lines
         if (d == Direction.UPGRADING_DIAGONAL) {
             firstIndexFrom = -wholeLength + 2;
         } else if (d == Direction.DOWNGRADING_DIAGONAL) {
@@ -103,7 +112,7 @@ public class BoardLineChecker {
                 }
                 // If we are not outside the Board
                 if (x >= 0 && x < wholeLength && y >= 0 && y < wholeLength) {
-                    Marble m = board.getMarble(x, y);
+                    Marble m = getMarble(x, y);
                     // If the square is empty or the Marble is different from the last one
                     if (m == null || (!m.equals(lastMarble) && lastMarble != null)) {
                         line.clear();
@@ -123,8 +132,13 @@ public class BoardLineChecker {
         }
         return null;
     }
-    
-    public Board getBoard() {
-        return board;
+
+    private Marble getMarble(int x, int y) {
+        if (board != null) {
+            return board.getMarble(x, y);
+        } else {
+            return marbles[y][x];
+        }
     }
+
 }

@@ -12,13 +12,14 @@ import java.util.Arrays;
 public class Tile {
 
     private int sideLength;
+
     private Marble[][] tile;
     private Direction lastDirection;
 
     /**
      * Calls the constructor with the default sideLength 3.
      */
-    protected Tile() {
+    Tile() {
         this(3);
     }
 
@@ -29,13 +30,30 @@ public class Tile {
      *
      * @param sideLength the amount of Marbles per side
      */
-    protected Tile(int sideLength) {
+    Tile(int sideLength) {
         if (sideLength <= 0) {
             throw new IllegalArgumentException("The sideLength of a Tile must be truly positive!");
         }
         this.sideLength = sideLength;
         tile = new Marble[sideLength][sideLength];
         lastDirection = null;
+    }
+
+    /**
+     * Copy-constructor to clone the Tile
+     *
+     * @param other the Tile to be cloned
+     */
+    Tile(Tile other) {
+        setSideLength(other.getSideLength());
+        setLastDirection(other.getLastDirection());
+        Marble[][] newTile = new Marble[getSideLength()][getSideLength()];
+        for (int y = 0; y < getSideLength(); y++) {
+            for (int x = 0; x < getSideLength(); x++) {
+                newTile[y][x] = other.getTile()[y][x] != null ? new Marble(other.getTile()[y][x]) : null;
+            }
+        }
+        setTile(other.getTile());
     }
 
     private boolean validateCoordinates(int x, int y) {
@@ -50,7 +68,7 @@ public class Tile {
      * @param y the Y coordinate
      * @return the Marble or null
      */
-    protected Marble get(int x, int y) {
+    public Marble getMarble(int x, int y) {
         if (validateCoordinates(x, y)) {
             return getTile()[y][x];
         } else {
@@ -145,19 +163,31 @@ public class Tile {
      * @param rowNumber the row to be toStringed
      * @return the String representation of only one row
      */
-    protected String rowToString(int rowNumber) {
-        return Arrays.toString(tile[rowNumber]);
+    String rowToString(int rowNumber) {
+        String row = "";
+        for (Marble m : tile[rowNumber]) {
+            row += m != null ? m.toString() : "[ ]";
+        }
+        return row;
     }
 
-    protected int getSideLength() {
+    int getSideLength() {
         return sideLength;
+    }
+
+    void setSideLength(int sideLength) {
+        this.sideLength = sideLength;
     }
 
     protected Marble[][] getTile() {
         return tile;
     }
 
-    protected Direction getLastDirection() {
+    public void setTile(Marble[][] tile) {
+        this.tile = tile;
+    }
+
+    Direction getLastDirection() {
         return lastDirection;
     }
 
@@ -197,7 +227,7 @@ public class Tile {
      *
      * @return true or false
      */
-    protected boolean isFull() {
+    boolean isFull() {
         for (Marble[] row : tile) {
             for (Marble m : row) {
                 if (m == null) {
@@ -206,6 +236,10 @@ public class Tile {
             }
         }
         return true;
+    }
+
+    Marble[][] toMarbleArray() {
+        return tile;
     }
 
     @Override

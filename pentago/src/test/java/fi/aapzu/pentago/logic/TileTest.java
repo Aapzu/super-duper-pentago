@@ -94,25 +94,25 @@ public class TileTest {
     public void getReturnsMarbleCorrectly() {
         Marble m = new Marble(Symbol.X);
         tile.addMarble(m, 0, 0);
-        assertEquals(tile.get(0, 0), m);
+        assertEquals(tile.getMarble(0, 0), m);
     }
     
     @Test
     public void getReturnsNullIfThePlaceIsEmptyOrDoesNotExist() {
-        assertNull(tile.get(0, 0));
-        assertNull(tile.get(-1, 0));
-        assertNull(tile.get(0, -1));
-        assertNull(tile.get(-1, -1));
-        assertNull(tile.get(-1, 10));
-        assertNull(tile.get(10, -1));
-        assertNull(tile.get(10, 10));
+        assertNull(tile.getMarble(0, 0));
+        assertNull(tile.getMarble(-1, 0));
+        assertNull(tile.getMarble(0, -1));
+        assertNull(tile.getMarble(-1, -1));
+        assertNull(tile.getMarble(-1, 10));
+        assertNull(tile.getMarble(10, -1));
+        assertNull(tile.getMarble(10, 10));
     }
     
     @Test
     public void removeMarbleRemovesMarble() {
         tile.addMarble(new Marble(Symbol.X), 0, 0);
         tile.removeMarble(0, 0);
-        assertNull(tile.get(0,0));
+        assertNull(tile.getMarble(0,0));
     }
     
     @Test

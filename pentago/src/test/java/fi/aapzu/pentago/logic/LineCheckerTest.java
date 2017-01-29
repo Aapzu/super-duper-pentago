@@ -10,27 +10,40 @@ import fi.aapzu.pentago.logic.marble.Marble;
 import fi.aapzu.pentago.logic.marble.Symbol;
 import java.util.ArrayList;
 import java.util.Arrays;
-import org.junit.After;
-import org.junit.Test;
+
+import org.junit.*;
+
 import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.Rule;
+
 import org.junit.rules.ExpectedException;
 
-public class BoardLineCheckerTest {
+public class LineCheckerTest {
     
     Board board;
-    BoardLineChecker lineChecker;
+    LineChecker lineChecker;
     
     @Rule
     public final ExpectedException exception = ExpectedException.none();
     
-    public BoardLineCheckerTest() {}
+    public LineCheckerTest() {}
+
+    private static long ts;
+
+    @BeforeClass
+    public static void setUpTest() {
+        ts = System.currentTimeMillis();
+    }
+
+    @AfterClass
+    public static void tearDownTest() {
+        long ts2 = System.currentTimeMillis();
+        System.out.println("Time: " + (ts2-ts));
+    }
     
     @Before
     public void setUp() {
         board = new Board();
-        lineChecker = new BoardLineChecker(board);
+        lineChecker = new LineChecker(board);
     }
     
     @After

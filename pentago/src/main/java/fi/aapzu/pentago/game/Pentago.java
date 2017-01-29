@@ -1,9 +1,6 @@
 package fi.aapzu.pentago.game;
 
-import fi.aapzu.pentago.logic.Board;
-import fi.aapzu.pentago.logic.BoardLineChecker;
-import fi.aapzu.pentago.logic.Direction;
-import fi.aapzu.pentago.logic.Line;
+import fi.aapzu.pentago.logic.*;
 import fi.aapzu.pentago.logic.marble.Marble;
 import fi.aapzu.pentago.logic.marble.Symbol;
 
@@ -16,9 +13,11 @@ public class Pentago {
 
     private Board board;
     private Player[] players;
-    private BoardLineChecker lineChecker;
+    private LineChecker lineChecker;
+
     private int whoseTurn;
     private boolean allowedToRotate;
+    private int turnsDone;
 
     /**
      * Creates a new game with a Board, two Players and the bookkeeping of whose
@@ -26,22 +25,46 @@ public class Pentago {
      */
     public Pentago() {
         board = new Board();
-        lineChecker = new BoardLineChecker(board);
+        lineChecker = new LineChecker(board);
         players = new Player[2];
         whoseTurn = 0;
         allowedToRotate = false;
     }
 
+    /**
+     * Copy-constructor to create a clone of the Pentago
+     *
+     * @param other the game to be cloned
+     */
+    public Pentago(Pentago other) {
+        setBoard(new Board(other.getBoard()));
+        setPlayers(new Player[other.getPlayers().length]);
+        for (int i = 0; i < getPlayers().length; i++) {
+            getPlayers()[i] = new Player(other.getPlayers()[i]);
+        }
+        setWhoseTurn(other.getWhoseTurn());
+        setAllowedToRotate(other.getAllowedToRotate());
+    }
+
+    /**
+     * Adds a human Player
+     *
+     * @param name
+     */
     public void addHumanPlayer(String name) {
         addPlayer(new Player(name));
     }
 
+    /**
+     * Adds a Bot
+     *
+     * @param name
+     */
     public void addBot(String name) {
         if (name == null) {
             name = "Bot" + System.currentTimeMillis();
         }
-        Bot bot = new Bot(this);
-        Player player = new Player(name, bot);
+        Bot player = new Bot(this, name);
         addPlayer(player);
     }
 
@@ -67,10 +90,10 @@ public class Pentago {
     /**
      * Sets the given name to the given Player.
      *
-     * @param i the index of the Player
+     * @param i    the index of the Player
      * @param name the name to be Given to the Player
      */
-    public void setPlayerName(int i, String name) {
+    void setPlayerName(int i, String name) {
         if (i < 0 || i > 1) {
             throw new IllegalArgumentException("Invalid player index: " + i);
         }
@@ -95,6 +118,7 @@ public class Pentago {
         if (!success) {
             throw new IllegalArgumentException("the coordinates outside the board!");
         }
+        turnsDone++;
         allowedToRotate = true;
     }
 
@@ -117,10 +141,10 @@ public class Pentago {
         board.rotateTile(x, y, d);
         allowedToRotate = false;
     }
-    
+
     /**
      * Tells if the game has no any possible moves anymore.
-     * 
+     *
      * @return true or false
      */
     public boolean isEven() {
@@ -129,7 +153,7 @@ public class Pentago {
 
     /**
      * Tells whose turn it is.
-     * 
+     *
      * @return the Player whose turn it is currently
      */
     public Player whoseTurn() {
@@ -146,7 +170,13 @@ public class Pentago {
         whoseTurn = (whoseTurn + 1) % 2;
     }
 
-    protected Player getPlayerBySymbol(Symbol symbol) {
+    /**
+     * Gets a Symbol and return the corresponding Player. If not found, returns null.
+     *
+     * @param symbol
+     * @return player or null
+     */
+    public Player getPlayerBySymbol(Symbol symbol) {
         for (Player p : players) {
             if (p.getSymbol() == symbol) {
                 return p;
@@ -164,62 +194,33 @@ public class Pentago {
     public Line checkLines() {
         Line line = lineChecker.checkLines(5);
         if (line != null && line.getSymbol() != null) {
-            line.setPlayer(getPlayerBySymbol((Symbol) line.getSymbol()));
+            line.setPlayer(getPlayerBySymbol(line.getSymbol()));
         }
         return line;
     }
 
-    public Board getBoard() {
-        return board;
-    }
-    
     /**
-     * Sets the Board. Also replaces the new BoardLineChecker with a new one.
-     * 
+     * Sets the Board. Also replaces the new LineChecker with a new one.
+     *
      * @param board the new Board
      */
     public void setBoard(Board board) {
         this.board = board;
-        this.lineChecker = new BoardLineChecker(board);
+        this.lineChecker = new LineChecker(board);
     }
 
-    public boolean getAllowedToRotate() {
-        return allowedToRotate;
-    }
-
-    public BoardLineChecker getLineChecker() {
-        return lineChecker;
-    }
-
-    public Player[] getPlayers() {
-        return players;
-    }
-
-    public Pentago clone() {
-        Pentago oldGame = this;
-        Board oldBoard = getBoard();
-        Pentago newGame = new Pentago();
-        Board newBoard = new Board();
-        int sideLength = oldBoard.getTileSideLength() * oldBoard.getSideLength();
-        for (int y = 0; y < sideLength; y++) {
-            for (int x = 0; x < sideLength; x++) {
-                newBoard.addMarble(oldBoard.getMarble(x, y), x, y);
-            }
-        }
-        newGame.setPlayerName(0, oldGame.getPlayers()[0].getName());
-        newGame.setPlayerName(1, oldGame.getPlayers()[1].getName());
-        newGame.setBoard(newBoard);
-        newGame.whoseTurn = oldGame.whoseTurn;
-        newGame.allowedToRotate = oldGame.getAllowedToRotate();
-
-        return newGame;
-    }
-
-    public String serialize() {
-        String res = "";
-        res += getBoard().serialize();
-        res += whoseTurn;
-        return res;
+    /**
+     * @return move the last move of the game
+     */
+    public Move getLastMove() {
+        Player lastPlayer = getPlayerBySymbol(Symbol.getOpponent(whoseTurn().getSymbol()));
+        Marble lastMarble = getBoard().getLastMarble();
+        int lastMarbleX = getBoard().getLastMarbleX();
+        int lastMarbleY = getBoard().getLastMarbleY();
+        int lastTileY = getBoard().getLastRotatedTileY();
+        int lastTileX = getBoard().getLastRotatedTileX();
+        Direction lastDirection = getBoard().getLastDirection(lastTileX, lastTileY);
+        return new Move(lastPlayer, lastMarble, lastMarbleX, lastMarbleY, lastTileX, lastTileY, lastDirection);
     }
 
     @Override
@@ -229,9 +230,7 @@ public class Pentago {
 
         Pentago pentago = (Pentago) o;
 
-        if (whoseTurn != pentago.whoseTurn) return false;
-        if (allowedToRotate != pentago.allowedToRotate) return false;
-        return board.equals(pentago.board);
+        return whoseTurn == pentago.whoseTurn && allowedToRotate == pentago.allowedToRotate && board.equals(pentago.board);
     }
 
     @Override
@@ -241,4 +240,52 @@ public class Pentago {
         result = 31 * result + (allowedToRotate ? 1 : 0);
         return result;
     }
+
+    public Board getBoard() {
+        return board;
+    }
+
+//    public LineChecker getLineChecker() {
+//        return lineChecker;
+//    }
+
+    Player[] getPlayers() {
+        return players;
+    }
+
+    private void setPlayers(Player[] players) {
+        this.players = players;
+    }
+
+//    public int getRoundNumber() {
+//        return turnsDone / 2;
+//    }
+
+//    public void setLineChecker(LineChecker lineChecker) {
+//        this.lineChecker = lineChecker;
+//    }
+
+    private int getWhoseTurn() {
+        return whoseTurn;
+    }
+
+    private void setWhoseTurn(int whoseTurn) {
+        this.whoseTurn = whoseTurn;
+    }
+
+    public boolean getAllowedToRotate() {
+        return allowedToRotate;
+    }
+
+    private void setAllowedToRotate(boolean allowedToRotate) {
+        this.allowedToRotate = allowedToRotate;
+    }
+
+//    public int getTurnsDone() {
+//        return turnsDone;
+//    }
+
+//    public void setTurnsDone(int turnsDone) {
+//        this.turnsDone = turnsDone;
+//    }
 }

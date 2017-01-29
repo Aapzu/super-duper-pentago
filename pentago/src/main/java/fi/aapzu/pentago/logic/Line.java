@@ -7,6 +7,7 @@ package fi.aapzu.pentago.logic;
 
 import fi.aapzu.pentago.game.Player;
 import fi.aapzu.pentago.logic.marble.Symbol;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -19,6 +20,7 @@ public class Line {
 
     private Symbol symbol;
     private ArrayList<Integer[]> coordinates = new ArrayList<>();
+    private Direction direction;
     private Player player;
 
     /**
@@ -26,7 +28,7 @@ public class Line {
      *
      * @param c the coordinate to be added
      */
-    public void addCoordinate(Integer[] c) {
+    void addCoordinate(Integer[] c) {
         coordinates.add(c);
     }
 
@@ -41,22 +43,6 @@ public class Line {
      */
     public int length() {
         return coordinates.size();
-    }
-
-    public void setSymbol(Symbol symbol) {
-        this.symbol = symbol;
-    }
-
-    public Symbol getSymbol() {
-        return symbol;
-    }
-
-    public void setPlayer(Player player) {
-        this.player = player;
-    }
-
-    public Player getPlayer() {
-        return player;
     }
 
     @Override
@@ -77,5 +63,29 @@ public class Line {
         symbol = null;
         player = null;
         coordinates.clear();
+    }
+
+    public void setSymbol(Symbol symbol) {
+        this.symbol = symbol;
+    }
+
+    public Symbol getSymbol() {
+        return symbol;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public Direction getDirection() {
+        return direction;
+    }
+
+    public void setDirection(Direction direction) {
+        this.direction = direction;
     }
 }

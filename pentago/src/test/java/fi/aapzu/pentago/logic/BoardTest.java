@@ -5,7 +5,6 @@
  */
 package fi.aapzu.pentago.logic;
 
-import fi.aapzu.pentago.game.PentagoGameRuleException;
 import fi.aapzu.pentago.logic.marble.Marble;
 import fi.aapzu.pentago.logic.marble.Symbol;
 
@@ -14,9 +13,10 @@ import java.util.Map;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
+
+import static org.junit.Assert.*;
 
 
 public class BoardTest {
@@ -335,5 +335,27 @@ public class BoardTest {
         board.addMarble(new Marble(Symbol.O), 5, 5);
         assertTrue(board.isFull());
     }
-    
+
+    @Test
+    public void getMarbleArrayWorks() {
+        Marble O = new Marble(Symbol.O);
+        Marble X = new Marble(Symbol.X);
+        board.addMarble(O, 0, 0);
+        board.addMarble(O, 1, 1);
+        board.addMarble(O, 2, 1);
+        board.addMarble(X, 4, 0);
+        board.addMarble(X, 4, 1);
+        board.addMarble(X, 4, 2);
+        board.addMarble(O, 1, 4);
+        board.addMarble(O, 2, 4);
+        board.addMarble(O, 4, 4);
+        assertEquals(new Marble[][]{
+                {O,     null,   null,   null,   X,      null},
+                {null,  O,      O,      null,   X,      null},
+                {null,  null,   null,   null,   X,      null},
+                {null,  null,   null,   null,   null,   null},
+                {null,  O,      O,      null,   O,      null},
+                {null,  null,   null,   null,   null,   null}
+        }, board.getMarbleArray());
+    }
 }

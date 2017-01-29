@@ -52,7 +52,6 @@ public class PentagoTest {
     @Test
     public void constructorSetsTheDataRight() {
         assertTrue(game.getBoard().isEmpty());
-        assertEquals(game.getBoard(), game.getLineChecker().getBoard());
         assertEquals(2, game.getPlayers().length);
         assertEquals(Symbol.O, game.getPlayers()[0].getSymbol());
         assertEquals(Symbol.X, game.getPlayers()[1].getSymbol());

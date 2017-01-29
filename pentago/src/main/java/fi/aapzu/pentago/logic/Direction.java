@@ -54,7 +54,7 @@ public enum Direction {
      * Gives the opposite Direction of a rotating direction. Returns null if the
      * Direction d is not a rotating direction.
      *
-     * @param d the direction to get the opposite from
+     * @param d the direction to getMarble the opposite from
      * @return opposite Direction or null
      */
     public static Direction getOpposite(Direction d) {
@@ -65,15 +65,5 @@ public enum Direction {
                 return CLOCKWISE;                
         }
         return null;
-    }
-
-    public static int getRotateDirectionAsNumber(Direction d) {
-        if(d != null) switch (d) {
-            case CLOCKWISE:
-                return 1;
-            case COUNTER_CLOCKWISE:
-                return 2;
-        }
-        return 0;
     }
 }

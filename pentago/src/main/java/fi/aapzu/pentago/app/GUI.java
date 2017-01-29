@@ -43,11 +43,9 @@ public class GUI extends Application {
     private Label helpLabel;
     private Label errorLabel;
 
-    public GUI(Pentago game) {
-        this.game = game;
-    }
 
-    protected void startGUI(String[] args) {
+
+    void startGUI(String[] args) {
         launch(args);
     }
 
@@ -57,6 +55,7 @@ public class GUI extends Application {
         primaryStage.setTitle("Pentago");
         primaryStage.show();
 
+        game = new Pentago();
         loadStartMenu();
     }
 
@@ -70,8 +69,8 @@ public class GUI extends Application {
             @Override
             public void handleEvent() {
                 try {
-                    game.setPlayerName(0, !whitePlayerName.getText().equals("") ? whitePlayerName.getText() : "White");
-                    game.setPlayerName(1, !blackPlayerName.getText().equals("") ? blackPlayerName.getText() : "Black");
+                    game.addHumanPlayer(!whitePlayerName.getText().equals("") ? whitePlayerName.getText() : "White");
+                    game.addHumanPlayer(!blackPlayerName.getText().equals("") ? blackPlayerName.getText() : "Black");
                     loadGame();
                 } catch (IOException ex) {
                     Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);

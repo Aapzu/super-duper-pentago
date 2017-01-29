@@ -20,8 +20,8 @@ public class TextUI {
     /**
      * Creates a new game and the scanner for the commands.
      */
-    public TextUI(Pentago game) {
-        this.game = game;
+    TextUI() {
+        game = new Pentago();
         scanner = new Scanner(System.in);
     }
 
@@ -29,7 +29,7 @@ public class TextUI {
      * Starts the game. Every other time prints the board and the Player in
      * turn, and asks for a command.
      */
-    public void startPentago() {
+    void startPentago() {
         System.out.println("Give name for player X:");
         String name = scanner.nextLine();
         game.addHumanPlayer(name);
@@ -102,7 +102,7 @@ public class TextUI {
                     x = parseCoordinates(cmd)[0];
                     y = parseCoordinates(cmd)[1];
                     success2 = game.getBoard().validateTileCoordinates(x, y);
-                } catch (Exception e) {}
+                } catch (Exception ignored) {}
             }
             while (!success3) {
                 System.out.println("Give the direction (1 for CLOCKWISE, 2 for COUNTER CLOCKWISE):");

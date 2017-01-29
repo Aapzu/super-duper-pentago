@@ -18,6 +18,10 @@ public class Marble {
     public Marble(Symbol symbol) {
         this.symbol = symbol;
     }
+
+    public Marble(Marble other) {
+        this(other.getSymbol());
+    }
     
     public Symbol getSymbol() {
         return symbol;

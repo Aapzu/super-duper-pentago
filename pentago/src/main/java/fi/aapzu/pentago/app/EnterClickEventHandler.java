@@ -19,7 +19,7 @@ class EnterClickEventHandler implements EventHandler<Event> {
      * 
      * @param e 
      */
-    protected void handleKeyEvent(KeyEvent e) {
+    void handleKeyEvent(KeyEvent e) {
         if (e.getCode().equals(KeyCode.ENTER)) {
             handleEvent();
         }
@@ -30,7 +30,7 @@ class EnterClickEventHandler implements EventHandler<Event> {
      * 
      * @param e 
      */
-    protected void handleMouseEvent(MouseEvent e) {
+    void handleMouseEvent(MouseEvent e) {
         handleEvent();
     }
 

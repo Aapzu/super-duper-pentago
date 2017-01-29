@@ -15,5 +15,9 @@ public enum Symbol {
     /**
      * Corresponds black color on the Board.
      */
-    X
+    X;
+
+    public static Symbol getOpponent(Symbol me) {
+        return me == X ? O : X;
+    }
 }
