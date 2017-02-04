@@ -1,13 +1,12 @@
 package fi.aapzu.pentago.app;
 
+import fi.aapzu.pentago.game.Bot;
 import fi.aapzu.pentago.game.Pentago;
 import fi.aapzu.pentago.game.PentagoGameRuleException;
 import fi.aapzu.pentago.logic.Direction;
 import fi.aapzu.pentago.logic.Line;
 import fi.aapzu.pentago.logic.marble.Marble;
 import fi.aapzu.pentago.logic.marble.Symbol;
-import static fi.aapzu.pentago.logic.marble.Symbol.O;
-import static fi.aapzu.pentago.logic.marble.Symbol.X;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +18,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
@@ -42,8 +42,9 @@ public class GUI extends Application {
     private List<Node> rotateButtons;
     private Label helpLabel;
     private Label errorLabel;
-
-
+    private Pane lockPane;
+    private CheckBox player0isBot;
+    private CheckBox player1isBot;
 
     void startGUI(String[] args) {
         launch(args);
@@ -61,24 +62,38 @@ public class GUI extends Application {
 
     private void loadStartMenu() throws IOException {
         replaceSceneContent("fxml/StartMenu.fxml");
-        TextField whitePlayerName = (TextField) (baseScene.getRoot().lookup("#whitePlayerName"));
-        TextField blackPlayerName = (TextField) (baseScene.getRoot().lookup("#blackPlayerName"));
+        TextField blackPlayerName = (TextField) (baseScene.getRoot().lookup("#whitePlayerName"));
+        TextField whitePlayerName = (TextField) (baseScene.getRoot().lookup("#blackPlayerName"));
         Button startButton = (Button) (baseScene.getRoot().lookup("#startButton"));
+
+        player0isBot = (CheckBox) (baseScene.getRoot().lookup("#player0isBot"));
+        player1isBot = (CheckBox) (baseScene.getRoot().lookup("#player1isBot"));
 
         EnterClickEventHandler handler = new EnterClickEventHandler() {
             @Override
             public void handleEvent() {
                 try {
-                    game.addHumanPlayer(!whitePlayerName.getText().equals("") ? whitePlayerName.getText() : "White");
-                    game.addBot(!blackPlayerName.getText().equals("") ? blackPlayerName.getText() : "Black");
+                    String p1 = !blackPlayerName.getText().equals("") ? blackPlayerName.getText() : "Black";
+                    String p2 = !whitePlayerName.getText().equals("") ? whitePlayerName.getText() : "White";
+                    game.clearPlayers();
+                    if (player0isBot.isSelected()) {
+                        game.addBot(p1);
+                    } else {
+                        game.addHumanPlayer(p1);
+                    }
+                    if (player1isBot.isSelected()) {
+                        game.addBot(p2);
+                    } else {
+                        game.addHumanPlayer(p2);
+                    }
                     loadGame();
                 } catch (IOException ex) {
                     Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         };
-        whitePlayerName.addEventHandler(KeyEvent.KEY_PRESSED, handler);
         blackPlayerName.addEventHandler(KeyEvent.KEY_PRESSED, handler);
+        whitePlayerName.addEventHandler(KeyEvent.KEY_PRESSED, handler);
         startButton.addEventHandler(MouseEvent.MOUSE_CLICKED, handler);
     }
 
@@ -91,11 +106,15 @@ public class GUI extends Application {
         helpLabel = (Label) (baseScene.getRoot().lookup("#helpLabel"));
         errorLabel = (Label) (baseScene.getRoot().lookup("#errorLabel"));
 
+        lockPane = (Pane) (baseScene.getRoot().lookup("#lockPane"));
+
+        unlockBoardForPlayer();
+
         initTiles();
         initCircles();
         addCircleClickHandlers();
 
-        readyToSetMarble();
+        nextTurn();
     }
 
     private void initTiles() {
@@ -175,6 +194,14 @@ public class GUI extends Application {
         }
     }
 
+    private void lockBoardForBot() {
+        lockPane.setVisible(true);
+    }
+
+    private void unlockBoardForPlayer() {
+        lockPane.setVisible(false);
+    }
+
     private void readyToSetMarble() {
         baseScene.getRoot().lookup("AnchorPane").getStyleClass().add("readyToSetMarble");
         baseScene.getRoot().lookup("AnchorPane").getStyleClass().remove("readyToRotate");
@@ -190,7 +217,14 @@ public class GUI extends Application {
         baseScene.getRoot().lookup("AnchorPane").getStyleClass().remove("readyToSetMarble");
         fillCircles();
         for (Node n : rotateButtons) {
+            int x = game.getBoard().getLastRotatedTileX();
+            int y = game.getBoard().getLastRotatedTileY();
+            Direction d = Direction.getOpposite(game.getBoard().getLastRotatedTileDirection());
+            String id = (d == Direction.CLOCKWISE ? "clockwise" : "counterClockwise") + x + y;
             n.setVisible(true);
+            if (game.getBoard().getLastRotatedTile() != null && n.getId().equals(id)) {
+                n.setVisible(false);
+            }
         }
         helpLabel.setText(game.whoseTurn() + " - Click the button on the tile you want to rotate");
     }
@@ -212,12 +246,23 @@ public class GUI extends Application {
             } else if (game.isEven()) {
                 evenGame();
             } else {
-                readyToSetMarble();
+                nextTurn();
             }
         } catch (Exception e) {
             if (e instanceof PentagoGameRuleException) {
                 errorLabel.setText("Illegal direction!");
             }
+        }
+    }
+
+    private void nextTurn() {
+        if (game.whoseTurn() instanceof Bot) {
+            lockBoardForBot();
+            game.whoseTurn().makeMove();
+            nextTurn();
+        } else {
+            unlockBoardForPlayer();
+            readyToSetMarble();
         }
     }
 

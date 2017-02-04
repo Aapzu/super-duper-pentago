@@ -6,7 +6,7 @@ import fi.aapzu.pentago.logic.Direction;
 /**
  * A bot which makes decisions on behalf of a Player
  */
-class Bot extends Player {
+public class Bot extends Player {
 
     private final Pentago game;
 

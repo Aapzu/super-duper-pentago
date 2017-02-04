@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.effect.DropShadow?>
@@ -9,10 +10,11 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.shape.Circle?>
 
-<AnchorPane fx:id="AnchorPane" prefHeight="630.0" prefWidth="575.0" styleClass="mainFxmlClass" stylesheets="@../styles/game.css" xmlns="http://javafx.com/javafx/8.0.72" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="AnchorPane" prefHeight="630.0" prefWidth="575.0" styleClass="mainFxmlClass" stylesheets="@../styles/game.css" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <GridPane fx:id="tile0" gridLinesVisible="true" layoutX="25.0" layoutY="50.0" prefHeight="250.0" prefWidth="250.0" styleClass="tile" stylesheets="@../styles/game.css">
          <columnConstraints>
@@ -77,7 +79,7 @@
             <Circle fill="#ffffff1a" radius="40.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
             <Circle fill="#ffffff1a" radius="40.0" stroke="BLACK" strokeType="INSIDE" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
             <Circle fill="#ffffff1a" radius="40.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
-            <Circle fill="#ffffff1a" radius="40.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+            <Circle disable="true" fill="#ffffff1a" radius="40.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
             <ImageView id="counterClockwise10" fitHeight="83.0" fitWidth="80.0" opacity="0.49" pickOnBounds="true" preserveRatio="true" rotate="-90.0" styleClass="counterClockwise" translateY="-1.0" GridPane.columnIndex="1">
                <image>
                   <Image url="@../images/rotate_icon_counter_clockwise.png" />
@@ -168,6 +170,11 @@
          </items>
       </ToolBar>
       <Label id="helpLabel" layoutX="27.0" layoutY="12.0" prefHeight="28.0" prefWidth="525.0" styleClass="helpLabel" />
+      <Pane id="lockPane" prefHeight="630.0" prefWidth="575.0" style="-fx-background-color: transparent;" styleClass="transparent">
+         <cursor>
+            <Cursor fx:constant="DEFAULT" />
+         </cursor>
+      </Pane>
    </children>
    <opaqueInsets>
       <Insets />

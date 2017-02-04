@@ -73,6 +73,10 @@ public class Pentago implements Node {
         addPlayer(player);
     }
 
+    public void clearPlayers() {
+        setPlayers(new Player[2]);
+    }
+
     private void addPlayer(Player player) {
         int playerNumber = players[0] == null ? 0 : (players[1] == null ? 1 : 2);
         if (playerNumber == 2) {
