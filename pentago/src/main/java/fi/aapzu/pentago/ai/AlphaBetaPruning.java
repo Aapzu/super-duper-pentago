@@ -1,25 +1,9 @@
 package fi.aapzu.pentago.ai;
 
-import fi.aapzu.pentago.ai.heuristics.Heuristics;
-import fi.aapzu.pentago.game.Move;
-import fi.aapzu.pentago.game.Pentago;
-import fi.aapzu.pentago.logic.marble.Symbol;
-
 /**
  * The core element of AI. Forms a game tree and tries to find the best possible move at the moment for the Bot.
  */
 public class AlphaBetaPruning {
-
-    private final Pentago game;
-    private final Heuristics heuristics;
-
-    /**
-     * @param game
-     */
-    public AlphaBetaPruning(Pentago game) {
-        this.game = game;
-        this.heuristics = new Heuristics();
-    }
 
     /**
      * Calculates the best move.
@@ -27,29 +11,29 @@ public class AlphaBetaPruning {
      * @param movesAhead how many moves ahead is calculated before implying heuristics
      * @return move the best move
      */
-    public Move getBest(int movesAhead) {
-        Pentago bestGameYet = game;
-        int bestGameScore = Integer.MIN_VALUE;
+    public static Node getBest(Node node, int movesAhead) {
+        Node bestNodeYet = node;
+        int bestScore = Integer.MIN_VALUE;
         int alpha = Integer.MIN_VALUE;
         int beta = Integer.MAX_VALUE;
-        for (Pentago game : PossibleGamesWithOneMove.get(game)) {
-            int score = maxValue(game, alpha, beta, 1, movesAhead);
-            if (score > bestGameScore) {
-                bestGameYet = game;
-                bestGameScore = score;
+        for (Node n : node.getChildren()) {
+            int score = maxValue(n, alpha, beta, 1, movesAhead);
+            if (score > bestScore) {
+                bestNodeYet = n;
+                bestScore = score;
             }
         }
-        return bestGameYet.getLastMove();
+        return bestNodeYet;
     }
 
-    private int maxValue(Pentago gameState, int alpha, int beta, int depth, int maxDepth) {
-        Pentago[] possibleGames = PossibleGamesWithOneMove.get(gameState);
-        if (depth >= maxDepth || possibleGames.length == 0) {
-            return heuristics.getScore(gameState, game.whoseTurn());
+    private static int maxValue(Node node, int alpha, int beta, int depth, int maxDepth) {
+        Node[] children = node.getChildren();
+        if (depth >= maxDepth || children.length == 0) {
+            return node.getNodeValue();
         }
         int value = Integer.MIN_VALUE;
-        for (Pentago newGameState : possibleGames) {
-            value = Math.max(value, minValue(newGameState, alpha, beta, depth++, maxDepth));
+        for (Node n : children) {
+            value = Math.max(value, minValue(n, alpha, beta, depth++, maxDepth));
             if (value > beta) {
                 return value;
             }
@@ -58,14 +42,14 @@ public class AlphaBetaPruning {
         return value;
     }
 
-    private int minValue(Pentago gameState, int alpha, int beta, int depth, int maxDepth) {
-        Pentago[] possibleGames = PossibleGamesWithOneMove.get(gameState);
-        if (depth >= maxDepth || possibleGames.length == 0) {
-            return heuristics.getScore(gameState, game.whoseTurn());
+    private static int minValue(Node node, int alpha, int beta, int depth, int maxDepth) {
+        Node[] children = node.getChildren();
+        if (depth >= maxDepth || children.length == 0) {
+            return node.getNodeValue();
         }
         int value = Integer.MAX_VALUE;
-        for(Pentago newGameState : possibleGames) {
-            value = Math.min(value, maxValue(newGameState, alpha, beta, depth++, maxDepth));
+        for(Node n : children) {
+            value = Math.min(value, maxValue(n, alpha, beta, depth++, maxDepth));
             if (value < alpha) {
                 return value;
             }

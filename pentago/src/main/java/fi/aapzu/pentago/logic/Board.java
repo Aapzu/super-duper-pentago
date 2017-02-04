@@ -32,10 +32,10 @@ public class Board {
     public Board(Board other) {
         setSideLength(other.getSideLength());
         setTileSideLength(other.getTileSideLength());
-        Tile[][] newTiles = new Tile[getTileSideLength()][getTileSideLength()];
-        for (int y = 0; y < getSideLength(); y++) {
-            for (int x = 0; x < getSideLength(); x++) {
-                newTiles[y][x] = new Tile(other.getTiles()[y][x]);
+        Tile[][] newTiles = new Tile[getSideLength()][getSideLength()];
+        for (int tileY = 0; tileY < getSideLength(); tileY++) {
+            for (int tileX = 0; tileX < getSideLength(); tileX++) {
+                newTiles[tileY][tileX] = new Tile(other.getTiles()[tileY][tileX]);
             }
         }
         setTiles(newTiles);
@@ -120,11 +120,10 @@ public class Board {
      */
     public boolean addMarble(Marble marble, int x, int y) {
         Tile tile = getTileByCoordinates(x, y);
-        boolean success = tile.addMarble(marble, x % tileSideLength, y % tileSideLength);
-        if (success) {
-
-        }
-        return success;
+        setLastMarble(marble);
+        setLastMarbleX(x);
+        setLastMarbleY(y);
+        return tile.addMarble(marble, x % tileSideLength, y % tileSideLength);
     }
 
     /**
@@ -175,10 +174,10 @@ public class Board {
         }
         Tile t = getTile(tileX, tileY);
         t.rotate(d);
-        lastRotatedTile = t;
-        lastRotatedTileX = tileX;
-        lastRotatedTileY = tileY;
-        lastRotatedTileDirection = d;
+        setLastRotatedTile(t);
+        setLastRotatedTileX(tileX);
+        setLastRotatedTileY(tileY);
+        setLastRotatedTileDirection(d);
     }
 
     public Tile[][] getTiles() {
@@ -280,23 +279,12 @@ public class Board {
 
         Board board = (Board) o;
 
-        if (sideLength != board.sideLength) return false;
-        if (tileSideLength != board.tileSideLength) return false;
-        if (lastRotatedTileY != board.lastRotatedTileY) return false;
-        if (lastRotatedTileX != board.lastRotatedTileX) return false;
-        if (!Arrays.deepEquals(tiles, board.tiles)) return false;
-        return lastRotatedTileDirection == board.lastRotatedTileDirection;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = sideLength;
-        result = 31 * result + tileSideLength;
-        result = 31 * result + Arrays.deepHashCode(tiles);
-        result = 31 * result + (lastRotatedTileDirection != null ? lastRotatedTileDirection.hashCode() : 0);
-        result = 31 * result + lastRotatedTileY;
-        result = 31 * result + lastRotatedTileX;
-        return result;
+        return sideLength == board.sideLength &&
+            tileSideLength == board.tileSideLength &&
+            lastRotatedTileY == board.lastRotatedTileY &&
+            lastRotatedTileX == board.lastRotatedTileX &&
+            Arrays.deepEquals(tiles, board.tiles) &&
+            lastRotatedTileDirection == board.lastRotatedTileDirection;
     }
 
     Marble[][] getMarbleArray() {

@@ -1,8 +1,6 @@
 package fi.aapzu.pentago.game;
 
 import fi.aapzu.pentago.ai.AlphaBetaPruning;
-import fi.aapzu.pentago.game.Move;
-import fi.aapzu.pentago.game.Pentago;
 import fi.aapzu.pentago.logic.Direction;
 
 /**
@@ -11,7 +9,6 @@ import fi.aapzu.pentago.logic.Direction;
 class Bot extends Player {
 
     private final Pentago game;
-    private final AlphaBetaPruning alphaBetaPruning;
 
     /**
      * @param game Pentago game the bot is playing
@@ -19,7 +16,6 @@ class Bot extends Player {
     Bot(Pentago game, String name) {
         super(name);
         this.game = game;
-        this.alphaBetaPruning = new AlphaBetaPruning(game);
     }
 
     /**
@@ -29,7 +25,8 @@ class Bot extends Player {
      */
     @Override
     public boolean makeMove() {
-        Move move = alphaBetaPruning.getBest(1);
+        Pentago bestGame = (Pentago)AlphaBetaPruning.getBest(game, 1);
+        Move move = bestGame.getLastMove();
         actByMove(move);
         return true;
     }

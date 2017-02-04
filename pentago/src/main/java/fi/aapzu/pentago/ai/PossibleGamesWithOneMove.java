@@ -9,13 +9,13 @@ import java.util.ArrayList;
 /**
  * A class to determine the possible games one can get from a game state with a single move
  */
-class PossibleGamesWithOneMove {
+public class PossibleGamesWithOneMove {
 
     /**
      * @param game
      * @return gameStates
      */
-    static Pentago[] get(Pentago game) {
+    public static Pentago[] get(Pentago game) {
         ArrayList<Pentago> games = new ArrayList<>();
         Board board = game.getBoard();
         int wholeLength = board.getTileSideLength() * board.getSideLength();

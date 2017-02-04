@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package fi.aapzu.pentago.logic;
 
 import fi.aapzu.pentago.logic.marble.Marble;
@@ -58,6 +54,32 @@ public class BoardTest {
     public void constructorWithoutParametersMustUseRightDefaultValues() {
         assertEquals(board.getSideLength(), 2);
         assertEquals(board.getTiles()[0][0].getSideLength(), 3);
+    }
+
+    @Test
+    public void copyConstructorWorks() {
+        board.addMarble(new Marble(Symbol.X), 0,0);
+        board.addMarble(new Marble(Symbol.O), 2,2);
+        board.addMarble(new Marble(Symbol.X), 4,1);
+        board.addMarble(new Marble(Symbol.O), 0,4);
+        board.addMarble(new Marble(Symbol.X), 5,5);
+        board.rotateTile(0, 0, Direction.CLOCKWISE);
+        board.rotateTile(0, 1, Direction.CLOCKWISE);
+        board.rotateTile(1, 0, Direction.COUNTER_CLOCKWISE);
+        board.rotateTile(1, 1, Direction.COUNTER_CLOCKWISE);
+
+        Board board2 = new Board(board);
+
+        assert(board.equals(board2));
+    }
+
+    @Test
+    public void copyConstructorWorksPt2() {
+        board = new Board(10, 20);
+        Board board2 = new Board(board);
+
+        assertEquals(board.getSideLength(), board2.getSideLength());
+        assertEquals(board.getTileSideLength(), board2.getTileSideLength());
     }
     
     @Test
@@ -182,12 +204,12 @@ public class BoardTest {
         board.addMarble(o, 1, 4);
         board.addMarble(o, 4, 4);
         
-        assertEquals("[[X], null, null][null, null, null]\n" +
-                "[null, [O], null][null, [X], null]\n" +
-                "[null, null, null][null, null, null]\n" +
-                "[[X], null, null][null, null, null]\n" +
-                "[null, [O], null][null, [O], null]\n" +
-                "[null, null, null][null, null, null]\n", board.toString());
+        assertEquals("[X][ ][ ][ ][ ][ ]\n" +
+                "[ ][O][ ][ ][X][ ]\n" +
+                "[ ][ ][ ][ ][ ][ ]\n" +
+                "[X][ ][ ][ ][ ][ ]\n" +
+                "[ ][O][ ][ ][O][ ]\n" +
+                "[ ][ ][ ][ ][ ][ ]\n", board.toString());
     }
     
     @Test
@@ -201,20 +223,20 @@ public class BoardTest {
         board.addMarble(x, 4, 1);
         board.addMarble(o, 4, 4);
         board.rotateTile(0, 0, Direction.CLOCKWISE);
-        assertEquals("[null, null, [X]][null, null, null]\n" +
-                "[null, [O], null][null, [X], null]\n" +
-                "[null, null, null][null, null, null]\n" +
-                "[[X], null, null][null, null, null]\n" +
-                "[null, [O], null][null, [O], null]\n" +
-                "[null, null, null][null, null, null]\n", board.toString());
+        assertEquals("[ ][ ][X][ ][ ][ ]\n" +
+                "[ ][O][ ][ ][X][ ]\n" +
+                "[ ][ ][ ][ ][ ][ ]\n" +
+                "[X][ ][ ][ ][ ][ ]\n" +
+                "[ ][O][ ][ ][O][ ]\n" +
+                "[ ][ ][ ][ ][ ][ ]\n", board.toString());
         
         board.rotateTile(0, 1, Direction.COUNTER_CLOCKWISE);
-        assertEquals("[null, null, [X]][null, null, null]\n" +
-                "[null, [O], null][null, [X], null]\n" +
-                "[null, null, null][null, null, null]\n" +
-                "[null, null, null][null, null, null]\n" +
-                "[null, [O], null][null, [O], null]\n" +
-                "[[X], null, null][null, null, null]\n", board.toString());
+        assertEquals("[ ][ ][X][ ][ ][ ]\n" +
+                "[ ][O][ ][ ][X][ ]\n" +
+                "[ ][ ][ ][ ][ ][ ]\n" +
+                "[ ][ ][ ][ ][ ][ ]\n" +
+                "[ ][O][ ][ ][O][ ]\n" +
+                "[X][ ][ ][ ][ ][ ]\n", board.toString());
     }    
     
     @Test
@@ -257,11 +279,11 @@ public class BoardTest {
         Tile t1 = board.getTile(0, 0);
         Tile t2 = board.getTile(0, 1);
         board.rotateTile(0, 0, Direction.CLOCKWISE);
-        assertEquals(t1, board.getLastRotatedTile());
-        assertNotEquals(t2, board.getLastRotatedTile());
+        assert(t1 == board.getLastRotatedTile());
+        assertFalse(t2 == board.getLastRotatedTile());
         board.rotateTile(0, 1, Direction.CLOCKWISE);
-        assertEquals(t2, board.getLastRotatedTile());
-        assertNotEquals(t1, board.getLastRotatedTile());
+        assert (t2 == board.getLastRotatedTile());
+        assertFalse(t1 == board.getLastRotatedTile());
     }
     
     @Test
@@ -357,5 +379,61 @@ public class BoardTest {
                 {null,  O,      O,      null,   O,      null},
                 {null,  null,   null,   null,   null,   null}
         }, board.getMarbleArray());
+    }
+    
+    @Test
+    public void equalsWorks() {
+        board.addMarble(new Marble(Symbol.X), 0,0);
+        board.addMarble(new Marble(Symbol.O), 2,2);
+        board.addMarble(new Marble(Symbol.X), 4,1);
+        board.addMarble(new Marble(Symbol.O), 0,4);
+        board.addMarble(new Marble(Symbol.X), 5,5);
+        board.rotateTile(0, 0, Direction.CLOCKWISE);
+        board.rotateTile(0, 1, Direction.CLOCKWISE);
+        board.rotateTile(1, 0, Direction.COUNTER_CLOCKWISE);
+        board.rotateTile(1, 1, Direction.COUNTER_CLOCKWISE);
+        
+        Board board2 = new Board();
+        board2.addMarble(new Marble(Symbol.X), 0,0);
+        board2.addMarble(new Marble(Symbol.O), 2,2);
+        board2.addMarble(new Marble(Symbol.X), 4,1);
+        board2.addMarble(new Marble(Symbol.O), 0,4);
+        board2.addMarble(new Marble(Symbol.X), 5,5);
+        board2.rotateTile(0, 0, Direction.CLOCKWISE);
+        board2.rotateTile(0, 1, Direction.CLOCKWISE);
+        board2.rotateTile(1, 0, Direction.COUNTER_CLOCKWISE);
+        board2.rotateTile(1, 1, Direction.COUNTER_CLOCKWISE);
+        
+        Board board3 = new Board();
+        board3.addMarble(new Marble(Symbol.X), 0,0);
+        board3.addMarble(new Marble(Symbol.O), 2,2);
+        board3.addMarble(new Marble(Symbol.X), 4,1);
+        board3.addMarble(new Marble(Symbol.O), 0,4);
+        board3.addMarble(new Marble(Symbol.O), 5,5);
+        board3.rotateTile(0, 0, Direction.CLOCKWISE);
+        board3.rotateTile(0, 1, Direction.CLOCKWISE);
+        board3.rotateTile(1, 0, Direction.COUNTER_CLOCKWISE);
+        board3.rotateTile(1, 1, Direction.COUNTER_CLOCKWISE);
+        
+        Board board4 = new Board();
+        board4.addMarble(new Marble(Symbol.X), 0,0);
+        board4.addMarble(new Marble(Symbol.O), 2,2);
+        board4.addMarble(new Marble(Symbol.X), 4,1);
+        board4.addMarble(new Marble(Symbol.O), 0,4);
+        board4.addMarble(new Marble(Symbol.X), 5,5);
+        board4.rotateTile(0, 0, Direction.CLOCKWISE);
+        board4.rotateTile(0, 1, Direction.COUNTER_CLOCKWISE);
+        board4.rotateTile(1, 0, Direction.COUNTER_CLOCKWISE);
+        board4.rotateTile(1, 1, Direction.COUNTER_CLOCKWISE);
+
+        assert(board.equals(board2));
+        assert(board2.equals(board));
+        assertFalse(board.equals(board3));
+        assertFalse(board2.equals(board3));
+        assertFalse(board4.equals(board));
+        assertFalse(board3.equals(board4));
+
+        assertFalse(board.equals("aapeli"));
+        assertFalse(board.equals(null));
     }
 }

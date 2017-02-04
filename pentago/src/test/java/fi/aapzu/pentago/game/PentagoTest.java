@@ -38,10 +38,18 @@ public class PentagoTest {
     public final ExpectedException exception = ExpectedException.none();
     
     public PentagoTest() {}
+
+    private void addMarble(int x, int y) {
+        game.addMarble(x, y);
+        game.rotateTile(1, 1, Direction.CLOCKWISE);
+        assertNull(game.checkLines());
+    }
     
     @Before
     public void setUp() {
         game = new Pentago();
+        game.addHumanPlayer("test");
+        game.addHumanPlayer("test2");
     }
     
     @After
@@ -53,10 +61,19 @@ public class PentagoTest {
     public void constructorSetsTheDataRight() {
         assertTrue(game.getBoard().isEmpty());
         assertEquals(2, game.getPlayers().length);
-        assertEquals(Symbol.O, game.getPlayers()[0].getSymbol());
-        assertEquals(Symbol.X, game.getPlayers()[1].getSymbol());
+        assertEquals(Symbol.X, game.getPlayers()[0].getSymbol());
+        assertEquals(Symbol.O, game.getPlayers()[1].getSymbol());
         assertEquals(game.getPlayers()[0], game.whoseTurn());
         assertFalse(game.getAllowedToRotate());
+    }
+
+    @Test
+    public void copyConstructorWorks() {
+        game.addMarble(0, 0);
+        game.rotateTile(0, 0, Direction.CLOCKWISE);
+        Pentago game2 = new Pentago(game);
+
+        assert(game.equals(game2));
     }
     
     @Test
@@ -66,8 +83,8 @@ public class PentagoTest {
         game.clear();
         verify(b).clear();
         assertEquals(2, game.getPlayers().length);
-        assertEquals(Symbol.O, game.getPlayers()[0].getSymbol());
-        assertEquals(Symbol.X, game.getPlayers()[1].getSymbol());
+        assertEquals(Symbol.X, game.getPlayers()[0].getSymbol());
+        assertEquals(Symbol.O, game.getPlayers()[1].getSymbol());
         assertEquals(game.getPlayers()[0], game.whoseTurn());
         assertFalse(game.getAllowedToRotate());
     }
@@ -90,7 +107,7 @@ public class PentagoTest {
     @Test
     public void setMarbleSetsCorrectMarbleToCorrectPlace() {
         game.addMarble(0,0);
-        assertEquals(Symbol.O, game.getBoard().toMarbleArray()[0][0].getSymbol());
+        assertEquals(Symbol.X, game.getBoard().toMarbleArray()[0][0].getSymbol());
     }
     
     @Test
@@ -173,19 +190,13 @@ public class PentagoTest {
     public void getPlayerBySymbolReturnsRight() {
         Player one = game.getPlayers()[0];
         Player two = game.getPlayers()[1];
-        assertEquals(two, game.getPlayerBySymbol(Symbol.X));
-        assertEquals(one, game.getPlayerBySymbol(Symbol.O));
+        assertEquals(one, game.getPlayerBySymbol(Symbol.X));
+        assertEquals(two, game.getPlayerBySymbol(Symbol.O));
     }
     
     @Test
     public void getPlayerBySymbolReturnsNullWithNullSymbol() {
         assertNull(game.getPlayerBySymbol(null));
-    }
-    
-    private void addMarble(int x, int y) {
-        game.addMarble(x, y);
-        game.rotateTile(1, 1, Direction.CLOCKWISE);
-        assertNull(game.checkLines());
     }
     
     @Test
@@ -215,5 +226,49 @@ public class PentagoTest {
         boolean isEven = game.isEven();
         assertFalse(isEven);
         verify(board).isFull();
+    }
+    
+    @Test
+    public void equalsWorks() {
+        game.addMarble(0,0);
+        game.rotateTile(0,0, Direction.CLOCKWISE);
+        game.addMarble(0,1);
+        
+        Pentago game2 = new Pentago();
+        game2.addHumanPlayer("test");
+        game2.addHumanPlayer("test2");
+        game2.addMarble(0,0);
+        game2.rotateTile(0,0, Direction.CLOCKWISE);
+        game2.addMarble(0,1);
+        
+        Pentago game3 = new Pentago();
+        game3.addHumanPlayer("test");
+        game3.addHumanPlayer("test3");
+        game3.addMarble(0,0);
+        game3.rotateTile(0,0, Direction.CLOCKWISE);
+        game3.addMarble(0,1);
+        
+        Pentago game4 = new Pentago();
+        game4.addHumanPlayer("test");
+        game4.addHumanPlayer("test2");
+        game4.addMarble(0,0);
+        game4.rotateTile(0,0, Direction.CLOCKWISE);
+
+        assert(game.equals(game2));
+        assert(game2.equals(game));
+        assertFalse(game.equals(game3));
+        assertFalse(game.equals(game4));
+        assertFalse(game3.equals(game4));
+    }
+
+    @Test
+    public void getLastMoveWorks() {
+        assertNull(game.getLastMove());
+        game.addMarble(0, 0);
+        game.rotateTile(1, 1, Direction.CLOCKWISE);
+
+        Move newMove = new Move(game.getPlayers()[0], new Marble(game.getPlayers()[0].getSymbol()), 0, 0, 1, 1, Direction.CLOCKWISE);
+        Move oldMove = game.getLastMove();
+        assert(oldMove.equals(newMove));
     }
 }

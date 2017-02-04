@@ -70,7 +70,7 @@ public class GUI extends Application {
             public void handleEvent() {
                 try {
                     game.addHumanPlayer(!whitePlayerName.getText().equals("") ? whitePlayerName.getText() : "White");
-                    game.addHumanPlayer(!blackPlayerName.getText().equals("") ? blackPlayerName.getText() : "Black");
+                    game.addBot(!blackPlayerName.getText().equals("") ? blackPlayerName.getText() : "Black");
                     loadGame();
                 } catch (IOException ex) {
                     Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
@@ -212,7 +212,6 @@ public class GUI extends Application {
             } else if (game.isEven()) {
                 evenGame();
             } else {
-                game.nextTurn();
                 readyToSetMarble();
             }
         } catch (Exception e) {

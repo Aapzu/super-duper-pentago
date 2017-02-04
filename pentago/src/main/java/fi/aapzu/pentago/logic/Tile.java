@@ -1,5 +1,6 @@
 package fi.aapzu.pentago.logic;
 
+import fi.aapzu.pentago.game.Pentago;
 import fi.aapzu.pentago.game.PentagoGameRuleException;
 import fi.aapzu.pentago.logic.marble.Marble;
 import java.util.Arrays;
@@ -53,7 +54,7 @@ public class Tile {
                 newTile[y][x] = other.getTile()[y][x] != null ? new Marble(other.getTile()[y][x]) : null;
             }
         }
-        setTile(other.getTile());
+        setTile(newTile);
     }
 
     private boolean validateCoordinates(int x, int y) {
@@ -86,7 +87,7 @@ public class Tile {
      * @param y the Y coordinate
      * @return true if succeeded, otherwise false
      */
-    protected boolean addMarble(Marble marble, int x, int y) {
+    protected boolean addMarble(Marble marble, int x, int y) throws PentagoGameRuleException {
         if (validateCoordinates(x, y)) {
             // Return null when trying to set a marble on top of another one
             if (marble != null && tile[y][x] != null) {
@@ -248,7 +249,7 @@ public class Tile {
             return false;
         }
         Tile that = (Tile)obj;
-        return Arrays.equals(that.getTile(), getTile()) && that.getLastDirection() == getLastDirection();
+        return that.toString().equals(toString()) && that.getLastDirection() == getLastDirection();
     }
 
     @Override

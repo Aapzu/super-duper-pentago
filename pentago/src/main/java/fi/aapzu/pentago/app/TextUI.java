@@ -64,7 +64,6 @@ public class TextUI {
             printGame();
             tryRotateTile();
         }
-        game.nextTurn();
     }
 
     private void trySetMarble() {

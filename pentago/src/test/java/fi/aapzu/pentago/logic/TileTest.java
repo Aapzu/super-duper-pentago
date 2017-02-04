@@ -56,6 +56,26 @@ public class TileTest {
         exception.expectMessage("must be truly positive");
         tile = new Tile(0);
     }
+
+    @Test
+    public void copyConstructorWorks() {
+        tile.addMarble(new Marble(Symbol.X), 0, 2);
+        tile.addMarble(new Marble(Symbol.O), 1, 2);
+        tile.rotate(Direction.CLOCKWISE);
+        Tile t2 = new Tile(tile);
+        assert(tile.equals(t2));
+        assert(t2.equals(tile));
+    }
+
+    @Test
+    public void copyConstructorReallyCopiesTheTile() {
+        tile.addMarble(new Marble(Symbol.X), 0, 2);
+        tile.addMarble(new Marble(Symbol.O), 1, 2);
+        tile.rotate(Direction.CLOCKWISE);
+        Tile t2 = new Tile(tile);
+        t2.addMarble(new Marble(Symbol.X), 0, 2);
+        assertFalse(tile.equals(t2));
+    }
     
     @Test
     public void constructorWithoutParameterUsesTheRightDefaultValue() {
@@ -139,9 +159,9 @@ public class TileTest {
         tile.addMarble(o, 1, 1);
         tile.addMarble(o, 2, 2);
         assertEquals(tile.toString(), 
-                "[[O], [X], null]\n"
-              + "[[X], [O], null]\n"
-              + "[null, null, [O]]");
+                "[O][X][ ]\n"
+              + "[X][O][ ]\n"
+              + "[ ][ ][O]");
     }
     
     @Test
@@ -153,9 +173,9 @@ public class TileTest {
         tile.addMarble(x, 0, 1);
         tile.addMarble(o, 1, 1);
         tile.addMarble(o, 2, 2);
-        assertEquals(tile.rowToString(0), "[[O], [X], null]");
-        assertEquals(tile.rowToString(1), "[[X], [O], null]");
-        assertEquals(tile.rowToString(2), "[null, null, [O]]");
+        assertEquals(tile.rowToString(0), "[O][X][ ]");
+        assertEquals(tile.rowToString(1), "[X][O][ ]");
+        assertEquals(tile.rowToString(2), "[ ][ ][O]");
     }
     
     @Test
@@ -182,9 +202,9 @@ public class TileTest {
         
         
         assertEquals(tile.toString(), 
-                "[null, [X], [O]]\n"
-              + "[null, [O], [X]]\n"
-              + "[[O], null, null]");
+                "[ ][X][O]\n"
+              + "[ ][O][X]\n"
+              + "[O][ ][ ]");
     }
     
     @Test
@@ -200,9 +220,9 @@ public class TileTest {
         tile.rotate(Direction.COUNTER_CLOCKWISE);
        
         assertEquals(tile.toString(), 
-                "[null, null, [O]]\n"
-              + "[[X], [O], null]\n"
-              + "[[O], [X], null]");
+                "[ ][ ][O]\n"
+              + "[X][O][ ]\n"
+              + "[O][X][ ]");
     }
     
     @Test
@@ -235,9 +255,9 @@ public class TileTest {
         tile2.rotate(Direction.COUNTER_CLOCKWISE);
         
         String rotatedString = 
-                "[[O], null, null]\n"
-              + "[null, [O], [X]]\n"
-              + "[null, [X], [O]]";
+                "[O][ ][ ]\n"
+              + "[ ][O][X]\n"
+              + "[ ][X][O]";
         assertEquals(tile.toString(), rotatedString);
         assertEquals(tile2.toString(), rotatedString);
     }
@@ -292,6 +312,31 @@ public class TileTest {
         }
         tile.addMarble(new Marble(Symbol.O), 2, 2);
         assertTrue(tile.isFull());
+    }
+
+    @Test
+    public void equalsWorks() {
+        Tile t1 = new Tile();
+        t1.addMarble(new Marble(Symbol.X), 2, 2);
+        t1.rotate(Direction.CLOCKWISE);
+        Tile t2 = new Tile();
+        t2.addMarble(new Marble(Symbol.X), 2, 2);
+        t2.rotate(Direction.CLOCKWISE);
+        Tile t3 = new Tile();
+        t3.addMarble(new Marble(Symbol.X), 2, 1);
+        t3.rotate(Direction.COUNTER_CLOCKWISE);
+        t3.rotate(Direction.CLOCKWISE);
+        Tile t4 = new Tile();
+        t4.addMarble(new Marble(Symbol.O), 2, 2);
+        t4.rotate(Direction.CLOCKWISE);
+        assert(t1.equals(t2));
+        assert(t2.equals(t1));
+        assertFalse(t1.equals(t3));
+        assertFalse(t3.equals(t1));
+        assertFalse(t1.equals(t4));
+        assertFalse(t4.equals(t1));
+        assertFalse(t3.equals(t4));
+        assertFalse(t4.equals(t3));
     }
     
 }

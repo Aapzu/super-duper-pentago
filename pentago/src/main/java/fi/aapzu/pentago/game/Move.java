@@ -9,6 +9,7 @@ import fi.aapzu.pentago.logic.marble.Marble;
 public class Move {
 
     private Player player;
+
     private Marble marble;
     private int marbleX;
     private int marbleY;
@@ -16,31 +17,31 @@ public class Move {
     private int tileY;
     private Direction rotateDirection;
 
-    Player getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 
-    Marble getMarble() {
+    public Marble getMarble() {
         return marble;
     }
 
-    int getMarbleX() {
+    public int getMarbleX() {
         return marbleX;
     }
 
-    int getMarbleY() {
+    public int getMarbleY() {
         return marbleY;
     }
 
-    int getTileX() {
+    public int getTileX() {
         return tileX;
     }
 
-    int getTileY() {
+    public int getTileY() {
         return tileY;
     }
 
-    Direction getRotateDirection() {
+    public Direction getRotateDirection() {
         return rotateDirection;
     }
 
@@ -62,5 +63,21 @@ public class Move {
         this.tileX = tileX;
         this.tileY = tileY;
         this.rotateDirection = rotateDirection;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Move move = (Move) o;
+
+        if (marbleX != move.marbleX) return false;
+        if (marbleY != move.marbleY) return false;
+        if (tileX != move.tileX) return false;
+        if (tileY != move.tileY) return false;
+        if (!player.equals(move.player)) return false;
+        if (!marble.equals(move.marble)) return false;
+        return rotateDirection == move.rotateDirection;
     }
 }

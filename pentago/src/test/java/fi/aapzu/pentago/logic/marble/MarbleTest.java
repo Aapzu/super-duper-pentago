@@ -29,6 +29,13 @@ public class MarbleTest {
     }
 
     @Test
+    public void copyConstructorWorks() {
+        Marble m1 = new Marble(Symbol.O);
+        Marble m2 = new Marble(m1);
+        assert(m1.equals(m2));
+    }
+
+    @Test
     public void toStringReturnsRightString() {
         assertEquals("[X]", m.toString());
         m = new Marble(Symbol.O);

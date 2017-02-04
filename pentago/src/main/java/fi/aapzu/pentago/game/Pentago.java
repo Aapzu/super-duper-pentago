@@ -1,15 +1,20 @@
 package fi.aapzu.pentago.game;
 
+import fi.aapzu.pentago.ai.Node;
+import fi.aapzu.pentago.ai.PossibleGamesWithOneMove;
+import fi.aapzu.pentago.ai.heuristics.Heuristics;
 import fi.aapzu.pentago.logic.*;
 import fi.aapzu.pentago.logic.marble.Marble;
 import fi.aapzu.pentago.logic.marble.Symbol;
+
+import java.util.Arrays;
 
 /**
  * The mother class of the game.
  *
  * @author Aapeli
  */
-public class Pentago {
+public class Pentago implements Node {
 
     private Board board;
     private Player[] players;
@@ -134,12 +139,13 @@ public class Pentago {
         if (!allowedToRotate) {
             throw new PentagoGameRuleException("A marble must be added first!");
         }
-        if (board.getTile(x, y) == board.getLastRotatedTile() && d == Direction.getOpposite(board.getLastDirection(x, y))) {
+        if (board.getLastRotatedTileX() == x && board.getLastRotatedTileY() == y && d == Direction.getOpposite(board.getLastDirection(x, y))) {
             throw new PentagoGameRuleException("The tile cannot be rotated back to the direction it was just rotated from!");
         }
 
         board.rotateTile(x, y, d);
         allowedToRotate = false;
+        nextTurn();
     }
 
     /**
@@ -213,14 +219,20 @@ public class Pentago {
      * @return move the last move of the game
      */
     public Move getLastMove() {
-        Player lastPlayer = getPlayerBySymbol(Symbol.getOpponent(whoseTurn().getSymbol()));
         Marble lastMarble = getBoard().getLastMarble();
-        int lastMarbleX = getBoard().getLastMarbleX();
-        int lastMarbleY = getBoard().getLastMarbleY();
-        int lastTileY = getBoard().getLastRotatedTileY();
-        int lastTileX = getBoard().getLastRotatedTileX();
-        Direction lastDirection = getBoard().getLastDirection(lastTileX, lastTileY);
-        return new Move(lastPlayer, lastMarble, lastMarbleX, lastMarbleY, lastTileX, lastTileY, lastDirection);
+        if (lastMarble != null) {
+            Player lastPlayer = getPlayerBySymbol(lastMarble.getSymbol());
+            Tile lastTile = getBoard().getLastRotatedTile();
+            if (lastTile != null) {
+                int lastMarbleX = getBoard().getLastMarbleX();
+                int lastMarbleY = getBoard().getLastMarbleY();
+                int lastTileY = getBoard().getLastRotatedTileY();
+                int lastTileX = getBoard().getLastRotatedTileX();
+                Direction lastDirection = getBoard().getLastDirection(lastTileX, lastTileY);
+                return new Move(lastPlayer, lastMarble, lastMarbleX, lastMarbleY, lastTileX, lastTileY, lastDirection);
+            }
+        }
+        return null;
     }
 
     @Override
@@ -230,7 +242,10 @@ public class Pentago {
 
         Pentago pentago = (Pentago) o;
 
-        return whoseTurn == pentago.whoseTurn && allowedToRotate == pentago.allowedToRotate && board.equals(pentago.board);
+        return  getWhoseTurn() == pentago.getWhoseTurn() &&
+                getAllowedToRotate() == pentago.getAllowedToRotate() &&
+                board.equals(pentago.board) &&
+                Arrays.deepEquals(getPlayers(), pentago.getPlayers());
     }
 
     @Override
@@ -245,25 +260,13 @@ public class Pentago {
         return board;
     }
 
-//    public LineChecker getLineChecker() {
-//        return lineChecker;
-//    }
-
-    Player[] getPlayers() {
+    public Player[] getPlayers() {
         return players;
     }
 
     private void setPlayers(Player[] players) {
         this.players = players;
     }
-
-//    public int getRoundNumber() {
-//        return turnsDone / 2;
-//    }
-
-//    public void setLineChecker(LineChecker lineChecker) {
-//        this.lineChecker = lineChecker;
-//    }
 
     private int getWhoseTurn() {
         return whoseTurn;
@@ -281,11 +284,14 @@ public class Pentago {
         this.allowedToRotate = allowedToRotate;
     }
 
-//    public int getTurnsDone() {
-//        return turnsDone;
-//    }
+    @Override
+    public int getNodeValue() {
+        return Heuristics.getScore(this, whoseTurn());
+    }
 
-//    public void setTurnsDone(int turnsDone) {
-//        this.turnsDone = turnsDone;
-//    }
+    @Override
+    public Node[] getChildren() {
+        return PossibleGamesWithOneMove.get(this);
+    }
+
 }

@@ -100,4 +100,16 @@ public class Player {
     public void setSymbol(Symbol symbol) {
         this.symbol = symbol;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Player player = (Player) o;
+
+        return symbol == player.symbol &&
+            (name == null || player.name == null || name.equals(player.name)) &&
+            (playerNumber == null || player.playerNumber == null || playerNumber.equals(player.playerNumber));
+    }
 }
