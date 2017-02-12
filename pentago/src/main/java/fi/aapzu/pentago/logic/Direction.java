@@ -2,7 +2,7 @@ package fi.aapzu.pentago.logic;
 
 /**
  * An enumeration for the directions in the game.
- * 
+ *
  * @author Aapeli
  */
 public enum Direction {
@@ -58,11 +58,13 @@ public enum Direction {
      * @return opposite Direction or null
      */
     public static Direction getOpposite(Direction d) {
-        if(d != null) switch (d) {
-            case CLOCKWISE:
-                return COUNTER_CLOCKWISE;
-            case COUNTER_CLOCKWISE:
-                return CLOCKWISE;                
+        if (d != null) {
+            switch (d) {
+                case CLOCKWISE:
+                    return COUNTER_CLOCKWISE;
+                case COUNTER_CLOCKWISE:
+                    return CLOCKWISE;
+            }
         }
         return null;
     }

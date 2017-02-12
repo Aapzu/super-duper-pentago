@@ -19,7 +19,7 @@ import java.util.Arrays;
 public class Line {
 
     private Symbol symbol;
-    private ArrayList<Integer[]> coordinates = new ArrayList<>();
+    private final ArrayList<Integer[]> coordinates = new ArrayList<>();
     private Direction direction;
     private Player player;
 

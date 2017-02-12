@@ -4,20 +4,21 @@ import fi.aapzu.pentago.logic.Direction;
 import fi.aapzu.pentago.logic.marble.Marble;
 
 /**
- * A move in the game
+ * A move in the game.
  */
 public class Move {
 
-    private Player player;
+    private final int player;
 
-    private Marble marble;
-    private int marbleX;
-    private int marbleY;
-    private int tileX;
-    private int tileY;
-    private Direction rotateDirection;
+    private final Marble marble;
 
-    public Player getPlayer() {
+    private final int marbleX;
+    private final int marbleY;
+    private final int tileX;
+    private final int tileY;
+    private final Direction rotateDirection;
+
+    public int getPlayer() {
         return player;
     }
 
@@ -46,7 +47,6 @@ public class Move {
     }
 
     /**
-     *
      * @param player
      * @param marble
      * @param marbleX
@@ -55,7 +55,7 @@ public class Move {
      * @param tileY
      * @param rotateDirection
      */
-    Move(Player player, Marble marble, int marbleX, int marbleY, int tileX, int tileY, Direction rotateDirection) {
+    Move(int player, Marble marble, int marbleX, int marbleY, int tileX, int tileY, Direction rotateDirection) {
         this.player = player;
         this.marbleX = marbleX;
         this.marbleY = marbleY;
@@ -67,17 +67,33 @@ public class Move {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Move move = (Move) o;
-
-        if (marbleX != move.marbleX) return false;
-        if (marbleY != move.marbleY) return false;
-        if (tileX != move.tileX) return false;
-        if (tileY != move.tileY) return false;
-        if (!player.equals(move.player)) return false;
-        if (!marble.equals(move.marble)) return false;
-        return rotateDirection == move.rotateDirection;
+        return marbleX == move.marbleX &&
+            marbleY == move.marbleY &&
+            tileX == move.tileX &&
+            tileY == move.tileY &&
+            player == move.getPlayer() &&
+            marble.equals(move.marble) &&
+            rotateDirection == move.rotateDirection;
     }
+
+    @Override
+    public String toString() {
+        return "Move{" +
+            "player=" + player +
+            ", marble=" + marble +
+            ", marbleX=" + marbleX +
+            ", marbleY=" + marbleY +
+            ", tileX=" + tileX +
+            ", tileY=" + tileY +
+            ", rotateDirection=" + rotateDirection +
+            '}';
+    }
+
 }

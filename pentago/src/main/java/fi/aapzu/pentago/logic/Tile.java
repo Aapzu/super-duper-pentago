@@ -1,8 +1,11 @@
 package fi.aapzu.pentago.logic;
 
-import fi.aapzu.pentago.game.Pentago;
 import fi.aapzu.pentago.game.PentagoGameRuleException;
 import fi.aapzu.pentago.logic.marble.Marble;
+import fi.aapzu.pentago.logic.marble.Symbol;
+import fi.aapzu.pentago.util.Serializable;
+import fi.aapzu.pentago.util.iterator.MarbleIterator;
+
 import java.util.Arrays;
 
 /**
@@ -10,12 +13,11 @@ import java.util.Arrays;
  *
  * @author Aapeli
  */
-public class Tile {
+public class Tile implements Serializable {
 
     private int sideLength;
 
     private Marble[][] tile;
-    private Direction lastDirection;
 
     /**
      * Calls the constructor with the default sideLength 3.
@@ -37,7 +39,6 @@ public class Tile {
         }
         this.sideLength = sideLength;
         tile = new Marble[sideLength][sideLength];
-        lastDirection = null;
     }
 
     /**
@@ -47,7 +48,6 @@ public class Tile {
      */
     Tile(Tile other) {
         setSideLength(other.getSideLength());
-        setLastDirection(other.getLastDirection());
         Marble[][] newTile = new Marble[getSideLength()][getSideLength()];
         for (int y = 0; y < getSideLength(); y++) {
             for (int x = 0; x < getSideLength(); x++) {
@@ -83,11 +83,11 @@ public class Tile {
      * already a Marble in the specified place.
      *
      * @param marble the Marble to be added
-     * @param x the X coordinate
-     * @param y the Y coordinate
+     * @param x      the X coordinate
+     * @param y      the Y coordinate
      * @return true if succeeded, otherwise false
      */
-    protected boolean addMarble(Marble marble, int x, int y) throws PentagoGameRuleException {
+    boolean addMarble(Marble marble, int x, int y) throws PentagoGameRuleException {
         if (validateCoordinates(x, y)) {
             // Return null when trying to set a marble on top of another one
             if (marble != null && tile[y][x] != null) {
@@ -108,7 +108,7 @@ public class Tile {
      * @param y the Y coordinate
      * @return the removed Marble or null
      */
-    protected Marble removeMarble(int x, int y) {
+    Marble removeMarble(int x, int y) {
         if (validateCoordinates(x, y)) {
             Marble marble = tile[y][x];
             addMarble(null, x, y);
@@ -125,11 +125,10 @@ public class Tile {
      *
      * @param d the Direction for the Tile to be rotated
      */
-    protected void rotate(Direction d) {
+    void rotate(Direction d) {
         if (!Arrays.asList(Direction.getRotateDirections()).contains(d)) {
             throw new IllegalArgumentException("Invalid direction!");
         }
-        setLastDirection(d);
         Marble[][] rotatedTile = new Marble[tile.length][tile[0].length];
         for (int y = 0; y < tile.length; y++) {
             for (int x = 0; x < tile[0].length; x++) {
@@ -176,30 +175,22 @@ public class Tile {
         return sideLength;
     }
 
-    void setSideLength(int sideLength) {
+    private void setSideLength(int sideLength) {
         this.sideLength = sideLength;
     }
 
-    protected Marble[][] getTile() {
+    Marble[][] getTile() {
         return tile;
     }
 
-    public void setTile(Marble[][] tile) {
+    private void setTile(Marble[][] tile) {
         this.tile = tile;
-    }
-
-    Direction getLastDirection() {
-        return lastDirection;
-    }
-
-    private void setLastDirection(Direction d) {
-        lastDirection = d;
     }
 
     /**
      * Removes every Marble.
      */
-    protected void clear() {
+    void clear() {
         for (int y = 0; y < getTile().length; y++) {
             for (int x = 0; x < getTile()[0].length; x++) {
                 addMarble(null, x, y);
@@ -212,7 +203,7 @@ public class Tile {
      *
      * @return true or false
      */
-    protected boolean isEmpty() {
+    boolean isEmpty() {
         for (Marble[] row : tile) {
             for (Marble m : row) {
                 if (m != null) {
@@ -239,7 +230,12 @@ public class Tile {
         return true;
     }
 
-    Marble[][] toMarbleArray() {
+    /**
+     * Gives a 2d marble array representation of the Tile.
+     *
+     * @return 2d marble array
+     */
+    public Marble[][] toMarbleArray() {
         return tile;
     }
 
@@ -248,8 +244,8 @@ public class Tile {
         if (obj == null || !(obj instanceof Tile)) {
             return false;
         }
-        Tile that = (Tile)obj;
-        return that.toString().equals(toString()) && that.getLastDirection() == getLastDirection();
+        Tile that = (Tile) obj;
+        return that.toString().equals(toString());
     }
 
     @Override
@@ -257,5 +253,38 @@ public class Tile {
         int result = sideLength;
         result = 31 * result + Arrays.deepHashCode(tile);
         return result;
+    }
+
+    @Override
+    public String serialize() {
+        String s = "";
+        MarbleIterator it = new MarbleIterator(this);
+        while (it.hasNext()) {
+            Marble m = it.next();
+            s += m != null ? m.serialize() : "0";
+        }
+        return s;
+    }
+
+    @Override
+    public boolean deserialize(String s) {
+        if (s.length() == 9) {
+            MarbleIterator it = new MarbleIterator(this);
+            setTile(new Marble[getSideLength()][getSideLength()]);
+            while (it.hasNext()) {
+                it.next();
+                int n = it.getY() * getSideLength() + it.getX();
+                Marble m = new Marble(Symbol.X); // Placeholder symbol
+                if (m.deserialize(s.substring(n, n + 1))) {
+                    if (m.getSymbol() != null) {
+                        addMarble(m, it.getX(), it.getY());
+                    }
+                } else {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
     }
 }

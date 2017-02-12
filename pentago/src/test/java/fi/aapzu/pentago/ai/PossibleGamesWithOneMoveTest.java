@@ -12,7 +12,7 @@ import static org.junit.Assert.assertNotNull;
 
 public class PossibleGamesWithOneMoveTest {
 
-    Pentago game;
+    private Pentago game;
 
     @Before
     public void setUp() {
@@ -28,28 +28,24 @@ public class PossibleGamesWithOneMoveTest {
 
     @Test
     public void getReturnsRightGamesInTheBeginning() {
-        Pentago[] games = PossibleGamesWithOneMove.get(game);
-        assertEquals(games.length, 288);
+        String[] games = PossibleGamesWithOneMove.get(game.serialize());
+        assertEquals(288, games.length);
 
-        for (Pentago p : games) {
+        for (String p : games) {
             int marbles = 0;
-            int sideLength = p.getBoard().getSideLength() * p.getBoard().getTileSideLength();
-            assertEquals(sideLength, game.getBoard().getSideLength() * game.getBoard().getTileSideLength());
-            for (int y = 0; y < sideLength; y++) {
-                for (int x = 0; x < sideLength; x++) {
-                    if (p.getBoard().getMarble(x, y) != null) {
-                        marbles++;
-                    }
+            assertEquals(40, p.length());
+            char[] chars = p.toCharArray();
+            for (int i = 0; i < 36; i++) {
+                char c = chars[i];
+                assert (c == '0' || c == '1' || c == '2');
+                if (c != '0') {
+                    marbles++;
                 }
             }
             assertEquals(1, marbles);
-            assertNotNull(p.getBoard().getLastMarble());
-            assertNotNull(p.getBoard().getLastMarbleX());
-            assertNotNull(p.getBoard().getLastMarbleY());
-            assertNotNull(p.getBoard().getLastRotatedTile());
-            assertNotNull(p.getBoard().getLastRotatedTileDirection());
-            assertNotNull(p.getBoard().getLastRotatedTileX());
-            assertNotNull(p.getBoard().getLastRotatedTileY());
+            assert (chars[36] == '0' || chars[36] == '1');
+            assert (chars[37] == '0' || chars[37] == '1');
+            assert (chars[38] == '1' || chars[38] == '2');
         }
     }
 
@@ -57,12 +53,15 @@ public class PossibleGamesWithOneMoveTest {
     public void itOnlyReturnsValidMoves() {
         game.addMarble(0, 0);
         game.rotateTile(0, 0, Direction.CLOCKWISE);
-        Pentago[] games = PossibleGamesWithOneMove.get(game);
-        for (Pentago p : games) {
-            Move m = p.getLastMove();
-            assert(m.getPlayer().equals(game.getPlayers()[1]));
-            assert(m.getMarbleX() != 2 || m.getMarbleY() != 0);
-            assert(m.getTileX() != 0 || m.getTileY() != 0 || m.getRotateDirection() != Direction.COUNTER_CLOCKWISE);
+        String[] games = PossibleGamesWithOneMove.get(game.serialize());
+        for (String s : games) {
+            Pentago g = new Pentago();
+            g.deserialize(s);
+            Move m = g.getLastMove();
+            assertNotNull(m);
+            assertEquals(m.getPlayer(), game.getWhoseTurnIndex());
+            assert (m.getMarbleX() != 2 || m.getMarbleY() != 0);
+            assert (m.getTileX() != 0 || m.getTileY() != 0 || m.getRotateDirection() != Direction.COUNTER_CLOCKWISE);
         }
     }
 }

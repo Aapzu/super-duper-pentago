@@ -1,4 +1,3 @@
-
 package fi.aapzu.pentago.logic;
 
 import fi.aapzu.pentago.game.PentagoGameRuleException;
@@ -6,26 +5,28 @@ import fi.aapzu.pentago.logic.marble.Marble;
 import fi.aapzu.pentago.logic.marble.Symbol;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
 import org.junit.Rule;
+import org.junit.Test;
 import org.junit.rules.ExpectedException;
+
+import static org.junit.Assert.*;
 
 
 public class TileTest {
-              
-    Tile tile;
-     
+
+    private Tile tile;
+
     @Rule
     public final ExpectedException exception = ExpectedException.none();
-    
-    public TileTest() {}
-    
+
+    public TileTest() {
+    }
+
     @Before
     public void setUp() {
         tile = new Tile();
     }
-    
+
     @After
     public void tearDown() {
         tile = null;
@@ -42,14 +43,14 @@ public class TileTest {
         assertEquals(tile.getTile().length, 15);
         assertEquals(tile.getTile()[0].length, 15);
     }
-    
+
     @Test
     public void constructorMustThrowExceptionIfSideLengthIsNegative() {
         exception.expect(IllegalArgumentException.class);
         exception.expectMessage("must be truly positive");
         tile = new Tile(-2);
     }
-    
+
     @Test
     public void constructorMustThrowExceptionIfSideLengthIsZero() {
         exception.expect(IllegalArgumentException.class);
@@ -63,8 +64,8 @@ public class TileTest {
         tile.addMarble(new Marble(Symbol.O), 1, 2);
         tile.rotate(Direction.CLOCKWISE);
         Tile t2 = new Tile(tile);
-        assert(tile.equals(t2));
-        assert(t2.equals(tile));
+        assert (tile.equals(t2));
+        assert (t2.equals(tile));
     }
 
     @Test
@@ -76,12 +77,12 @@ public class TileTest {
         t2.addMarble(new Marble(Symbol.X), 0, 2);
         assertFalse(tile.equals(t2));
     }
-    
+
     @Test
     public void constructorWithoutParameterUsesTheRightDefaultValue() {
         assertEquals(tile.getSideLength(), 3);
     }
-    
+
     @Test
     public void setMarbleSetsRightMarbleIntoRightPlace() {
         Marble m = new Marble(Symbol.X);
@@ -91,7 +92,7 @@ public class TileTest {
         assertEquals(tile.getTile()[0][0].toString(), "[X]");
         assertEquals(tile.getTile()[2][1].toString(), "[O]");
     }
-    
+
     @Test
     public void setMarbleDoesNotSetMarbleOutsideTheTile() {
         Marble m = new Marble(Symbol.X);
@@ -102,21 +103,21 @@ public class TileTest {
         assertFalse(tile.addMarble(m, 3, 15));
         assertFalse(tile.addMarble(m, 15, 2));
     }
-    
+
     @Test
     public void setMarbleThrowsExceptionIfPlaceIsNotEmpty() {
         tile.addMarble(new Marble(Symbol.O), 1, 1);
         exception.expect(PentagoGameRuleException.class);
         tile.addMarble(new Marble(Symbol.O), 1, 1);
     }
-    
+
     @Test
     public void getReturnsMarbleCorrectly() {
         Marble m = new Marble(Symbol.X);
         tile.addMarble(m, 0, 0);
         assertEquals(tile.getMarble(0, 0), m);
     }
-    
+
     @Test
     public void getReturnsNullIfThePlaceIsEmptyOrDoesNotExist() {
         assertNull(tile.getMarble(0, 0));
@@ -127,28 +128,28 @@ public class TileTest {
         assertNull(tile.getMarble(10, -1));
         assertNull(tile.getMarble(10, 10));
     }
-    
+
     @Test
     public void removeMarbleRemovesMarble() {
         tile.addMarble(new Marble(Symbol.X), 0, 0);
         tile.removeMarble(0, 0);
-        assertNull(tile.getMarble(0,0));
+        assertNull(tile.getMarble(0, 0));
     }
-    
+
     @Test
     public void removeMarbleReturnsTheMarbleItRemoved() {
         Marble m = new Marble(Symbol.X);
         tile.addMarble(m, 0, 0);
         assertEquals(m, tile.removeMarble(0, 0));
     }
-    
+
     @Test
     public void removeMarbleReturnsNullIfThePlaceIsEmptyOrDoesNotExist() {
         assertNull(tile.removeMarble(0, 0));
         assertNull(tile.removeMarble(-1, 0));
         assertNull(tile.removeMarble(10, 10));
     }
-    
+
     @Test
     public void toStringReturnsRightKindOfString() {
         Marble x = new Marble(Symbol.X);
@@ -158,12 +159,12 @@ public class TileTest {
         tile.addMarble(x, 0, 1);
         tile.addMarble(o, 1, 1);
         tile.addMarble(o, 2, 2);
-        assertEquals(tile.toString(), 
+        assertEquals(tile.toString(),
                 "[O][X][ ]\n"
-              + "[X][O][ ]\n"
-              + "[ ][ ][O]");
+                        + "[X][O][ ]\n"
+                        + "[ ][ ][O]");
     }
-    
+
     @Test
     public void rowToStringReturnsRightKindOfString() {
         Marble x = new Marble(Symbol.X);
@@ -177,7 +178,7 @@ public class TileTest {
         assertEquals(tile.rowToString(1), "[X][O][ ]");
         assertEquals(tile.rowToString(2), "[ ][ ][O]");
     }
-    
+
     @Test
     public void rotateThrowsExceptionIfTheDirectionIsInvalid() {
         exception.expect(IllegalArgumentException.class);
@@ -187,7 +188,7 @@ public class TileTest {
         tile.rotate(Direction.UPGRADING_DIAGONAL);
         tile.rotate(Direction.DOWNGRADING_DIAGONAL);
     }
-    
+
     @Test
     public void rotateWorksCorrectlyClockwise() {
         Marble x = new Marble(Symbol.X);
@@ -197,16 +198,16 @@ public class TileTest {
         tile.addMarble(x, 0, 1);
         tile.addMarble(o, 1, 1);
         tile.addMarble(o, 2, 2);
-        
+
         tile.rotate(Direction.CLOCKWISE);
-        
-        
-        assertEquals(tile.toString(), 
+
+
+        assertEquals(tile.toString(),
                 "[ ][X][O]\n"
-              + "[ ][O][X]\n"
-              + "[O][ ][ ]");
+                        + "[ ][O][X]\n"
+                        + "[O][ ][ ]");
     }
-    
+
     @Test
     public void rotateWorksCorrectlyCounterClockWise() {
         Marble x = new Marble(Symbol.X);
@@ -216,15 +217,15 @@ public class TileTest {
         tile.addMarble(x, 0, 1);
         tile.addMarble(o, 1, 1);
         tile.addMarble(o, 2, 2);
-        
+
         tile.rotate(Direction.COUNTER_CLOCKWISE);
-       
-        assertEquals(tile.toString(), 
+
+        assertEquals(tile.toString(),
                 "[ ][ ][O]\n"
-              + "[X][O][ ]\n"
-              + "[O][X][ ]");
+                        + "[X][O][ ]\n"
+                        + "[O][X][ ]");
     }
-    
+
     @Test
     public void doubleRotateInDifferentDirectionsBringsBackToTheBeginning() {
         String firstToString = tile.toString();
@@ -232,7 +233,7 @@ public class TileTest {
         tile.rotate(Direction.COUNTER_CLOCKWISE);
         assertEquals(tile.toString(), firstToString);
     }
-    
+
     @Test
     public void doubleRotateIsTheSameInBothDirections() {
         Marble x = new Marble(Symbol.X);
@@ -244,7 +245,7 @@ public class TileTest {
         tile.addMarble(o, 2, 2);
         tile.rotate(Direction.CLOCKWISE);
         tile.rotate(Direction.CLOCKWISE);
-        
+
         Tile tile2 = new Tile();
         tile2.addMarble(o, 0, 0);
         tile2.addMarble(x, 1, 0);
@@ -253,28 +254,15 @@ public class TileTest {
         tile2.addMarble(o, 2, 2);
         tile2.rotate(Direction.COUNTER_CLOCKWISE);
         tile2.rotate(Direction.COUNTER_CLOCKWISE);
-        
-        String rotatedString = 
+
+        String rotatedString =
                 "[O][ ][ ]\n"
-              + "[ ][O][X]\n"
-              + "[ ][X][O]";
+                        + "[ ][O][X]\n"
+                        + "[ ][X][O]";
         assertEquals(tile.toString(), rotatedString);
         assertEquals(tile2.toString(), rotatedString);
     }
-    
-    @Test
-    public void getLastDirectionFirstReturnsNull() {
-        assertNull(tile.getLastDirection());
-    }
-    
-    @Test
-    public void getLastDirectionReturnsTheLastDirection() {
-        tile.rotate(Direction.CLOCKWISE);
-        assertEquals(Direction.CLOCKWISE, tile.getLastDirection());
-        tile.rotate(Direction.COUNTER_CLOCKWISE);
-        assertEquals(Direction.COUNTER_CLOCKWISE, tile.getLastDirection());
-    }
-    
+
     @Test
     public void clearClearsTheTile() {
         Marble x = new Marble(Symbol.X);
@@ -284,27 +272,27 @@ public class TileTest {
         tile.addMarble(x, 0, 2);
         tile.addMarble(o, 1, 1);
         tile.addMarble(o, 2, 2);
-        
+
         tile.clear();
-        for(Marble[] row : tile.getTile()) {
-            for(Marble m : row) {
+        for (Marble[] row : tile.getTile()) {
+            for (Marble m : row) {
                 assertNull(m);
             }
         }
     }
-    
+
     @Test
     public void isEmptyReturnsRight() {
         assertTrue(tile.isEmpty());
         tile.addMarble(new Marble(Symbol.O), 0, 0);
         assertFalse(tile.isEmpty());
     }
-    
+
     @Test
     public void isFullReturnsRight() {
-        for(int y = 0; y < 3; y++) {
-            for(int x = 0; x < 3; x++) {
-                if(x != 2 || y != 2) {
+        for (int y = 0; y < 3; y++) {
+            for (int x = 0; x < 3; x++) {
+                if (x != 2 || y != 2) {
                     tile.addMarble(new Marble(Symbol.O), x, y);
                     assertFalse(tile.isFull());
                 }
@@ -329,8 +317,8 @@ public class TileTest {
         Tile t4 = new Tile();
         t4.addMarble(new Marble(Symbol.O), 2, 2);
         t4.rotate(Direction.CLOCKWISE);
-        assert(t1.equals(t2));
-        assert(t2.equals(t1));
+        assert (t1.equals(t2));
+        assert (t2.equals(t1));
         assertFalse(t1.equals(t3));
         assertFalse(t3.equals(t1));
         assertFalse(t1.equals(t4));
@@ -338,5 +326,26 @@ public class TileTest {
         assertFalse(t3.equals(t4));
         assertFalse(t4.equals(t3));
     }
-    
+
+    @Test
+    public void serializationWorks() {
+        Tile t1 = new Tile();
+        t1.addMarble(new Marble(Symbol.X), 2, 2);
+        t1.addMarble(new Marble(Symbol.O), 0, 2);
+        t1.addMarble(new Marble(Symbol.X), 2, 1);
+        assertEquals("000001201", t1.serialize());
+    }
+
+    @Test
+    public void deserializationWorks() {
+        Tile t1 = new Tile();
+        t1.addMarble(new Marble(Symbol.X), 2, 2);
+        t1.addMarble(new Marble(Symbol.O), 0, 2);
+        t1.addMarble(new Marble(Symbol.X), 2, 1);
+        Tile t2 = new Tile();
+        assert (t2.deserialize("000001201"));
+        assertEquals(t1, t2);
+        assertFalse(t2.deserialize("0000012012")); // Too long
+    }
+
 }

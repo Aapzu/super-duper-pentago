@@ -7,12 +7,6 @@ import fi.aapzu.pentago.logic.Direction;
 import fi.aapzu.pentago.logic.Line;
 import fi.aapzu.pentago.logic.marble.Marble;
 import fi.aapzu.pentago.logic.marble.Symbol;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -32,11 +26,21 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+/**
+ * Graphic user interface for the game.
+ */
 public class GUI extends Application {
 
     private Pentago game;
-    private GridPane[][] tiles = new GridPane[2][2];
-    private Circle[][] circles = new Circle[6][6];
+    private final GridPane[][] tiles = new GridPane[2][2];
+    private final Circle[][] circles = new Circle[6][6];
     private Scene baseScene;
     private Stage primaryStage;
     private List<Node> rotateButtons;
@@ -233,7 +237,8 @@ public class GUI extends Application {
         try {
             game.addMarble(x, y);
             readyToRotate();
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
     }
 
     private void rotateTile(int x, int y, Direction d) {
@@ -311,7 +316,7 @@ public class GUI extends Application {
     /**
      * Binds the main manu button to change the view to the main menu.
      */
-    public void initMainMenu() {
+    private void initMainMenu() {
         ((Button) (baseScene.getRoot().lookup("#mainMenuButton"))).addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event) -> {
             try {
                 game.clear();
@@ -324,12 +329,12 @@ public class GUI extends Application {
 
     /**
      * Changes the view to a fxml view by the parameter 'fxml'.
-     * 
+     *
      * @param fxml the url of the fxml file
      * @return the page created
      * @throws IOException if the fxml file is not found
      */
-    private Pane replaceSceneContent(String fxml) throws IOException {
+    private void replaceSceneContent(String fxml) throws IOException {
         Pane page = (Pane) FXMLLoader.load(getClass().getClassLoader().getResource(fxml));
         baseScene = primaryStage.getScene();
         if (baseScene == null) {
@@ -339,7 +344,5 @@ public class GUI extends Application {
             baseScene.setRoot(page);
         }
         primaryStage.sizeToScene();
-
-        return page;
     }
 }

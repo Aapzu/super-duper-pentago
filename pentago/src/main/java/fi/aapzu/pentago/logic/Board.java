@@ -1,6 +1,9 @@
 package fi.aapzu.pentago.logic;
 
 import fi.aapzu.pentago.logic.marble.Marble;
+import fi.aapzu.pentago.util.Serializable;
+import fi.aapzu.pentago.util.iterator.BoardTileIterator;
+
 import java.util.Arrays;
 
 /**
@@ -8,10 +11,12 @@ import java.util.Arrays;
  *
  * @author Aapeli
  */
-public class Board {
+public class Board implements Serializable {
 
-    private int sideLength;
-    private int tileSideLength;
+    private final int sideLength;
+    private final int tileSideLength;
+
+    private final int totalSideLength;
 
     private Tile[][] tiles;
     private Tile lastRotatedTile;
@@ -25,13 +30,13 @@ public class Board {
     private Marble lastMarble;
 
     /**
-     * Copy-constructor to clone the Board
+     * Copy-constructor to clone the Board.
      *
      * @param other Board to be cloned
      */
     public Board(Board other) {
-        setSideLength(other.getSideLength());
-        setTileSideLength(other.getTileSideLength());
+        this(other.getSideLength(), other.getTileSideLength());
+
         Tile[][] newTiles = new Tile[getSideLength()][getSideLength()];
         for (int tileY = 0; tileY < getSideLength(); tileY++) {
             for (int tileX = 0; tileX < getSideLength(); tileX++) {
@@ -51,12 +56,13 @@ public class Board {
     /**
      * Creates the Board, and the Tiles in it.
      *
-     * @param sideLength the amount of the Tiles per side
+     * @param sideLength     the amount of the Tiles per side
      * @param tileSideLength the amount of the Marbles per side of a Tile
      */
     public Board(int sideLength, int tileSideLength) {
         this.sideLength = sideLength;
         this.tileSideLength = tileSideLength;
+        this.totalSideLength = this.sideLength * this.tileSideLength;
         tiles = new Tile[sideLength][sideLength];
         for (int y = 0; y < sideLength; y++) {
             for (int x = 0; x < sideLength; x++) {
@@ -114,8 +120,8 @@ public class Board {
      * Adds a Marble to the Board to the given place.
      *
      * @param marble the Marble to be set to the Board.
-     * @param x the X coordinate
-     * @param y the Y coordinate
+     * @param x      the X coordinate
+     * @param y      the Y coordinate
      * @return true if succeeded, otherwise false
      */
     public boolean addMarble(Marble marble, int x, int y) {
@@ -166,7 +172,7 @@ public class Board {
      *
      * @param tileX the X coordinate of the Tile.
      * @param tileY the Y coordinate of the Tile.
-     * @param d the Direction
+     * @param d     the Direction
      */
     public void rotateTile(int tileX, int tileY, Direction d) {
         if (!Arrays.asList(Direction.getRotateDirections()).contains(d)) {
@@ -186,17 +192,6 @@ public class Board {
 
     public Tile getLastRotatedTile() {
         return lastRotatedTile;
-    }
-
-    /**
-     * Returns the last Direction the Tile in the given place was rotated to.
-     *
-     * @param tileX the X coordinate of the Tile.
-     * @param tileY the Y coordinate of the Tile.
-     * @return the Direction
-     */
-    public Direction getLastDirection(int tileX, int tileY) {
-        return getTile(tileX, tileY).getLastDirection();
     }
 
     /**
@@ -239,10 +234,10 @@ public class Board {
             }
         }
     }
-    
+
     /**
      * Tells if the whole Board only has empty squares in it.
-     * 
+     *
      * @return true or false
      */
     public boolean isEmpty() {
@@ -255,10 +250,10 @@ public class Board {
         }
         return true;
     }
-    
+
     /**
      * Tells if the whole Board has no any empty squares in it.
-     * 
+     *
      * @return true or false
      */
     public boolean isFull() {
@@ -274,32 +269,32 @@ public class Board {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Board board = (Board) o;
-
         return sideLength == board.sideLength &&
             tileSideLength == board.tileSideLength &&
             lastRotatedTileY == board.lastRotatedTileY &&
             lastRotatedTileX == board.lastRotatedTileX &&
+            ((lastRotatedTile == null && board.getLastRotatedTile() == null) ||
+                lastRotatedTile.equals(board.getLastRotatedTile())) &&
+            ((lastMarble == null && board.getLastMarble() == null) ||
+                lastMarble.equals(board.getLastMarble())) &&
+            lastMarbleX == board.getLastMarbleX() &&
+            lastMarbleY == board.getLastMarbleY() &&
             Arrays.deepEquals(tiles, board.tiles) &&
             lastRotatedTileDirection == board.lastRotatedTileDirection;
     }
 
     Marble[][] getMarbleArray() {
-        int marbleSideLength = getSideLength() * getTileSideLength();
-        Marble[][] marbles = new Marble[marbleSideLength][marbleSideLength];
-        for (int tileY = 0; tileY < getSideLength(); tileY++) {
-            for (int tileX = 0; tileX < getSideLength(); tileX++) {
-                Marble[][] tile = getTile(tileX, tileY).toMarbleArray();
-                for (int marbleY = 0; marbleY < getTileSideLength(); marbleY++) {
-                    for (int marbleX = 0; marbleX < getTileSideLength(); marbleX++) {
-                        int y = tileY * getTileSideLength() + marbleY;
-                        int x = tileX * getTileSideLength() + marbleX;
-                        marbles[y][x] = tile[marbleY][marbleX];
-                    }
-                }
+        Marble[][] marbles = new Marble[getTotalSideLength()][getTotalSideLength()];
+        for (int y = 0; y < getTotalSideLength(); y++) {
+            for (int x = 0; x < getTileSideLength(); x++) {
+                marbles[y][x] = getMarble(x, y);
             }
         }
         return marbles;
@@ -329,43 +324,79 @@ public class Board {
         return lastMarble;
     }
 
-    public void setSideLength(int sideLength) {
-        this.sideLength = sideLength;
-    }
-
-    public void setTileSideLength(int tileSideLength) {
-        this.tileSideLength = tileSideLength;
-    }
-
-    public void setTiles(Tile[][] tiles) {
+    void setTiles(Tile[][] tiles) {
         this.tiles = tiles;
     }
 
-    public void setLastRotatedTile(Tile lastRotatedTile) {
+    private void setLastRotatedTile(Tile lastRotatedTile) {
         this.lastRotatedTile = lastRotatedTile;
     }
 
-    public void setLastRotatedTileDirection(Direction lastRotatedTileDirection) {
+    private void setLastRotatedTileDirection(Direction lastRotatedTileDirection) {
         this.lastRotatedTileDirection = lastRotatedTileDirection;
     }
 
-    public void setLastRotatedTileY(int lastRotatedTileY) {
+    private void setLastRotatedTileY(int lastRotatedTileY) {
         this.lastRotatedTileY = lastRotatedTileY;
     }
 
-    public void setLastRotatedTileX(int lastRotatedTileX) {
+    private void setLastRotatedTileX(int lastRotatedTileX) {
         this.lastRotatedTileX = lastRotatedTileX;
     }
 
-    public void setLastMarbleY(int lastMarbleY) {
+    private void setLastMarbleY(int lastMarbleY) {
         this.lastMarbleY = lastMarbleY;
     }
 
-    public void setLastMarbleX(int lastMarbleX) {
+    private void setLastMarbleX(int lastMarbleX) {
         this.lastMarbleX = lastMarbleX;
     }
 
-    public void setLastMarble(Marble lastMarble) {
+    private void setLastMarble(Marble lastMarble) {
         this.lastMarble = lastMarble;
+    }
+
+    @Override
+    public String serialize() {
+        String s = "";
+        BoardTileIterator it = new BoardTileIterator(this);
+        while (it.hasNext()) {
+            s += it.next().serialize();
+        }
+        s += getLastMarbleX();
+        s += getLastMarbleY();
+        s += getLastRotatedTileX();
+        s += getLastRotatedTileY();
+        s += getLastRotatedTileDirection() == Direction.CLOCKWISE ? 1 : (getLastRotatedTileDirection() == Direction.COUNTER_CLOCKWISE ? 2 : 0);
+        return s;
+    }
+
+    @Override
+    public boolean deserialize(String s) {
+        if (s.length() == 41) {
+            setLastRotatedTileDirection(s.charAt(40) != '0' ? (s.charAt(40) == '1' ? Direction.CLOCKWISE : Direction.COUNTER_CLOCKWISE) : null);
+            setLastRotatedTileY(Integer.parseInt(Character.toString(s.charAt(39))));
+            setLastRotatedTileX(Integer.parseInt(Character.toString(s.charAt(38))));
+            setLastMarbleX(Integer.parseInt(Character.toString(s.charAt(36))));
+            setLastMarbleY(Integer.parseInt(Character.toString(s.charAt(37))));
+            BoardTileIterator it = new BoardTileIterator(this);
+            while (it.hasNext()) {
+                Tile t = it.next();
+                int n = it.getY() * getSideLength() + it.getX();
+                int i1 = n * getTileSideLength() * getTileSideLength();
+                int i2 = i1 + getTileSideLength() * getTileSideLength();
+                if (!t.deserialize(s.substring(i1, i2))) {
+                    return false;
+                }
+            }
+            setLastRotatedTile(getTile(getLastRotatedTileX(), getLastRotatedTileY()));
+            setLastMarble(getMarble(getLastMarbleX(), getLastMarbleY()));
+            return true;
+        }
+        return false;
+    }
+
+    public int getTotalSideLength() {
+        return totalSideLength;
     }
 }

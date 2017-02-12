@@ -1,26 +1,22 @@
 package fi.aapzu.pentago.game;
 
-import fi.aapzu.pentago.ai.Node;
-import fi.aapzu.pentago.ai.PossibleGamesWithOneMove;
-import fi.aapzu.pentago.ai.heuristics.Heuristics;
 import fi.aapzu.pentago.logic.*;
 import fi.aapzu.pentago.logic.marble.Marble;
 import fi.aapzu.pentago.logic.marble.Symbol;
-
-import java.util.Arrays;
+import fi.aapzu.pentago.util.Serializable;
 
 /**
  * The mother class of the game.
  *
  * @author Aapeli
  */
-public class Pentago implements Node {
+public class Pentago implements Serializable {
 
     private Board board;
     private Player[] players;
     private LineChecker lineChecker;
 
-    private int whoseTurn;
+    private int whoseTurnIndex;
     private boolean allowedToRotate;
     private int turnsDone;
 
@@ -32,12 +28,12 @@ public class Pentago implements Node {
         board = new Board();
         lineChecker = new LineChecker(board);
         players = new Player[2];
-        whoseTurn = 0;
+        whoseTurnIndex = 0;
         allowedToRotate = false;
     }
 
     /**
-     * Copy-constructor to create a clone of the Pentago
+     * Copy-constructor to create a clone of the Pentago.
      *
      * @param other the game to be cloned
      */
@@ -47,23 +43,23 @@ public class Pentago implements Node {
         for (int i = 0; i < getPlayers().length; i++) {
             getPlayers()[i] = new Player(other.getPlayers()[i]);
         }
-        setWhoseTurn(other.getWhoseTurn());
+        setWhoseTurnIndex(other.getWhoseTurnIndex());
         setAllowedToRotate(other.getAllowedToRotate());
     }
 
     /**
-     * Adds a human Player
+     * Adds a human Player.
      *
-     * @param name
+     * @param name name of the player
      */
     public void addHumanPlayer(String name) {
         addPlayer(new Player(name));
     }
 
     /**
-     * Adds a Bot
+     * Adds a Bot.
      *
-     * @param name
+     * @param name name of the Bot
      */
     public void addBot(String name) {
         if (name == null) {
@@ -73,6 +69,9 @@ public class Pentago implements Node {
         addPlayer(player);
     }
 
+    /**
+     * Removes the Players.
+     */
     public void clearPlayers() {
         setPlayers(new Player[2]);
     }
@@ -83,7 +82,7 @@ public class Pentago implements Node {
             throw new PentagoGameRuleException("Game already has two players!");
         }
         player.setPlayerNumber(playerNumber);
-        player.setSymbol(player.getSymbolForPlayerNumber(playerNumber));
+        player.setSymbol(Player.getSymbolForPlayerNumber(playerNumber));
         players[playerNumber] = player;
     }
 
@@ -92,7 +91,7 @@ public class Pentago implements Node {
      */
     public void clear() {
         board.clear();
-        whoseTurn = 0;
+        whoseTurnIndex = 0;
         allowedToRotate = false;
     }
 
@@ -132,6 +131,22 @@ public class Pentago implements Node {
     }
 
     /**
+     * Calls addMarble without throwing an Exception.
+     *
+     * @param x the X coordinate of the Marble
+     * @param y the Y coordinate of the Marble
+     * @return true if succeeded, else false
+     */
+    public boolean tryAddMarble(int x, int y) {
+        try {
+            addMarble(x, y);
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+    }
+
+    /**
      * Rotates the given Tile and gives the turn to the other Player. Throws
      * PentagoGameRuleException if a Marble hasn't been set to the Board first.
      *
@@ -143,13 +158,30 @@ public class Pentago implements Node {
         if (!allowedToRotate) {
             throw new PentagoGameRuleException("A marble must be added first!");
         }
-        if (board.getLastRotatedTileX() == x && board.getLastRotatedTileY() == y && d == Direction.getOpposite(board.getLastDirection(x, y))) {
+        if (board.getLastRotatedTileX() == x && board.getLastRotatedTileY() == y && d == Direction.getOpposite(board.getLastRotatedTileDirection())) {
             throw new PentagoGameRuleException("The tile cannot be rotated back to the direction it was just rotated from!");
         }
 
         board.rotateTile(x, y, d);
         allowedToRotate = false;
         nextTurn();
+    }
+
+    /**
+     * Calls rotateTile without throwing an Exception.
+     *
+     * @param x the X coordinate of the Tile
+     * @param y the X coordinate of the Tile
+     * @param d the Direction
+     * @return true if succeeded, else false
+     */
+    public boolean tryRotateTile(int x, int y, Direction d) {
+        try {
+            rotateTile(x, y, d);
+            return true;
+        } catch (PentagoGameRuleException e) {
+            return false;
+        }
     }
 
     /**
@@ -170,20 +202,29 @@ public class Pentago implements Node {
         if (players[0] == null || players[1] == null) {
             throw new PentagoGameRuleException("Not enough players!");
         }
-        return players[whoseTurn];
+        return players[whoseTurnIndex];
+    }
+
+    /**
+     * Tells whose turn it is in number.
+     *
+     * @return int whose turn it is currently
+     */
+    public int getWhoseTurnIndex() {
+        return whoseTurnIndex;
     }
 
     /**
      * Changes the turn from other player to another.
      */
     public void nextTurn() {
-        whoseTurn = (whoseTurn + 1) % 2;
+        whoseTurnIndex = (whoseTurnIndex + 1) % 2;
     }
 
     /**
      * Gets a Symbol and return the corresponding Player. If not found, returns null.
      *
-     * @param symbol
+     * @param symbol symbol to get the Player of
      * @return player or null
      */
     public Player getPlayerBySymbol(Symbol symbol) {
@@ -220,51 +261,29 @@ public class Pentago implements Node {
     }
 
     /**
-     * @return move the last move of the game
+     * @return move the last move of the game.
      */
     public Move getLastMove() {
         Marble lastMarble = getBoard().getLastMarble();
         if (lastMarble != null) {
-            Player lastPlayer = getPlayerBySymbol(lastMarble.getSymbol());
             Tile lastTile = getBoard().getLastRotatedTile();
             if (lastTile != null) {
                 int lastMarbleX = getBoard().getLastMarbleX();
                 int lastMarbleY = getBoard().getLastMarbleY();
                 int lastTileY = getBoard().getLastRotatedTileY();
                 int lastTileX = getBoard().getLastRotatedTileX();
-                Direction lastDirection = getBoard().getLastDirection(lastTileX, lastTileY);
-                return new Move(lastPlayer, lastMarble, lastMarbleX, lastMarbleY, lastTileX, lastTileY, lastDirection);
+                Direction lastDirection = getBoard().getLastRotatedTileDirection();
+                return new Move(Math.abs(getWhoseTurnIndex() - 1), lastMarble, lastMarbleX, lastMarbleY, lastTileX, lastTileY, lastDirection);
             }
         }
         return null;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Pentago pentago = (Pentago) o;
-
-        return  getWhoseTurn() == pentago.getWhoseTurn() &&
-                getAllowedToRotate() == pentago.getAllowedToRotate() &&
-                board.equals(pentago.board) &&
-                Arrays.deepEquals(getPlayers(), pentago.getPlayers());
-    }
-
-    @Override
-    public int hashCode() {
-        int result = board.hashCode();
-        result = 31 * result + whoseTurn;
-        result = 31 * result + (allowedToRotate ? 1 : 0);
-        return result;
     }
 
     public Board getBoard() {
         return board;
     }
 
-    public Player[] getPlayers() {
+    Player[] getPlayers() {
         return players;
     }
 
@@ -272,12 +291,8 @@ public class Pentago implements Node {
         this.players = players;
     }
 
-    private int getWhoseTurn() {
-        return whoseTurn;
-    }
-
-    private void setWhoseTurn(int whoseTurn) {
-        this.whoseTurn = whoseTurn;
+    private void setWhoseTurnIndex(int whoseTurn) {
+        this.whoseTurnIndex = whoseTurn;
     }
 
     public boolean getAllowedToRotate() {
@@ -289,13 +304,20 @@ public class Pentago implements Node {
     }
 
     @Override
-    public int getNodeValue() {
-        return Heuristics.getScore(this, whoseTurn());
+    public String serialize() {
+        String s = getBoard().serialize();
+        s += getWhoseTurnIndex();
+        return s;
     }
 
     @Override
-    public Node[] getChildren() {
-        return PossibleGamesWithOneMove.get(this);
+    public boolean deserialize(String s) {
+        if (s.length() == 42) {
+            setWhoseTurnIndex(Integer.parseInt(Character.toString(s.charAt(41))));
+            if (getBoard().deserialize(s.substring(0, 41))) {
+                return true;
+            }
+        }
+        return false;
     }
-
 }

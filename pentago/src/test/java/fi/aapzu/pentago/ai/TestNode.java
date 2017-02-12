@@ -2,9 +2,9 @@ package fi.aapzu.pentago.ai;
 
 public class TestNode implements Node {
 
-    private String name;
-    private Integer value;
-    private Node[] children;
+    private final String name;
+    private final Integer value;
+    private final Node[] children;
 
     TestNode(String name, Integer value, Node[] children) {
         this.name = name;

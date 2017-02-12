@@ -7,21 +7,23 @@ package fi.aapzu.pentago.logic;
 
 import fi.aapzu.pentago.game.Player;
 import fi.aapzu.pentago.logic.marble.Symbol;
-import java.util.Arrays;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.Arrays;
+
 import static org.junit.Assert.*;
 
 /**
- *
  * @author Aapeli
  */
 public class LineTest {
 
-    Line line;
+    private Line line;
 
-    public LineTest() {}
+    public LineTest() {
+    }
 
     @Before
     public void setUp() {
@@ -35,16 +37,16 @@ public class LineTest {
 
     @Test
     public void addCoordinateAddsCoordinate() {
-        line.addCoordinate(new Integer[]{0,0});
+        line.addCoordinate(new Integer[]{0, 0});
         assertEquals(1, line.getCoordinates().size());
-        assertTrue(Arrays.equals(new Integer[]{0,0}, line.getCoordinates().get(0)));
+        assertTrue(Arrays.equals(new Integer[]{0, 0}, line.getCoordinates().get(0)));
     }
 
     @Test
     public void lengthReturnsRight() {
-        line.addCoordinate(new Integer[]{0,0});
-        line.addCoordinate(new Integer[]{1,0});
-        line.addCoordinate(new Integer[]{2,0});
+        line.addCoordinate(new Integer[]{0, 0});
+        line.addCoordinate(new Integer[]{1, 0});
+        line.addCoordinate(new Integer[]{2, 0});
         assertEquals(3, line.length());
     }
 
@@ -52,7 +54,7 @@ public class LineTest {
     public void clearClearsAll() {
         line.setPlayer(new Player());
         line.setSymbol(Symbol.O);
-        line.addCoordinate(new Integer[]{0,0});
+        line.addCoordinate(new Integer[]{0, 0});
         line.clear();
         assertTrue(line.getCoordinates().isEmpty());
         assertNull(line.getPlayer());
@@ -65,7 +67,7 @@ public class LineTest {
         line.setPlayer(p);
 
         line.setSymbol(Symbol.O);
-        line.addCoordinate(new Integer[]{0,0});
+        line.addCoordinate(new Integer[]{0, 0});
         String expected = "" +
                 "Player: test\n" +
                 "Symbol: O\n" +

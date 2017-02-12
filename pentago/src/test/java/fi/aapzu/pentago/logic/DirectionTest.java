@@ -1,18 +1,16 @@
-
 package fi.aapzu.pentago.logic;
 
-import java.util.Arrays;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
+
+import java.util.Arrays;
+
 import static org.junit.Assert.*;
 
 
 public class DirectionTest {
-    
-    public DirectionTest() {}
+
+    public DirectionTest() {
+    }
 
     @Test
     public void getRotateDirectionsReturnsRight() {
@@ -23,13 +21,13 @@ public class DirectionTest {
     public void getLineDirectionsReturnsRight() {
         assertTrue(Arrays.equals(new Direction[]{Direction.HORIZONTAL, Direction.VERTICAL, Direction.UPGRADING_DIAGONAL, Direction.DOWNGRADING_DIAGONAL}, Direction.getLineDirections()));
     }
-    
+
     @Test
     public void getOppositeReturnsRight() {
         assertEquals(Direction.CLOCKWISE, Direction.getOpposite(Direction.COUNTER_CLOCKWISE));
         assertEquals(Direction.COUNTER_CLOCKWISE, Direction.getOpposite(Direction.CLOCKWISE));
     }
-    
+
     @Test
     public void getOppositeReturnsNullIfNoOpposite() {
         assertNull(Direction.getOpposite(Direction.HORIZONTAL));

@@ -1,4 +1,3 @@
-
 package fi.aapzu.pentago.ai.heuristics;
 
 import fi.aapzu.pentago.game.Pentago;
@@ -7,31 +6,30 @@ import fi.aapzu.pentago.logic.marble.Marble;
 import fi.aapzu.pentago.logic.marble.Symbol;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 import static org.junit.Assert.assertEquals;
 
 public class PossibleLinesTest {
 
-    Pentago game;
+    private Pentago game;
 
     /*
         These can be changed easily if the values in original class need to be checked
      */
-    private static int initialPoints = 10;
-    private static int pointFactor = 10;
+    private static final int initialPoints = 10;
+    private static final int pointFactor = 10;
 
-    public PossibleLinesTest() {}
-    
+    public PossibleLinesTest() {
+    }
+
     @Before
     public void setUp() {
         game = new Pentago();
         game.addHumanPlayer("a");
         game.addHumanPlayer("b");
     }
-    
+
     @After
     public void tearDown() {
         game = null;
@@ -39,8 +37,8 @@ public class PossibleLinesTest {
 
     @Test
     public void getScoreWorksWithEmptyBoard() {
-        assertEquals(0, new PossibleLines().getScore(game, game.getPlayerBySymbol(Symbol.O)));
-        assertEquals(0, new PossibleLines().getScore(game, game.getPlayerBySymbol(Symbol.X)));
+        assertEquals(0, new PossibleLines().getScore(game, 1));
+        assertEquals(0, new PossibleLines().getScore(game, 0));
     }
 
     @Test
@@ -51,73 +49,72 @@ public class PossibleLinesTest {
                 "------\n" +
                 "------\n" +
                 "------\n");
-        assertEquals(3 * initialPoints, new PossibleLines().getScore(game, game.getPlayerBySymbol(Symbol.X)));
+        assertEquals(3 * initialPoints, new PossibleLines().getScore(game, 0));
     }
 
     @Test
     public void getScoreWorksWithTwoOfALine() {
         setBoard("--X---\n" +
-                 "--X---\n" +
-                 "------\n" +
-                 "------\n" +
-                 "------\n" +
-                 "------\n");
+                "--X---\n" +
+                "------\n" +
+                "------\n" +
+                "------\n" +
+                "------\n");
         int points = 6 * initialPoints + initialPoints * pointFactor;
-        assertEquals(points, new PossibleLines().getScore(game, game.getPlayerBySymbol(Symbol.X)));
+        assertEquals(points, new PossibleLines().getScore(game, 0));
     }
 
     @Test
     public void getScoreWorksWithThreeOfALine() {
         setBoard("---X--\n" +
-                 "---X--\n" +
-                 "---X--\n" +
-                 "------\n" +
-                 "------\n" +
-                 "------\n");
+                "---X--\n" +
+                "---X--\n" +
+                "------\n" +
+                "------\n" +
+                "------\n");
         int points = 10 * initialPoints +
                 initialPoints * pointFactor +
                 initialPoints * (int) Math.pow(pointFactor, 2);
-        assertEquals(points, new PossibleLines().getScore(game, game.getPlayerBySymbol(Symbol.X)));
+        assertEquals(points, new PossibleLines().getScore(game, 0));
     }
 
     @Test
     public void getScoreWorksWithFourOfALine() {
         setBoard("---X--\n" +
-                 "---X--\n" +
-                 "---X--\n" +
-                 "---X--\n" +
-                 "------\n" +
-                 "------\n");
+                "---X--\n" +
+                "---X--\n" +
+                "---X--\n" +
+                "------\n" +
+                "------\n");
         int points = 15 * initialPoints +
                 initialPoints * (int) Math.pow(pointFactor, 2) +
-                initialPoints * (int)Math.pow(pointFactor, 3);
-        assertEquals(points, new PossibleLines().getScore(game, game.getPlayerBySymbol(Symbol.X)));
+                initialPoints * (int) Math.pow(pointFactor, 3);
+        assertEquals(points, new PossibleLines().getScore(game, 0));
     }
 
     @Test
     public void getScoreWorksWithFiveOfALine() {
         setBoard("---X--\n" +
-                 "---X--\n" +
-                 "---X--\n" +
-                 "---X--\n" +
-                 "---X--\n" +
-                 "------\n");
-        assertEquals(Integer.MAX_VALUE, new PossibleLines().getScore(game, game.getPlayerBySymbol(Symbol.X)));
+                "---X--\n" +
+                "---X--\n" +
+                "---X--\n" +
+                "---X--\n" +
+                "------\n");
+        assertEquals(Integer.MAX_VALUE, new PossibleLines().getScore(game, 0));
     }
 
     @Test
     public void getScoreAddsPointsForOwnAndReducesForOpponents() {
         setBoard("OXXX--\n" +
-                 "------\n" +
-                 "------\n" +
-                 "------\n" +
-                 "------\n" +
-                 "------\n");
+                "------\n" +
+                "------\n" +
+                "------\n" +
+                "------\n" +
+                "------\n");
         int points = 2 * initialPoints +
                 initialPoints * (int) Math.pow(pointFactor, 2);
-        assertEquals(points, new PossibleLines().getScore(game, game.getPlayerBySymbol(Symbol.X)));
+        assertEquals(points, new PossibleLines().getScore(game, 0));
     }
-
 
 
     private void setBoard(String board) {

@@ -5,6 +5,7 @@ import fi.aapzu.pentago.game.PentagoGameRuleException;
 import fi.aapzu.pentago.game.Player;
 import fi.aapzu.pentago.logic.Direction;
 import fi.aapzu.pentago.logic.Line;
+
 import java.util.Scanner;
 
 /**
@@ -12,10 +13,10 @@ import java.util.Scanner;
  *
  * @author Aapeli
  */
-public class TextUI {
+class TextUI {
 
-    private Pentago game;
-    private Scanner scanner;
+    private final Pentago game;
+    private final Scanner scanner;
 
     /**
      * Creates a new game and the scanner for the commands.
@@ -101,7 +102,8 @@ public class TextUI {
                     x = parseCoordinates(cmd)[0];
                     y = parseCoordinates(cmd)[1];
                     success2 = game.getBoard().validateTileCoordinates(x, y);
-                } catch (Exception ignored) {}
+                } catch (Exception ignored) {
+                }
             }
             while (!success3) {
                 System.out.println("Give the direction (1 for CLOCKWISE, 2 for COUNTER CLOCKWISE):");

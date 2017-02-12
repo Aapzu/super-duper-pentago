@@ -3,9 +3,7 @@ package fi.aapzu.pentago.game;
 import fi.aapzu.pentago.logic.marble.Symbol;
 
 /**
- * A player in the game. Can be either human-player or have a bot
- *
- * @author Aapeli
+ * A player in the game.
  */
 public class Player {
 
@@ -14,9 +12,10 @@ public class Player {
     private Integer playerNumber;
 
     /**
-     * Creates a Player with the given Symbol.
+     * Creates a Player with the given name and playerNumber.
      *
-     * @param name the name of the player
+     * @param name         the name of the player
+     * @param playerNumber index of the Player
      */
     public Player(String name, Integer playerNumber) {
         this.symbol = getSymbolForPlayerNumber(playerNumber);
@@ -24,16 +23,24 @@ public class Player {
         this.playerNumber = playerNumber;
     }
 
+    /**
+     * Creates new Player with the given name.
+     *
+     * @param name name of the Player
+     */
     public Player(String name) {
         this(name, null);
     }
 
+    /**
+     * Creates new Player with null name and playerNumber.
+     */
     public Player() {
         this(null, null);
     }
 
     /**
-     * Copy-constructor to clone the Player
+     * Copy-constructor to clone the Player.
      *
      * @param other Player to be cloned
      */
@@ -46,6 +53,7 @@ public class Player {
     /**
      * Creates a Player with the given Symbol. Uses null for the name.
      *
+     * @param playerNumber index of the player
      */
     public Player(int playerNumber) {
         this(null, playerNumber);
@@ -57,7 +65,7 @@ public class Player {
     }
 
     /**
-     * If this is called, it means the Player is not bot so it returns false
+     * If this is called, it means the Player is not bot so it returns false.
      *
      * @return false
      */
@@ -66,11 +74,12 @@ public class Player {
     }
 
     /**
-     * Return symbol for number. 0 => X, 1 => O
-     * @param playerNumber
+     * Return symbol for number. 0 equals 'X' while 1 equals 'O'
+     *
+     * @param playerNumber index to get the symbol from
      * @return symbol
      */
-    Symbol getSymbolForPlayerNumber(Integer playerNumber) {
+    public static Symbol getSymbolForPlayerNumber(Integer playerNumber) {
         if (playerNumber == null || playerNumber > 1 || playerNumber < 0) {
             return null;
         }
@@ -103,13 +112,17 @@ public class Player {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Player player = (Player) o;
 
         return symbol == player.symbol &&
-            (name == null || player.name == null || name.equals(player.name)) &&
-            (playerNumber == null || player.playerNumber == null || playerNumber.equals(player.playerNumber));
+                (name == null || player.name == null || name.equals(player.name)) &&
+                (playerNumber == null || player.playerNumber == null || playerNumber.equals(player.playerNumber));
     }
 }

@@ -11,47 +11,42 @@ import fi.aapzu.pentago.logic.Line;
 import fi.aapzu.pentago.logic.marble.Marble;
 import fi.aapzu.pentago.logic.marble.Symbol;
 import org.junit.After;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+
+import static org.junit.Assert.*;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.isA;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
- *
  * @author Aapeli
  */
 public class PentagoTest {
-    
-    Pentago game;
-    
+
+    private Pentago game;
+
     @Rule
     public final ExpectedException exception = ExpectedException.none();
-    
-    public PentagoTest() {}
+
+    public PentagoTest() {
+    }
 
     private void addMarble(int x, int y) {
         game.addMarble(x, y);
         game.rotateTile(1, 1, Direction.CLOCKWISE);
         assertNull(game.checkLines());
     }
-    
+
     @Before
     public void setUp() {
         game = new Pentago();
         game.addHumanPlayer("test");
         game.addHumanPlayer("test2");
     }
-    
+
     @After
     public void tearDown() {
         game = null;
@@ -73,9 +68,9 @@ public class PentagoTest {
         game.rotateTile(0, 0, Direction.CLOCKWISE);
         Pentago game2 = new Pentago(game);
 
-        assert(game.equals(game2));
+        assert (game.equals(game2));
     }
-    
+
     @Test
     public void clearClearsThePentago() {
         Board b = mock(Board.class);
@@ -88,7 +83,7 @@ public class PentagoTest {
         assertEquals(game.getPlayers()[0], game.whoseTurn());
         assertFalse(game.getAllowedToRotate());
     }
-        
+
     @Test
     public void setPlayerNameSetsRightName() {
         game.setPlayerName(0, "test0");
@@ -96,76 +91,76 @@ public class PentagoTest {
         assertEquals("test0", game.getPlayers()[0].getName());
         assertEquals("test1", game.getPlayers()[1].getName());
     }
-        
+
     @Test
     public void setPlayerThrowsExceptionIfTheIndexIsIllegl() {
         exception.expect(IllegalArgumentException.class);
         game.setPlayerName(-1, "test");
         game.setPlayerName(2, "test");
     }
-    
+
     @Test
     public void setMarbleSetsCorrectMarbleToCorrectPlace() {
-        game.addMarble(0,0);
+        game.addMarble(0, 0);
         assertEquals(Symbol.X, game.getBoard().toMarbleArray()[0][0].getSymbol());
     }
-    
+
     @Test
     public void setMarbleSetsAllowedToRotateToTrue() {
-        game.addMarble(0,0);
+        game.addMarble(0, 0);
         assertTrue(game.getAllowedToRotate());
     }
-    
+
     @Test
     public void setMarbleThrowsExceptionIfIllegalCoordinates() {
         exception.expect(IllegalArgumentException.class);
         game.addMarble(-1, -1);
     }
-    
+
     @Test
     public void setMarbleThrowsExceptionIfAllowedToRotate() {
         game.addMarble(0, 1);
         exception.expect(PentagoGameRuleException.class);
         game.addMarble(0, 0);
     }
-    
+
     @Test
     public void rotateTileRotatestheRightTile() {
         Board board = mock(Board.class);
         when(board.addMarble(isA(Marble.class), anyInt(), anyInt())).thenReturn(true);
         game.setBoard(board);
-        
+
         // A marble must be added always before rotating
         game.addMarble(0, 0);
         game.rotateTile(0, 0, Direction.CLOCKWISE);
         verify(board).rotateTile(0, 0, Direction.CLOCKWISE);
-        
+
         game.addMarble(0, 1);
         game.rotateTile(0, 1, Direction.COUNTER_CLOCKWISE);
         verify(board).rotateTile(0, 1, Direction.COUNTER_CLOCKWISE);
-        
+
         game.addMarble(0, 2);
         game.rotateTile(1, 0, Direction.CLOCKWISE);
         verify(board).rotateTile(1, 0, Direction.CLOCKWISE);
-        
+
         game.addMarble(0, 3);
         game.rotateTile(1, 1, Direction.COUNTER_CLOCKWISE);
         verify(board).rotateTile(1, 1, Direction.COUNTER_CLOCKWISE);
     }
-    
+
     @Test
     public void rotateTileSetsAllowedToRotateToFalse() {
         game.addMarble(0, 0);
-        game.rotateTile(0,0, Direction.CLOCKWISE);
+        game.rotateTile(0, 0, Direction.CLOCKWISE);
         assertFalse(game.getAllowedToRotate());
     }
-    
+
     @Test
     public void rotateTileThrowsExceptionIfNotAllowedToRotate() {
         exception.expect(PentagoGameRuleException.class);
         game.rotateTile(0, 0, Direction.CLOCKWISE);
     }
-    
+
     @Test
     public void rotateTileThrowsExceptionIfIllegalDirection() {
         game.addMarble(0, 0);
@@ -174,7 +169,7 @@ public class PentagoTest {
         game.addMarble(0, 1);
         game.rotateTile(0, 0, Direction.COUNTER_CLOCKWISE);
     }
-    
+
     @Test
     public void nextTurnChangestheTurn() {
         Player one = game.getPlayers()[0];
@@ -185,7 +180,7 @@ public class PentagoTest {
         game.nextTurn();
         assertEquals(game.whoseTurn(), one);
     }
-    
+
     @Test
     public void getPlayerBySymbolReturnsRight() {
         Player one = game.getPlayers()[0];
@@ -193,12 +188,12 @@ public class PentagoTest {
         assertEquals(one, game.getPlayerBySymbol(Symbol.X));
         assertEquals(two, game.getPlayerBySymbol(Symbol.O));
     }
-    
+
     @Test
     public void getPlayerBySymbolReturnsNullWithNullSymbol() {
         assertNull(game.getPlayerBySymbol(null));
     }
-    
+
     @Test
     public void checkLinesWorks() {
         addMarble(1, 5); // White
@@ -209,15 +204,15 @@ public class PentagoTest {
         addMarble(2, 2); // Black
         addMarble(1, 2); // White
         addMarble(2, 3); // Black
-        
-        
+
+
         game.addMarble(1, 1);
         game.rotateTile(1, 1, Direction.CLOCKWISE);
         Line line = game.checkLines();
         assertNotNull(line);
         assertEquals(game.getPlayers()[0], line.getPlayer());
     }
-    
+
     @Test
     public void isEvenClassIsFullOfBoard() {
         Board board = mock(Board.class);
@@ -227,35 +222,35 @@ public class PentagoTest {
         assertFalse(isEven);
         verify(board).isFull();
     }
-    
+
     @Test
     public void equalsWorks() {
-        game.addMarble(0,0);
-        game.rotateTile(0,0, Direction.CLOCKWISE);
-        game.addMarble(0,1);
-        
+        game.addMarble(0, 0);
+        game.rotateTile(0, 0, Direction.CLOCKWISE);
+        game.addMarble(0, 1);
+
         Pentago game2 = new Pentago();
         game2.addHumanPlayer("test");
         game2.addHumanPlayer("test2");
-        game2.addMarble(0,0);
-        game2.rotateTile(0,0, Direction.CLOCKWISE);
-        game2.addMarble(0,1);
-        
+        game2.addMarble(0, 0);
+        game2.rotateTile(0, 0, Direction.CLOCKWISE);
+        game2.addMarble(0, 1);
+
         Pentago game3 = new Pentago();
         game3.addHumanPlayer("test");
         game3.addHumanPlayer("test3");
-        game3.addMarble(0,0);
-        game3.rotateTile(0,0, Direction.CLOCKWISE);
-        game3.addMarble(0,1);
-        
+        game3.addMarble(0, 0);
+        game3.rotateTile(0, 0, Direction.CLOCKWISE);
+        game3.addMarble(0, 1);
+
         Pentago game4 = new Pentago();
         game4.addHumanPlayer("test");
         game4.addHumanPlayer("test2");
-        game4.addMarble(0,0);
-        game4.rotateTile(0,0, Direction.CLOCKWISE);
+        game4.addMarble(0, 0);
+        game4.rotateTile(0, 0, Direction.CLOCKWISE);
 
-        assert(game.equals(game2));
-        assert(game2.equals(game));
+        assert (game.equals(game2));
+        assert (game2.equals(game));
         assertFalse(game.equals(game3));
         assertFalse(game.equals(game4));
         assertFalse(game3.equals(game4));
@@ -267,8 +262,45 @@ public class PentagoTest {
         game.addMarble(0, 0);
         game.rotateTile(1, 1, Direction.CLOCKWISE);
 
-        Move newMove = new Move(game.getPlayers()[0], new Marble(game.getPlayers()[0].getSymbol()), 0, 0, 1, 1, Direction.CLOCKWISE);
+        Move newMove = new Move(0, new Marble(game.getPlayers()[0].getSymbol()), 0, 0, 1, 1, Direction.CLOCKWISE);
         Move oldMove = game.getLastMove();
-        assert(oldMove.equals(newMove));
+        assert (oldMove.equals(newMove));
+    }
+
+    @Test
+    public void serializeWorks() {
+        game.setBoard(mock(Board.class));
+        when(game.getBoard().serialize()).thenReturn("");
+
+        assertEquals(1, game.serialize().length());
+        assertEquals("0", game.serialize());
+        game.nextTurn();
+        assertEquals("1", game.serialize());
+        game.nextTurn();
+        assertEquals("0", game.serialize());
+    }
+
+    @Test
+    public void deserializeWorks() {
+        game.addMarble(0, 0);
+        game.rotateTile(0, 0, Direction.CLOCKWISE);
+        String s = game.getBoard().serialize() + "1";
+        Pentago game2 = new Pentago();
+        assert (game2.deserialize(s));
+        assert (game.getBoard().equals(game2.getBoard()));
+        assertEquals(game.getWhoseTurnIndex(), game2.getWhoseTurnIndex());
+    }
+
+    @Test
+    public void getLastMoveWorksAlsoForSerializedPentago() {
+        game.addMarble(0, 0);
+        game.rotateTile(1, 1, Direction.CLOCKWISE);
+
+        Pentago game2 = new Pentago();
+        game2.deserialize(game.serialize());
+        Move newMove = new Move(0, new Marble(game.getPlayers()[0].getSymbol()), 0, 0, 1, 1, Direction.CLOCKWISE);
+        Move oldMove = game2.getLastMove();
+        assertNotNull(oldMove);
+        assert (oldMove.equals(newMove));
     }
 }

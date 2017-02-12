@@ -6,22 +6,23 @@
 package fi.aapzu.pentago.game;
 
 import fi.aapzu.pentago.logic.marble.Symbol;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
 /**
- *
  * @author Aapeli
  */
 public class PlayerTest {
 
-    public PlayerTest() {}
+    public PlayerTest() {
+    }
 
     @Test
     public void constructorsWorksRight() {
         Player p = new Player(0);
-        assertEquals((Integer)0, p.getPlayerNumber());
+        assertEquals((Integer) 0, p.getPlayerNumber());
 
         p = new Player("test");
         assertEquals("test", p.getName());

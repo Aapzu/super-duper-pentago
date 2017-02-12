@@ -1,19 +1,18 @@
 package fi.aapzu.pentago.ai.heuristics;
 
 import fi.aapzu.pentago.game.Pentago;
-import fi.aapzu.pentago.game.Player;
 
 /**
- * A heuristic used by Bot
+ * A heuristic used by Bot.
  */
 public interface Heuristic {
 
     /**
-     * Calculates a value for the gameState for the player
+     * Calculates a value for the gameState for the player.
      *
-     * @param gameState
-     * @param player
+     * @param gameState   state of the Pentago game
+     * @param playerIndex index of the Player for whom the score is calculated
      * @return score
      */
-    int getScore(Pentago gameState, Player player);
+    int getScore(Pentago gameState, int playerIndex);
 }

@@ -16,7 +16,7 @@ import java.util.Arrays;
  */
 public class LineChecker {
 
-    private Marble[][] marbles;
+    private final Marble[][] marbles;
     private Board board;
 
     /**
@@ -29,6 +29,11 @@ public class LineChecker {
         this.board = board;
     }
 
+    /**
+     * Creates a new LineChecker for the given Tile.
+     *
+     * @param tile the Tile to be checked
+     */
     public LineChecker(Tile tile) {
         this.marbles = tile.toMarbleArray();
     }
@@ -67,7 +72,7 @@ public class LineChecker {
      * @param d      the Direction to be looked at
      * @return the line or null
      */
-    protected Line checkLines(int length, Direction d) {
+    Line checkLines(int length, Direction d) {
         int wholeLength = marbles.length;
         // An empty line
         Line line = new Line();

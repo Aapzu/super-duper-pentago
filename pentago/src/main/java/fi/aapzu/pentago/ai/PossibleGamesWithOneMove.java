@@ -1,43 +1,61 @@
 package fi.aapzu.pentago.ai;
 
-import fi.aapzu.pentago.game.Pentago;
-import fi.aapzu.pentago.logic.Board;
-import fi.aapzu.pentago.logic.Direction;
-
 import java.util.ArrayList;
 
 /**
  * A class to determine the possible games one can get from a game state with a single move
  */
-public class PossibleGamesWithOneMove {
+class PossibleGamesWithOneMove {
+
+    private static final char[][] ROTATION_TILE_DIRECTION_POSSIBILITIES = {
+            {'0', '0', '1'}, {'0', '0', '2'}, {'0', '1', '1'}, {'0', '1', '2'},
+            {'1', '0', '1'}, {'1', '0', '2'}, {'1', '1', '1'}, {'1', '1', '2'},
+    };
+
+    private static boolean rotationTileDirectionIsOpposite(char[] first, char[] second) {
+        return first[0] == second[0] &&
+                first[1] == second[1] &&
+                first[2] != '0' &&
+                second[2] != '0' &&
+                ((first[2] == '1' && second[2] == '2') ||
+                        (first[2] == '2' && second[2] == '1'));
+    }
 
     /**
-     * @param game
+     * @param s serialization String of the Pentago game
      * @return gameStates
      */
-    public static Pentago[] get(Pentago game) {
-        ArrayList<Pentago> games = new ArrayList<>();
-        Board board = game.getBoard();
-        int wholeLength = board.getTileSideLength() * board.getSideLength();
-        for (int y = 0; y < wholeLength; y++) {
-            for (int x = 0; x < wholeLength; x++) {
-                Pentago newGame = new Pentago(game);
-                try {
-                    newGame.addMarble(x, y);
-                    for (int tileY = 0; tileY < board.getSideLength(); tileY++) {
-                        for (int tileX = 0; tileX < board.getSideLength(); tileX++) {
-                            for (Direction d :Direction.getRotateDirections()) {
-                                try {
-                                    Pentago newNewGame = new Pentago(newGame);
-                                    newNewGame.rotateTile(tileX, tileY, d);
-                                    games.add(newNewGame);
-                                } catch (Exception ignored) {}
-                            }
-                        }
-                    }
-                } catch (Exception ignored) {}
+    public static String[] get(String s) {
+        char symbol = s.charAt(s.length() - 1) == '0' ? '1' : '2';
+        return getGamesAfterRotationAndMarbleInsertion(s, symbol);
+    }
+
+    private static String[] getGamesAfterRotationAndMarbleInsertion(String s, char symbol) {
+        ArrayList<String> games = new ArrayList<>();
+        for (String g : getGamesAfterMarbleInsertion(s, symbol)) {
+            char[] chars = g.toCharArray();
+            char[] chars2 = new char[]{chars[38], chars[39], chars[40]};
+            for (char[] pos : ROTATION_TILE_DIRECTION_POSSIBILITIES) {
+                if (!rotationTileDirectionIsOpposite(chars2, pos)) {
+                    chars[38] = pos[0];
+                    chars[39] = pos[1];
+                    chars[40] = pos[2];
+                    games.add(new String(chars));
+                }
             }
         }
-        return games.toArray(new Pentago [games.size()]);
+        return games.toArray(new String[games.size()]);
+    }
+
+    private static String[] getGamesAfterMarbleInsertion(String s, char symbol) {
+        ArrayList<String> gamesBeforeRotation = new ArrayList<>();
+        for (int i = 0; i < 36; i++) {
+            if (s.charAt(i) == '0') {
+                char[] chars = s.toCharArray();
+                chars[i] = symbol;
+                gamesBeforeRotation.add(new String(chars));
+            }
+        }
+        return gamesBeforeRotation.toArray(new String[gamesBeforeRotation.size()]);
     }
 }

@@ -1,14 +1,16 @@
 package fi.aapzu.pentago.game;
 
 import fi.aapzu.pentago.ai.AlphaBetaPruning;
+import fi.aapzu.pentago.ai.PentagoNode;
 import fi.aapzu.pentago.logic.Direction;
 
 /**
- * A bot which makes decisions on behalf of a Player
+ * A bot which makes decisions on behalf of a Player.
  */
 public class Bot extends Player {
 
     private final Pentago game;
+    private final AlphaBetaPruning alphaBetaPruning;
 
     /**
      * @param game Pentago game the bot is playing
@@ -16,6 +18,7 @@ public class Bot extends Player {
     Bot(Pentago game, String name) {
         super(name);
         this.game = game;
+        this.alphaBetaPruning = new AlphaBetaPruning();
     }
 
     /**
@@ -25,13 +28,16 @@ public class Bot extends Player {
      */
     @Override
     public boolean makeMove() {
-        Pentago bestGame = (Pentago)AlphaBetaPruning.getBest(game, 1);
-        Move move = bestGame.getLastMove();
+        PentagoNode bestGame = (PentagoNode) alphaBetaPruning.getBest(new PentagoNode(game.serialize()), 2);
+        Pentago game = new Pentago();
+        game.deserialize(bestGame.getSerializationString());
+        Move move = game.getLastMove();
         actByMove(move);
         return true;
     }
 
     // TODO: remove this
+
     /**
      * Makes a random move
      */
@@ -41,23 +47,25 @@ public class Bot extends Player {
         int x;
         while (!success) {
             try {
-                y = (int)(Math.random() * 6);
-                x = (int)(Math.random() * 6);
+                y = (int) (Math.random() * 6);
+                x = (int) (Math.random() * 6);
                 this.game.addMarble(x, y);
                 success = true;
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {
+            }
         }
         success = false;
         Direction[] directions = Direction.getRotateDirections();
         int i;
         while (!success) {
             try {
-                x = (int)(Math.random() * 2);
-                y = (int)(Math.random() * 2);
-                i = (int)(Math.random() * 2);
+                x = (int) (Math.random() * 2);
+                y = (int) (Math.random() * 2);
+                i = (int) (Math.random() * 2);
                 this.game.rotateTile(x, y, directions[i]);
                 success = true;
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {
+            }
         }
     }
 
