@@ -3,6 +3,7 @@ package fi.aapzu.pentago.ai;
 import fi.aapzu.pentago.game.Move;
 import fi.aapzu.pentago.game.Pentago;
 import fi.aapzu.pentago.logic.Direction;
+import fi.aapzu.pentago.util.DynamicArray;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,8 +29,8 @@ public class PossibleGamesWithOneMoveTest {
 
     @Test
     public void getReturnsRightGamesInTheBeginning() {
-        String[] games = PossibleGamesWithOneMove.get(game.serialize());
-        assertEquals(288, games.length);
+        DynamicArray<String> games = PossibleGamesWithOneMove.get(game.serialize());
+        assertEquals(288, games.size());
 
         for (String p : games) {
             int marbles = 0;
@@ -53,7 +54,7 @@ public class PossibleGamesWithOneMoveTest {
     public void itOnlyReturnsValidMoves() {
         game.addMarble(0, 0);
         game.rotateTile(0, 0, Direction.CLOCKWISE);
-        String[] games = PossibleGamesWithOneMove.get(game.serialize());
+        DynamicArray<String> games = PossibleGamesWithOneMove.get(game.serialize());
         for (String s : games) {
             Pentago g = new Pentago();
             g.deserialize(s);

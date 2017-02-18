@@ -7,6 +7,7 @@ package fi.aapzu.pentago.logic;
 
 import fi.aapzu.pentago.game.Player;
 import fi.aapzu.pentago.logic.marble.Symbol;
+import fi.aapzu.pentago.util.DynamicArray;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,7 +20,7 @@ import java.util.Arrays;
 public class Line {
 
     private Symbol symbol;
-    private final ArrayList<Integer[]> coordinates = new ArrayList<>();
+    private final DynamicArray<Integer[]> coordinates = new DynamicArray<>();
     private Direction direction;
     private Player player;
 
@@ -32,7 +33,7 @@ public class Line {
         coordinates.add(c);
     }
 
-    public ArrayList<Integer[]> getCoordinates() {
+    public DynamicArray<Integer[]> getCoordinates() {
         return coordinates;
     }
 

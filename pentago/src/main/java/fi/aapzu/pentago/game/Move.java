@@ -18,42 +18,16 @@ public class Move {
     private final int tileY;
     private final Direction rotateDirection;
 
-    public int getPlayer() {
-        return player;
-    }
-
-    public Marble getMarble() {
-        return marble;
-    }
-
-    public int getMarbleX() {
-        return marbleX;
-    }
-
-    public int getMarbleY() {
-        return marbleY;
-    }
-
-    public int getTileX() {
-        return tileX;
-    }
-
-    public int getTileY() {
-        return tileY;
-    }
-
-    public Direction getRotateDirection() {
-        return rotateDirection;
-    }
-
     /**
-     * @param player
-     * @param marble
-     * @param marbleX
-     * @param marbleY
-     * @param tileX
-     * @param tileY
-     * @param rotateDirection
+     * Constructor of Move.
+     *
+     * @param player index of the Player who made the move
+     * @param marble instance of the Marble set in the move
+     * @param marbleX x position of the Marble set
+     * @param marbleY y position of the Marble set
+     * @param tileX x position of the rotated Tile
+     * @param tileY y position of the rotated Tile
+     * @param rotateDirection Direction of the rotated tile
      */
     Move(int player, Marble marble, int marbleX, int marbleY, int tileX, int tileY, Direction rotateDirection) {
         this.player = player;
@@ -94,6 +68,34 @@ public class Move {
             ", tileY=" + tileY +
             ", rotateDirection=" + rotateDirection +
             '}';
+    }
+
+    public int getPlayer() {
+        return player;
+    }
+
+    public Marble getMarble() {
+        return marble;
+    }
+
+    public int getMarbleX() {
+        return marbleX;
+    }
+
+    public int getMarbleY() {
+        return marbleY;
+    }
+
+    public int getTileX() {
+        return tileX;
+    }
+
+    public int getTileY() {
+        return tileY;
+    }
+
+    public Direction getRotateDirection() {
+        return rotateDirection;
     }
 
 }

@@ -13,6 +13,8 @@ public class Bot extends Player {
     private final AlphaBetaPruning alphaBetaPruning;
 
     /**
+     * Constructor for Bot.
+     *
      * @param game Pentago game the bot is playing
      */
     Bot(Pentago game, String name) {
@@ -36,38 +38,6 @@ public class Bot extends Player {
         return true;
     }
 
-    // TODO: remove this
-
-    /**
-     * Makes a random move
-     */
-    void makeRandomMove() {
-        boolean success = false;
-        int y;
-        int x;
-        while (!success) {
-            try {
-                y = (int) (Math.random() * 6);
-                x = (int) (Math.random() * 6);
-                this.game.addMarble(x, y);
-                success = true;
-            } catch (Exception ignored) {
-            }
-        }
-        success = false;
-        Direction[] directions = Direction.getRotateDirections();
-        int i;
-        while (!success) {
-            try {
-                x = (int) (Math.random() * 2);
-                y = (int) (Math.random() * 2);
-                i = (int) (Math.random() * 2);
-                this.game.rotateTile(x, y, directions[i]);
-                success = true;
-            } catch (Exception ignored) {
-            }
-        }
-    }
 
     /**
      * Gets a Move and sets a marble on the board and rotates a tile.

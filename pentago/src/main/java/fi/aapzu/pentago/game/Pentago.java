@@ -18,7 +18,6 @@ public class Pentago implements Serializable {
 
     private int whoseTurnIndex;
     private boolean allowedToRotate;
-    private int turnsDone;
 
     /**
      * Creates a new game with a Board, two Players and the bookkeeping of whose
@@ -126,24 +125,7 @@ public class Pentago implements Serializable {
         if (!success) {
             throw new IllegalArgumentException("the coordinates outside the board!");
         }
-        turnsDone++;
         allowedToRotate = true;
-    }
-
-    /**
-     * Calls addMarble without throwing an Exception.
-     *
-     * @param x the X coordinate of the Marble
-     * @param y the Y coordinate of the Marble
-     * @return true if succeeded, else false
-     */
-    public boolean tryAddMarble(int x, int y) {
-        try {
-            addMarble(x, y);
-            return true;
-        } catch (IllegalArgumentException e) {
-            return false;
-        }
     }
 
     /**
@@ -165,23 +147,6 @@ public class Pentago implements Serializable {
         board.rotateTile(x, y, d);
         allowedToRotate = false;
         nextTurn();
-    }
-
-    /**
-     * Calls rotateTile without throwing an Exception.
-     *
-     * @param x the X coordinate of the Tile
-     * @param y the X coordinate of the Tile
-     * @param d the Direction
-     * @return true if succeeded, else false
-     */
-    public boolean tryRotateTile(int x, int y, Direction d) {
-        try {
-            rotateTile(x, y, d);
-            return true;
-        } catch (PentagoGameRuleException e) {
-            return false;
-        }
     }
 
     /**
@@ -217,7 +182,7 @@ public class Pentago implements Serializable {
     /**
      * Changes the turn from other player to another.
      */
-    public void nextTurn() {
+    void nextTurn() {
         whoseTurnIndex = (whoseTurnIndex + 1) % 2;
     }
 
@@ -227,7 +192,7 @@ public class Pentago implements Serializable {
      * @param symbol symbol to get the Player of
      * @return player or null
      */
-    public Player getPlayerBySymbol(Symbol symbol) {
+    Player getPlayerBySymbol(Symbol symbol) {
         for (Player p : players) {
             if (p.getSymbol() == symbol) {
                 return p;

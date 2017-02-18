@@ -8,6 +8,8 @@ package fi.aapzu.pentago.logic;
 import fi.aapzu.pentago.game.PentagoGameRuleException;
 import fi.aapzu.pentago.logic.marble.Marble;
 import fi.aapzu.pentago.logic.marble.Symbol;
+import fi.aapzu.pentago.util.ArrayUtils;
+import fi.aapzu.pentago.util.DynamicArray;
 import org.junit.*;
 import org.junit.rules.ExpectedException;
 
@@ -103,21 +105,21 @@ public class LineCheckerTest {
             }
             board.addMarble(m, point[0], point[1]);
         }
-        Line line = (Line) lineChecker.checkLines(length);
+        Line line = lineChecker.checkLines(length);
         assertNotNull(line);
         assertNotNull(line.getSymbol());
         assertNotNull(line.getCoordinates());
         assertEquals(Symbol.O, line.getSymbol());
-        assertEquals(length, ((ArrayList) line.getCoordinates()).size());
+        assertEquals(length, line.getCoordinates().size());
 
         // Needed because ArrayList.contains(T[]) doesn't work
-        ArrayList<ArrayList<Integer>> copyOfPoints = new ArrayList<>();
+        DynamicArray<DynamicArray<Integer>> copyOfPoints = new DynamicArray<>();
         for (Integer[] point : points) {
-            copyOfPoints.add(new ArrayList<>(Arrays.asList(point)));
+            copyOfPoints.add(ArrayUtils.asList(point));
         }
 
-        for (Integer[] point : (ArrayList<Integer[]>) line.getCoordinates()) {
-            assertTrue(copyOfPoints.contains(new ArrayList<>(Arrays.asList(point))));
+        for (Integer[] point : line.getCoordinates()) {
+            assertTrue(copyOfPoints.contains(new DynamicArray<>(point)));
         }
     }
 

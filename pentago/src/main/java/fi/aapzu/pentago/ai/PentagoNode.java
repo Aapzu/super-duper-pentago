@@ -2,6 +2,7 @@ package fi.aapzu.pentago.ai;
 
 import fi.aapzu.pentago.ai.heuristics.Heuristics;
 import fi.aapzu.pentago.game.Pentago;
+import fi.aapzu.pentago.util.DynamicArray;
 
 /**
  * Wrapper between serialized Pentago and AlphaBetaPruning.
@@ -39,10 +40,12 @@ public class PentagoNode implements Node {
 
     @Override
     public Node[] getChildren() {
-        String[] strings = PossibleGamesWithOneMove.get(getSerializationString());
-        PentagoNode[] games = new PentagoNode[strings.length];
-        for (int i = 0; i < strings.length; i++) {
-            games[i] = new PentagoNode(strings[i]);
+        DynamicArray<String> strings = PossibleGamesWithOneMove.get(getSerializationString());
+        PentagoNode[] games = new PentagoNode[strings.size()];
+        int i = 0;
+        for (String s : strings) {
+            games[i] = new PentagoNode(s);
+            i++;
         }
         return games;
     }

@@ -21,7 +21,7 @@ public class AlphaBetaPruning {
      *
      * @param node       the node to begin the calculation from
      * @param movesAhead how many moves ahead is calculated before implying heuristics
-     * @return move the best move
+     * @return the best move
      */
     public Node getBest(Node node, int movesAhead) {
         Node bestNodeYet = node;

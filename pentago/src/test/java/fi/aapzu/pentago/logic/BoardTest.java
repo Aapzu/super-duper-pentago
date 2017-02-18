@@ -2,6 +2,7 @@ package fi.aapzu.pentago.logic;
 
 import fi.aapzu.pentago.logic.marble.Marble;
 import fi.aapzu.pentago.logic.marble.Symbol;
+import fi.aapzu.pentago.util.ArrayUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -361,14 +362,14 @@ public class BoardTest {
         board.addMarble(O, 1, 4);
         board.addMarble(O, 2, 4);
         board.addMarble(O, 4, 4);
-        assertEquals(new Marble[][]{
+        assert(ArrayUtils.deepEquals(new Marble[][]{
                 {O, null, null, null, X, null},
                 {null, O, O, null, X, null},
                 {null, null, null, null, X, null},
                 {null, null, null, null, null, null},
                 {null, O, O, null, O, null},
                 {null, null, null, null, null, null}
-        }, board.getMarbleArray());
+        }, board.getMarbleArray()));
     }
 
     @Test

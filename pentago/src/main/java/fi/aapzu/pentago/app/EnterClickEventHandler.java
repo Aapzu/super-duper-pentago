@@ -43,7 +43,6 @@ class EnterClickEventHandler implements EventHandler<Event> {
     /**
      * The thing the eventHandler really does.
      */
-    void handleEvent() {
-    }
+    void handleEvent() {}
 
 }

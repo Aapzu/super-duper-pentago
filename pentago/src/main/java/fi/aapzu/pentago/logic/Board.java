@@ -15,19 +15,18 @@ public class Board implements Serializable {
 
     private final int sideLength;
     private final int tileSideLength;
-
     private final int totalSideLength;
 
     private Tile[][] tiles;
-    private Tile lastRotatedTile;
 
-    private Direction lastRotatedTileDirection;
+    private Tile lastRotatedTile;
     private int lastRotatedTileY;
     private int lastRotatedTileX;
+    private Direction lastRotatedTileDirection;
 
+    private Marble lastMarble;
     private int lastMarbleY;
     private int lastMarbleX;
-    private Marble lastMarble;
 
     /**
      * Copy-constructor to clone the Board.
@@ -112,7 +111,7 @@ public class Board implements Serializable {
      * @param marbleY the Y coordinate of the Marble
      * @return the Tile
      */
-    public Tile getTileByCoordinates(int marbleX, int marbleY) {
+    Tile getTileByCoordinates(int marbleX, int marbleY) {
         return getTile(marbleX / tileSideLength, marbleY / tileSideLength);
     }
 
@@ -154,7 +153,7 @@ public class Board implements Serializable {
      * @param y the Y coordinate
      * @return the removed Marble
      */
-    public Marble removeMarble(int x, int y) {
+    Marble removeMarble(int x, int y) {
         Tile tile = getTileByCoordinates(x, y);
         return tile.removeMarble(x % tileSideLength, y % tileSideLength);
     }
@@ -290,6 +289,11 @@ public class Board implements Serializable {
             lastRotatedTileDirection == board.lastRotatedTileDirection;
     }
 
+    /**
+     * Gives the Marbles on the Board in a single 2d array
+     *
+     * @return array of Marbles
+     */
     Marble[][] getMarbleArray() {
         Marble[][] marbles = new Marble[getTotalSideLength()][getTotalSideLength()];
         for (int y = 0; y < getTotalSideLength(); y++) {

@@ -1,5 +1,7 @@
 package fi.aapzu.pentago.ai;
 
+import fi.aapzu.pentago.util.DynamicArray;
+
 import java.util.ArrayList;
 
 /**
@@ -8,8 +10,8 @@ import java.util.ArrayList;
 class PossibleGamesWithOneMove {
 
     private static final char[][] ROTATION_TILE_DIRECTION_POSSIBILITIES = {
-            {'0', '0', '1'}, {'0', '0', '2'}, {'0', '1', '1'}, {'0', '1', '2'},
-            {'1', '0', '1'}, {'1', '0', '2'}, {'1', '1', '1'}, {'1', '1', '2'},
+        {'0', '0', '1'}, {'0', '0', '2'}, {'0', '1', '1'}, {'0', '1', '2'},
+        {'1', '0', '1'}, {'1', '0', '2'}, {'1', '1', '1'}, {'1', '1', '2'},
     };
 
     private static boolean rotationTileDirectionIsOpposite(char[] first, char[] second) {
@@ -22,16 +24,18 @@ class PossibleGamesWithOneMove {
     }
 
     /**
+     * Gives all the possible moves after one move
+     *
      * @param s serialization String of the Pentago game
      * @return gameStates
      */
-    public static String[] get(String s) {
+    static DynamicArray<String> get(String s) {
         char symbol = s.charAt(s.length() - 1) == '0' ? '1' : '2';
         return getGamesAfterRotationAndMarbleInsertion(s, symbol);
     }
 
-    private static String[] getGamesAfterRotationAndMarbleInsertion(String s, char symbol) {
-        ArrayList<String> games = new ArrayList<>();
+    private static DynamicArray<String> getGamesAfterRotationAndMarbleInsertion(String s, char symbol) {
+        DynamicArray<String> games = new DynamicArray<>();
         for (String g : getGamesAfterMarbleInsertion(s, symbol)) {
             char[] chars = g.toCharArray();
             char[] chars2 = new char[]{chars[38], chars[39], chars[40]};
@@ -44,7 +48,7 @@ class PossibleGamesWithOneMove {
                 }
             }
         }
-        return games.toArray(new String[games.size()]);
+        return games;
     }
 
     private static String[] getGamesAfterMarbleInsertion(String s, char symbol) {

@@ -18,13 +18,13 @@ public class MarblesInSameTile implements Heuristic {
     private static final int THREE = 200;
 
     private static final int[][][] VERTICAL_HORIZONTAL_LINES = {
-            {{0, 0}, {1, 0}, {2, 0}}, {{0, 1}, {1, 1}, {2, 1}},
-            {{0, 2}, {1, 2}, {2, 2}}, {{0, 0}, {0, 1}, {0, 2}},
-            {{1, 0}, {1, 1}, {1, 2}}, {{2, 0}, {2, 1}, {2, 2}},
+        {{0, 0}, {1, 0}, {2, 0}}, {{0, 1}, {1, 1}, {2, 1}},
+        {{0, 2}, {1, 2}, {2, 2}}, {{0, 0}, {0, 1}, {0, 2}},
+        {{1, 0}, {1, 1}, {1, 2}}, {{2, 0}, {2, 1}, {2, 2}},
     };
 
     private static final int[][][] DIAGONAL_LINES = {
-            {{0, 0}, {1, 1}, {2, 2}}, {{0, 2}, {1, 1}, {2, 0}}
+        {{0, 0}, {1, 1}, {2, 2}}, {{0, 2}, {1, 1}, {2, 0}}
     };
 
     private int analyzeLine(Tile tile, Symbol me, int[][] possibleLine, boolean diagonal) {
@@ -52,15 +52,12 @@ public class MarblesInSameTile implements Heuristic {
     private int analyzeTile(Tile tile, int playerIndex) {
         Symbol me = Player.getSymbolForPlayerNumber(playerIndex);
         int t = 0;
-
         for (int[][] possibleLine : VERTICAL_HORIZONTAL_LINES) {
             t += analyzeLine(tile, me, possibleLine, false);
         }
-
         for (int[][] possibleLine : DIAGONAL_LINES) {
             t += analyzeLine(tile, me, possibleLine, true);
         }
-
         return t;
     }
 

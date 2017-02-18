@@ -1,12 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package fi.aapzu.pentago.logic;
 
 import fi.aapzu.pentago.game.Player;
 import fi.aapzu.pentago.logic.marble.Symbol;
+import fi.aapzu.pentago.util.ArrayUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,9 +12,6 @@ import java.util.Arrays;
 
 import static org.junit.Assert.*;
 
-/**
- * @author Aapeli
- */
 public class LineTest {
 
     private Line line;
@@ -39,7 +33,7 @@ public class LineTest {
     public void addCoordinateAddsCoordinate() {
         line.addCoordinate(new Integer[]{0, 0});
         assertEquals(1, line.getCoordinates().size());
-        assertTrue(Arrays.equals(new Integer[]{0, 0}, line.getCoordinates().get(0)));
+        assertTrue(ArrayUtils.deepEquals(new Integer[]{0, 0}, line.getCoordinates().get(0)));
     }
 
     @Test
