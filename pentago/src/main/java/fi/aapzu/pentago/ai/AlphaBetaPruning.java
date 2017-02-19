@@ -26,8 +26,8 @@ public class AlphaBetaPruning {
     public Node getBest(Node node, int movesAhead) {
         Node bestNodeYet = node;
         int bestScore = Integer.MIN_VALUE;
-        int alpha = Integer.MIN_VALUE;
-        int beta = Integer.MAX_VALUE;
+        Integer alpha = Integer.MIN_VALUE;
+        Integer beta = Integer.MAX_VALUE;
         Node[] children = node.getChildren();
         for (Node n : children) {
             int score = maxValue(n, alpha, beta, 1, movesAhead);
@@ -39,7 +39,7 @@ public class AlphaBetaPruning {
         return bestNodeYet;
     }
 
-    private int value(boolean minValue, Node node, int alpha, int beta, int depth, int maxDepth) {
+    private int value(boolean minValue, Node node, Integer alpha, Integer beta, int depth, int maxDepth) {
         int newDepth = depth + 1;
 
         Node[] children = node.getChildren();
@@ -56,19 +56,23 @@ public class AlphaBetaPruning {
             value = minValue ?
                     Math.min(value, maxValue(n, alpha, beta, newDepth, maxDepth)) :
                     Math.max(value, minValue(n, alpha, beta, newDepth, maxDepth));
-            if ((minValue && value < alpha) || value > beta) {
+            if ((minValue && value > beta || value < alpha)) {
                 return value;
             }
-            alpha = minValue ? Math.min(value, beta) : Math.max(alpha, value);
+            if (minValue) {
+                beta = Math.min(beta, value);
+            } else {
+                alpha = Math.max(alpha, value);
+            }
         }
         return value;
     }
 
-    private int maxValue(Node node, int alpha, int beta, int depth, int maxDepth) {
+    private int maxValue(Node node, Integer alpha, Integer beta, int depth, int maxDepth) {
         return value(false, node, alpha, beta, depth, maxDepth);
     }
 
-    private int minValue(Node node, int alpha, int beta, int depth, int maxDepth) {
+    private int minValue(Node node, Integer alpha, Integer beta, int depth, int maxDepth) {
         return value(true, node, alpha, beta, depth, maxDepth);
     }
 }

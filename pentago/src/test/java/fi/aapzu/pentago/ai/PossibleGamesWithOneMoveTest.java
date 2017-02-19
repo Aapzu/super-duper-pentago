@@ -52,7 +52,7 @@ public class PossibleGamesWithOneMoveTest {
     @Test
     public void itOnlyReturnsValidMoves() {
         game.addMarble(0, 0);
-        game.rotateTile(0, 0, Direction.CLOCKWISE);
+        game.rotateTile(1, 1, Direction.CLOCKWISE);
         DynamicArray<String> games = PossibleGamesWithOneMove.get(game.serialize());
         for (String s : games) {
             Pentago g = new Pentago();

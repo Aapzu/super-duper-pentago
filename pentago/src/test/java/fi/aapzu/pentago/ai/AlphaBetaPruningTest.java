@@ -102,28 +102,28 @@ public class AlphaBetaPruningTest {
     @Test
     public void itWorksWithBiggerTreeAndDepth() {
         Node node = new TestNode("moi", 0, new TestNode[]{
-                new TestNode("b", 0, new TestNode[]{
-                        new TestNode("ba", 0, new TestNode[]{
-                                new TestNode(1)
-                        }),
-                        new TestNode("bb", 0, new TestNode[]{
-                                new TestNode(1)
-                        })
+            new TestNode("b", 0, new TestNode[]{
+                new TestNode("ba", 0, new TestNode[]{
+                    new TestNode(1)
                 }),
-                new TestNode("a", 0, new TestNode[]{
-                        new TestNode("aa", -1),
-                        new TestNode("ab", 0, new TestNode[]{
-                                new TestNode(1, new TestNode[]{
-                                        new TestNode(100)
-                                })
-                        })
-                }),
-                new TestNode("c", 0, new TestNode[]{
-                        new TestNode("ca", -1),
-                        new TestNode("cb", 0, new TestNode[]{
-                                new TestNode(1)
-                        })
+                new TestNode("bb", 0, new TestNode[]{
+                    new TestNode(1)
                 })
+            }),
+            new TestNode("a", 0, new TestNode[]{
+                new TestNode("aa", -1),
+                new TestNode("ab", 0, new TestNode[]{
+                    new TestNode(1, new TestNode[]{
+                        new TestNode(100)
+                    })
+                })
+            }),
+            new TestNode("c", 0, new TestNode[]{
+                new TestNode("ca", -1),
+                new TestNode("cb", 0, new TestNode[]{
+                    new TestNode(1)
+                })
+            })
         });
         assertEquals("b", ((TestNode) alphaBetaPruning.getBest(node, 2)).getName());
         assertEquals("a", ((TestNode) alphaBetaPruning.getBest(node, 3)).getName());
