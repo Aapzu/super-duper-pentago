@@ -1,5 +1,6 @@
 package fi.aapzu.pentago.util;
 
+import java.lang.reflect.Array;
 import java.util.Iterator;
 
 /**
@@ -24,6 +25,8 @@ public class DynamicArray<T> implements Iterable<T> {
     public DynamicArray(T[] array) {
         itemArray = array;
         arrayLength = array.length;
+        arrayIndex = array.length;
+        doubleArraySize();
     }
 
     /**
@@ -87,13 +90,22 @@ public class DynamicArray<T> implements Iterable<T> {
         if (obj == null || !(obj instanceof DynamicArray)) {
             return false;
         }
-        DynamicArray that = (DynamicArray) obj;
-        int i = 0;
-        for (Object o : that) {
-            if (!o.equals(this.get(i))) {
+        DynamicArray<Object> that = (DynamicArray<Object>) obj;
+        if (size() != that.size()) {
+            return false;
+        }
+        for (int i = 0; i < size(); i++) {
+            Object a = get(i);
+            Object b = that.get(i);
+            if (a == b) {
+                continue;
+            }
+            if (a instanceof Object[] && b instanceof Object[] && !ArrayUtils.deepEquals((Object[]) a, (Object[]) b)) {
+               return false;
+            }
+            if (a != null && !(a instanceof Object[]) && !a.equals(b)) {
                 return false;
             }
-            i++;
         }
         return true;
     }

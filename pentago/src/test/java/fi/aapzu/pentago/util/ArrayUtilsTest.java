@@ -6,6 +6,7 @@ import org.junit.Test;
 import static fi.aapzu.pentago.logic.marble.Symbol.O;
 import static fi.aapzu.pentago.logic.marble.Symbol.X;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 public class ArrayUtilsTest {
 
@@ -17,11 +18,11 @@ public class ArrayUtilsTest {
 
         String[] a3 = new String[]{"1", "2", "3", "4"};
         String[] a4 = new String[]{"1", "2", "3", "4"};
-        assert(!ArrayUtils.deepEquals(a1, a3));
+        assertFalse(ArrayUtils.deepEquals(a1, a3));
         assert(ArrayUtils.deepEquals(a3, a4));
 
         String[] a5 = new String[]{"1", "3", "3"};
-        assert(!ArrayUtils.deepEquals(a1, a5));
+        assertFalse(ArrayUtils.deepEquals(a1, a5));
 
         String[][] a6 = new String[][]{
                 {"1", "2"}, {"3", "4"}
@@ -33,7 +34,7 @@ public class ArrayUtilsTest {
                 {"1", "2"}, {"4", "4"}
         };
         assert(ArrayUtils.deepEquals(a6, a7));
-        assert(!ArrayUtils.deepEquals(a6, a8));
+        assertFalse(ArrayUtils.deepEquals(a6, a8));
 
         assert(ArrayUtils.deepEquals(new Marble[][]{
                 {new Marble(O), null, null, null, new Marble(X), null},
@@ -50,7 +51,7 @@ public class ArrayUtilsTest {
                 {null, new Marble(O), new Marble(O), null, new Marble(O), null},
                 {null, null, null, null, null, null}
         }));
-
+        assertFalse(ArrayUtils.deepEquals(new Integer[]{null}, new Integer[]{2}));
     }
 
     @Test

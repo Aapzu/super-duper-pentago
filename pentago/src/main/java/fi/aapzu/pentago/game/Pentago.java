@@ -3,7 +3,10 @@ package fi.aapzu.pentago.game;
 import fi.aapzu.pentago.logic.*;
 import fi.aapzu.pentago.logic.marble.Marble;
 import fi.aapzu.pentago.logic.marble.Symbol;
+import fi.aapzu.pentago.util.ArrayUtils;
 import fi.aapzu.pentago.util.Serializable;
+
+import java.util.Arrays;
 
 /**
  * The mother class of the game.
@@ -14,6 +17,7 @@ public class Pentago implements Serializable {
 
     private Board board;
     private Player[] players;
+
     private LineChecker lineChecker;
 
     private int whoseTurnIndex;
@@ -38,6 +42,7 @@ public class Pentago implements Serializable {
      */
     public Pentago(Pentago other) {
         setBoard(new Board(other.getBoard()));
+        setLineChecker(new LineChecker(getBoard()));
         setPlayers(new Player[other.getPlayers().length]);
         for (int i = 0; i < getPlayers().length; i++) {
             getPlayers()[i] = new Player(other.getPlayers()[i]);
@@ -277,12 +282,39 @@ public class Pentago implements Serializable {
 
     @Override
     public boolean deserialize(String s) {
+        boolean success = false;
         if (s.length() == 42) {
             setWhoseTurnIndex(Integer.parseInt(Character.toString(s.charAt(41))));
             if (getBoard().deserialize(s.substring(0, 41))) {
-                return true;
+                success = true;
             }
+            setLineChecker(new LineChecker(getBoard()));
         }
-        return false;
+        return success;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Pentago pentago = (Pentago) o;
+
+        return whoseTurnIndex == pentago.getWhoseTurnIndex() &&
+                allowedToRotate == pentago.getAllowedToRotate() &&
+                board.equals(pentago.getBoard()) &&
+                lineChecker.equals(pentago.getLineChecker());
+    }
+
+    public LineChecker getLineChecker() {
+        return lineChecker;
+    }
+
+    public void setLineChecker(LineChecker lineChecker) {
+        this.lineChecker = lineChecker;
     }
 }

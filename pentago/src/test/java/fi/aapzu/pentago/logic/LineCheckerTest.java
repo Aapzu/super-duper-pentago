@@ -26,9 +26,6 @@ public class LineCheckerTest {
     @Rule
     public final ExpectedException exception = ExpectedException.none();
 
-    public LineCheckerTest() {
-    }
-
     private static long ts;
 
     @BeforeClass
@@ -362,5 +359,15 @@ public class LineCheckerTest {
         points.add(new Integer[]{5, 4});
         points.add(new Integer[]{4, 5});
         checkLinesWorks(points, null, 2);
+    }
+
+    @Test
+    public void equalsWorks() {
+        board.addMarble(new Marble(Symbol.O), 0, 0);
+        Board board2 = new Board();
+        board2.addMarble(new Marble(Symbol.O), 0, 0);
+        LineChecker lc2 = new LineChecker(board2);
+        assert(lineChecker.equals(lc2));
+        assert(lc2.equals(lineChecker));
     }
 }

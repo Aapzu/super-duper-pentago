@@ -6,6 +6,7 @@
 package fi.aapzu.pentago.logic;
 
 import fi.aapzu.pentago.logic.marble.Marble;
+import fi.aapzu.pentago.util.ArrayUtils;
 
 import java.util.Arrays;
 
@@ -16,7 +17,6 @@ import java.util.Arrays;
  */
 public class LineChecker {
 
-    private final Marble[][] marbles;
     private Board board;
 
     /**
@@ -25,17 +25,7 @@ public class LineChecker {
      * @param board the Board the LineChecker checks
      */
     public LineChecker(Board board) {
-        this.marbles = board.toMarbleArray();
         this.board = board;
-    }
-
-    /**
-     * Creates a new LineChecker for the given Tile.
-     *
-     * @param tile the Tile to be checked
-     */
-    public LineChecker(Tile tile) {
-        this.marbles = tile.toMarbleArray();
     }
 
     /**
@@ -46,8 +36,8 @@ public class LineChecker {
      * @return the line found or null
      */
     public Line checkLines(int length) {
-        if (length < 2 || length > marbles.length) {
-            throw new IllegalArgumentException("The length of a line must be between 2 and " + marbles.length);
+        if (length < 2 || length > board.getTotalSideLength()) {
+            throw new IllegalArgumentException("The length of a line must be between 2 and " + board.getTotalSideLength());
         }
         Line line = null;
 
@@ -73,7 +63,6 @@ public class LineChecker {
      * @return the line or null
      */
     Line checkLines(int length, Direction d) {
-        int wholeLength = marbles.length;
         // An empty line
         Line line = new Line();
         if (!Arrays.asList(Direction.getLineDirections()).contains(d)) {
@@ -81,20 +70,20 @@ public class LineChecker {
         }
         // The default values
         int firstIndexFrom = 0;
-        int firstIndexTo = wholeLength;
+        int firstIndexTo = board.getTotalSideLength();
 
         // Must start from or continue to outside the board to getMarble the also lowest lines
         if (d == Direction.UPGRADING_DIAGONAL) {
-            firstIndexFrom = -wholeLength + 2;
+            firstIndexFrom = -board.getTotalSideLength() + 2;
         } else if (d == Direction.DOWNGRADING_DIAGONAL) {
-            firstIndexTo = 2 * wholeLength - 2;
+            firstIndexTo = 2 * board.getTotalSideLength() - 2;
         }
 
         Marble lastMarble;
         for (int i = firstIndexFrom; i < firstIndexTo; i++) {
             line.clear();
             lastMarble = null;
-            for (int j = 0; j < wholeLength; j++) {
+            for (int j = 0; j < board.getTotalSideLength(); j++) {
                 int x = -1;
                 int y = -1;
                 switch (d) {
@@ -116,7 +105,7 @@ public class LineChecker {
                         break;
                 }
                 // If we are not outside the Board
-                if (x >= 0 && x < wholeLength && y >= 0 && y < wholeLength) {
+                if (x >= 0 && x < board.getTotalSideLength() && y >= 0 && y < board.getTotalSideLength()) {
                     Marble m = getMarble(x, y);
                     // If the square is empty or the Marble is different from the last one
                     if (m == null || (!m.equals(lastMarble) && lastMarble != null)) {
@@ -139,11 +128,25 @@ public class LineChecker {
     }
 
     private Marble getMarble(int x, int y) {
-        if (board != null) {
-            return board.getMarble(x, y);
-        } else {
-            return marbles[y][x];
+        return board.getMarble(x, y);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
         }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        LineChecker that = (LineChecker) o;
+
+        return board.equals(that.board);
+    }
+
+    public Board getBoard() {
+        return board;
     }
 
 }

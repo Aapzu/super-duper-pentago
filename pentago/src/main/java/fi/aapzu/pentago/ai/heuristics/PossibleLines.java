@@ -44,7 +44,8 @@ public class PossibleLines implements Heuristic {
         Symbol opponent = Symbol.getOpponent(me);
         Marble marble;
 
-        int my, opponents, t = 0;
+        int my, opponents;
+        long t = 0L;
         for (int[][] possibleLine : ALL_POSSIBLE_LINES) {
             my = opponents = 0;
             for (int j = 0; j < 5; j++) {
@@ -56,7 +57,8 @@ public class PossibleLines implements Heuristic {
                 }
             }
             t += HEURISTIC_ARRAY[my][opponents];
+            t = Math.min(Integer.MAX_VALUE, t);
         }
-        return t;
+        return Math.toIntExact(t);
     }
 }

@@ -3,6 +3,7 @@ package fi.aapzu.pentago.logic;
 import fi.aapzu.pentago.logic.marble.Marble;
 import fi.aapzu.pentago.util.Serializable;
 import fi.aapzu.pentago.util.iterator.BoardTileIterator;
+import fi.aapzu.pentago.util.iterator.MarbleIterator;
 
 import java.util.Arrays;
 
@@ -43,13 +44,18 @@ public class Board implements Serializable {
             }
         }
         setTiles(newTiles);
-        setLastRotatedTile(other.getLastRotatedTile());
         setLastRotatedTileY(other.getLastRotatedTileY());
         setLastRotatedTileX(other.getLastRotatedTileX());
+        setLastRotatedTile(getTile(getLastRotatedTileX(), getLastRotatedTileY()));
         setLastRotatedTileDirection(other.getLastRotatedTileDirection());
         setLastMarbleX(other.getLastMarbleX());
         setLastMarbleY(other.getLastMarbleY());
-        setLastMarble(other.getLastMarble());
+        // To get the right Marble we must first rotate the Tile back and then to the same spot again
+        if (getLastRotatedTileDirection() != null && other.getLastRotatedTile() == other.getTileByCoordinates(other.getLastMarbleX(), other.getLastMarbleY())) {
+            getLastRotatedTile().rotate(Direction.getOpposite(getLastRotatedTileDirection()));
+            setLastMarble(getMarble(getLastMarbleX(), getLastMarbleY()));
+            getLastRotatedTile().rotate(getLastRotatedTileDirection());
+        }
     }
 
     /**
@@ -112,7 +118,27 @@ public class Board implements Serializable {
      * @return the Tile
      */
     Tile getTileByCoordinates(int marbleX, int marbleY) {
-        return getTile(marbleX / tileSideLength, marbleY / tileSideLength);
+        return getTile(getTileXByXCoordinate(marbleX), getTileYByYCoordinate(marbleY));
+    }
+
+    /**
+     * Return the X coordinate Tile, in which the given coordinates for a Marble are.
+     *
+     * @param marbleX the X coordinate of the Marble
+     * @return X
+     */
+    int getTileXByXCoordinate(int marbleX) {
+        return marbleX / tileSideLength;
+    }
+
+    /**
+     * Return the Tile, in which the given coordinates for a Marble are.
+     *
+     * @param marbleY the Y coordinate of the Marble
+     * @return Y
+     */
+    int getTileYByYCoordinate(int marbleY) {
+        return marbleY / tileSideLength;
     }
 
     /**
@@ -296,10 +322,10 @@ public class Board implements Serializable {
      */
     Marble[][] getMarbleArray() {
         Marble[][] marbles = new Marble[getTotalSideLength()][getTotalSideLength()];
-        for (int y = 0; y < getTotalSideLength(); y++) {
-            for (int x = 0; x < getTileSideLength(); x++) {
-                marbles[y][x] = getMarble(x, y);
-            }
+        MarbleIterator it = new MarbleIterator(this);
+        while (it.hasNext()) {
+            Marble m = it.next();
+            marbles[it.getY()][it.getX()] = m;
         }
         return marbles;
     }
@@ -394,7 +420,16 @@ public class Board implements Serializable {
                 }
             }
             setLastRotatedTile(getTile(getLastRotatedTileX(), getLastRotatedTileY()));
-            setLastMarble(getMarble(getLastMarbleX(), getLastMarbleY()));
+            // To get the right Marble we must first rotate the Tile back and then to the same spot again
+            if (getLastRotatedTileDirection() != null) {
+                if (getLastRotatedTileX() == getTileXByXCoordinate(getLastMarbleX()) && getLastRotatedTileY() == getTileYByYCoordinate(getLastMarbleY())) {
+                    getLastRotatedTile().rotate(Direction.getOpposite(getLastRotatedTileDirection()));
+                    setLastMarble(getMarble(getLastMarbleX(), getLastMarbleY()));
+                    getLastRotatedTile().rotate(getLastRotatedTileDirection());
+                } else {
+                    setLastMarble(getMarble(getLastMarbleX(), getLastMarbleY()));
+                }
+            }
             return true;
         }
         return false;

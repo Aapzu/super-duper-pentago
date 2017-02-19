@@ -68,7 +68,7 @@ public class PentagoTest {
         game.rotateTile(0, 0, Direction.CLOCKWISE);
         Pentago game2 = new Pentago(game);
 
-        assert (game.equals(game2));
+        assert(game.equals(game2));
     }
 
     @Test
@@ -236,13 +236,6 @@ public class PentagoTest {
         game2.rotateTile(0, 0, Direction.CLOCKWISE);
         game2.addMarble(0, 1);
 
-        Pentago game3 = new Pentago();
-        game3.addHumanPlayer("test");
-        game3.addHumanPlayer("test3");
-        game3.addMarble(0, 0);
-        game3.rotateTile(0, 0, Direction.CLOCKWISE);
-        game3.addMarble(0, 1);
-
         Pentago game4 = new Pentago();
         game4.addHumanPlayer("test");
         game4.addHumanPlayer("test2");
@@ -251,9 +244,7 @@ public class PentagoTest {
 
         assert (game.equals(game2));
         assert (game2.equals(game));
-        assertFalse(game.equals(game3));
         assertFalse(game.equals(game4));
-        assertFalse(game3.equals(game4));
     }
 
     @Test
@@ -286,9 +277,8 @@ public class PentagoTest {
         game.rotateTile(0, 0, Direction.CLOCKWISE);
         String s = game.getBoard().serialize() + "1";
         Pentago game2 = new Pentago();
-        assert (game2.deserialize(s));
-        assert (game.getBoard().equals(game2.getBoard()));
-        assertEquals(game.getWhoseTurnIndex(), game2.getWhoseTurnIndex());
+        assert(game2.deserialize(s));
+        assert(game.equals(game2));
     }
 
     @Test

@@ -9,6 +9,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -363,12 +364,12 @@ public class BoardTest {
         board.addMarble(O, 2, 4);
         board.addMarble(O, 4, 4);
         assert(ArrayUtils.deepEquals(new Marble[][]{
-                {O, null, null, null, X, null},
-                {null, O, O, null, X, null},
-                {null, null, null, null, X, null},
-                {null, null, null, null, null, null},
-                {null, O, O, null, O, null},
-                {null, null, null, null, null, null}
+                {O,     null,   null,   null, X,    null},
+                {null,  O,      O,      null, X,    null},
+                {null,  null,   null,   null, X,    null},
+                {null,  null,   null,   null, null, null},
+                {null,  O,      O,      null, O,    null},
+                {null,  null,   null,   null, null, null}
         }, board.getMarbleArray()));
     }
 
@@ -457,19 +458,20 @@ public class BoardTest {
     @Test
     public void deserializationWorks() {
         board.addMarble(new Marble(Symbol.X), 0, 0);
+        board.rotateTile(1, 1, Direction.COUNTER_CLOCKWISE);
         board.addMarble(new Marble(Symbol.O), 2, 2);
+        board.rotateTile(1, 1, Direction.COUNTER_CLOCKWISE);
         board.addMarble(new Marble(Symbol.X), 4, 1);
+        board.rotateTile(1, 1, Direction.COUNTER_CLOCKWISE);
         board.addMarble(new Marble(Symbol.O), 0, 4);
-        board.addMarble(new Marble(Symbol.X), 5, 5);
         board.rotateTile(1, 1, Direction.COUNTER_CLOCKWISE);
-        board.rotateTile(1, 1, Direction.COUNTER_CLOCKWISE);
-        board.rotateTile(1, 1, Direction.COUNTER_CLOCKWISE);
+        board.addMarble(new Marble(Symbol.X), 3, 5);
         board.rotateTile(1, 1, Direction.COUNTER_CLOCKWISE);
         String s = board.getTile(0, 0).serialize() +
                 board.getTile(1, 0).serialize() +
                 board.getTile(0, 1).serialize() +
                 board.getTile(1, 1).serialize() +
-                "55112";
+                "35112";
         Board b2 = new Board();
         assert (b2.deserialize(s));
         assertEquals(board, b2);

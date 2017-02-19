@@ -24,7 +24,7 @@ public class ArrayUtils {
             if (a1[i] instanceof Object[] && a2[i] instanceof Object[]) {
                 equals = deepEquals((Object[]) a1[i], (Object[]) a2[i]);
             } else {
-                equals = a1[i].equals(a2[i]);
+                equals = a1[i] != null && a1[i].equals(a2[i]);
             }
             if (!equals) {
                 return false;
