@@ -9,6 +9,7 @@ This version is originally made as a basic programming practice work (Javalabra)
     * [Week Report 2](documentation/tiralabra/week-reports/week-report-2.md)
     * [Week Report 3](documentation/tiralabra/week-reports/week-report-3.md)
     * [Week Report 4](documentation/tiralabra/week-reports/week-report-4.md)
+    * [Week Report 5](documentation/tiralabra/week-reports/week-report-5.md)
 * [Definition of the topic (Javalabra)](documentation/javalabra/topic-definition.md)
 * [API Documentation](https://rawgit.com/Aapzu/super-duper-pentago/master/documentation/tiralabra/javadoc/index.html)
 
