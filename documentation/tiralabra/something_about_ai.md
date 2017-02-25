@@ -13,6 +13,7 @@ The digits from 37th to 42nd:
 |40.| Y of last rotated Tile |
 |41.| Direction of last rotated tile (0/1/2)\*  |
 |42.| Whose turn it is (0/1)  |
+|43.| Is the game started? (0/1) |
 \* 0 = not rotated (initial state), 1 = clockwise, 2 = counter-clockwise
 
 
@@ -21,10 +22,10 @@ The digits from 37th to 42nd:
 | No. in a row  | Direction | Points    |
 | -             | -         | -         |
 | 1             | -         | 0         | 
-| 2             | D         | 1         |
-| 2             | V/H       | 2         |
-| 3             | D         | 3         |
-| 3             | V/H       | 4         |
+| 2             | D         | 10        |
+| 2             | V/H       | 20       	|
+| 3             | D         | 100       |
+| 3             | V/H       | 200       |
 D = Diagonal, V = Vertical, H = Horizontal
 
 

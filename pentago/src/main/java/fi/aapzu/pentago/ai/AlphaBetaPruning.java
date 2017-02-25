@@ -77,4 +77,11 @@ public class AlphaBetaPruning {
     private int minValue(Node node, Integer alpha, Integer beta, int depth, int maxDepth) {
         return value(true, node, alpha, beta, depth, maxDepth);
     }
+
+    /**
+     * Clears the map of nodes
+     */
+    public void clear() {
+        nodes.clear();
+    }
 }

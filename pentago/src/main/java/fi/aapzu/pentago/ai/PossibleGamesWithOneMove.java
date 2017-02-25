@@ -33,7 +33,7 @@ class PossibleGamesWithOneMove {
      * @return gameStates
      */
     static DynamicArray<String> get(String s) {
-        char symbol = s.charAt(s.length() - 1) == '0' ? '1' : '2';
+        char symbol = s.charAt(41) == '0' ? '1' : '2';
         return getGamesAfterRotationAndMarbleInsertion(s, symbol);
     }
 

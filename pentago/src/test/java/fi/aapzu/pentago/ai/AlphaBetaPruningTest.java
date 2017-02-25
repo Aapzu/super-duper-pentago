@@ -163,7 +163,6 @@ public class AlphaBetaPruningTest {
         assertEquals(-1, node.getChildren()[2].getAlphaBetaValue());
     }
 
-    @Ignore
     @Test
     public void itWorksWithPentagoIfDepthIs2() {
         Pentago game = new Pentago();

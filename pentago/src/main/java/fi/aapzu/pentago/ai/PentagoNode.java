@@ -33,7 +33,7 @@ public class PentagoNode extends Node {
     public int getNodeValue() {
         Pentago game = new Pentago();
         if (game.deserialize(getSerializationString())) {
-            return Heuristics.getScore(game, game.getWhoseTurnIndex());
+            return Heuristics.getScore(game, 1 - game.getWhoseTurnIndex());
         }
         throw new RuntimeException("Invalid serialization string!");
     }
