@@ -31,8 +31,7 @@ public class PentagoTest {
     @Rule
     public final ExpectedException exception = ExpectedException.none();
 
-    public PentagoTest() {
-    }
+    public PentagoTest() {}
 
     private void addMarble(int x, int y) {
         game.addMarble(x, y);
@@ -262,20 +261,22 @@ public class PentagoTest {
     public void serializeWorks() {
         game.setBoard(mock(Board.class));
         when(game.getBoard().serialize()).thenReturn("");
+        when(game.getBoard().addMarble(any(Marble.class), anyInt(), anyInt())).thenReturn(true);
 
-        assertEquals(1, game.serialize().length());
-        assertEquals("0", game.serialize());
+        assertEquals(2, game.serialize().length());
+        assertEquals("00", game.serialize());
         game.nextTurn();
-        assertEquals("1", game.serialize());
+        assertEquals("10", game.serialize());
         game.nextTurn();
-        assertEquals("0", game.serialize());
+        game.addMarble(0, 0);
+        assertEquals("01", game.serialize());
     }
 
     @Test
     public void deserializeWorks() {
         game.addMarble(0, 0);
         game.rotateTile(0, 0, Direction.CLOCKWISE);
-        String s = game.getBoard().serialize() + "1";
+        String s = game.getBoard().serialize() + "11";
         Pentago game2 = new Pentago();
         assert(game2.deserialize(s));
         assert(game.equals(game2));

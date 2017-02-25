@@ -26,19 +26,6 @@ public class LineCheckerTest {
     @Rule
     public final ExpectedException exception = ExpectedException.none();
 
-    private static long ts;
-
-    @BeforeClass
-    public static void setUpTest() {
-        ts = System.currentTimeMillis();
-    }
-
-    @AfterClass
-    public static void tearDownTest() {
-        long ts2 = System.currentTimeMillis();
-        System.out.println("Time: " + (ts2 - ts));
-    }
-
     @Before
     public void setUp() {
         board = new Board();

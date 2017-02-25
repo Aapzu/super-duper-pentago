@@ -3,7 +3,6 @@ package fi.aapzu.pentago.logic;
 /**
  * An enumeration for the directions in the game.
  *
- * @author Aapeli
  */
 public enum Direction {
 
@@ -32,6 +31,8 @@ public enum Direction {
      */
     DOWNGRADING_DIAGONAL;
 
+    public Direction opposite;
+
     /**
      * Gives the directions in which the tiles are allowed to be rotated.
      *
@@ -47,25 +48,12 @@ public enum Direction {
      * @return Array of Directions
      */
     public static Direction[] getLineDirections() {
-        return new Direction[]{HORIZONTAL, VERTICAL, UPGRADING_DIAGONAL, DOWNGRADING_DIAGONAL};
+        return new Direction[]{ HORIZONTAL, VERTICAL, UPGRADING_DIAGONAL, DOWNGRADING_DIAGONAL };
     }
 
-    /**
-     * Gives the opposite Direction of a rotating direction. Returns null if the
-     * Direction d is not a rotating direction.
-     *
-     * @param d the direction to getMarble the opposite from
-     * @return opposite Direction or null
-     */
-    public static Direction getOpposite(Direction d) {
-        if (d != null) {
-            switch (d) {
-                case CLOCKWISE:
-                    return COUNTER_CLOCKWISE;
-                case COUNTER_CLOCKWISE:
-                    return CLOCKWISE;
-            }
-        }
-        return null;
+    static {
+        CLOCKWISE.opposite = COUNTER_CLOCKWISE;
+        COUNTER_CLOCKWISE.opposite = CLOCKWISE;
     }
+
 }

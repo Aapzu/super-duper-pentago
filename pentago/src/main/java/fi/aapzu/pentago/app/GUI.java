@@ -223,8 +223,8 @@ public class GUI extends Application {
         for (Node n : rotateButtons) {
             int x = game.getBoard().getLastRotatedTileX();
             int y = game.getBoard().getLastRotatedTileY();
-            Direction d = Direction.getOpposite(game.getBoard().getLastRotatedTileDirection());
-            String id = (d == Direction.CLOCKWISE ? "clockwise" : "counterClockwise") + x + y;
+            Direction d = game.getBoard().getLastRotatedTileDirection() != null ? game.getBoard().getLastRotatedTileDirection().opposite : null;
+            String id = d != null ? (d == Direction.CLOCKWISE ? "clockwise" : "counterClockwise") + x + y : null;
             n.setVisible(true);
             if (game.getBoard().getLastRotatedTile() != null && n.getId().equals(id)) {
                 n.setVisible(false);

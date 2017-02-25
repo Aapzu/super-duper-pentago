@@ -2,9 +2,7 @@
 # Some specifications
 
 ## Serialization String of the game state
-Serialization String is 42 digits long base 3 number in String format. First 36 characters represent the Board in following order:
-In each tile: from left to right, from up to down.
-And the tiles from top to bottom, left to right.
+Serialization String is 42 digits long base 3 number in String format. First 36 characters represent the Board from left to right, top to bottom.
 The digits from 37th to 42nd:
 
 | # | Meaning |

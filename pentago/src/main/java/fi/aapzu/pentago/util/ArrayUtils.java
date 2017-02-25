@@ -40,4 +40,53 @@ public class ArrayUtils {
         }
         return list;
     }
+
+    public static int[] reverse(int[] array) {
+        int[] rev = new int[array.length];
+        for (int i = 0, j = array.length - 1; i < array.length; i++, j--) {
+            rev[i] = array[j];
+        }
+        return rev;
+    }
+
+    @SuppressWarnings("unchecked")
+//    public static <T> T[] clone(T[] array) {
+//        Object[] clone = new Object[array.length];
+//        for (int i = 0; i < array.length; i++) {
+//            clone[i] = array[i];
+//        }
+//        return (T[]) clone;
+//    }
+
+    public static char[] clone(char[] array) {
+        char[] clone = new char[array.length];
+        for (int i = 0; i < array.length; i++) {
+            clone[i] = array[i];
+        }
+        return clone;
+    }
+
+//    public static int[] clone(int[] array) {
+//        int[] clone = new int[array.length];
+//        for (int i = 0; i < array.length; i++) {
+//            clone[i] = array[i];
+//        }
+//        return clone;
+//    }
+
+//    public static long[] clone(long[] array) {
+//        long[] clone = new long[array.length];
+//        for (int i = 0; i < array.length; i++) {
+//            clone[i] = array[i];
+//        }
+//        return clone;
+//    }
+
+//    public static boolean[] clone(boolean[] array) {
+//        boolean[] clone = new boolean[array.length];
+//        for (int i = 0; i < array.length; i++) {
+//            clone[i] = array[i];
+//        }
+//        return clone;
+//    }
 }

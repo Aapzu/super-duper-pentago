@@ -2,7 +2,7 @@ package fi.aapzu.pentago.ai;
 
 import fi.aapzu.pentago.logic.Direction;
 import fi.aapzu.pentago.logic.Tile;
-import fi.aapzu.pentago.logic.marble.Marble;
+import fi.aapzu.pentago.util.ArrayUtils;
 import fi.aapzu.pentago.util.DynamicArray;
 
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ class PossibleGamesWithOneMove {
                 first[2] != 0 &&
                 second[2] != 0 &&
                 ((first[2] == 1 && second[2] == 2) ||
-                        (first[2] == 2 && second[2] == 1));
+                (first[2] == 2 && second[2] == 1));
     }
 
     /**
@@ -46,55 +46,45 @@ class PossibleGamesWithOneMove {
                     Character.getNumericValue(chars[39]),
                     Character.getNumericValue(chars[40])
             };
+            int gameStarted = Character.getNumericValue(chars[42]);
             for (int[] pos : ROTATION_TILE_DIRECTION_POSSIBILITIES) {
-                if (!rotationTileDirectionIsOpposite(ints, pos)) {
-                    chars = rotateTilePart(pos[0], pos[1], pos[2], chars);
-                    chars[38] = Character.forDigit(pos[0], 10);
-                    chars[39] = Character.forDigit(pos[1], 10);
-                    chars[40] = Character.forDigit(pos[2], 10);
-                    chars[41] = Character.forDigit(1 - Character.getNumericValue(chars[41]), 10);
-                    games.add(new String(chars));
+                char[] newChars = ArrayUtils.clone(chars);
+                if (gameStarted == 0 || !rotationTileDirectionIsOpposite(ints, pos)) {
+                    int tileX = pos[0], tileY = pos[1], tileDir = pos[2];
+                    int startI = tileY * 18 + tileX * 9;
+                    char[] clonedChars = ArrayUtils.clone(chars);
+                    for (int i = startI, j = 0; i < startI + 9; i++, j++) {
+                        int newI = startI + translateTileIndex(j, tileDir);
+                        newChars[newI] = clonedChars[i];
+                    }
+                    newChars[38] = Character.forDigit(pos[0], 10); // lastRotatedTileX
+                    newChars[39] = Character.forDigit(pos[1], 10); // lastRotatedTileY
+                    newChars[40] = Character.forDigit(pos[2], 10); // lastRotatedTileDirection
+                    newChars[41] = Character.forDigit(1 - Character.getNumericValue(newChars[41]), 10);
+                    newChars[42] = '1';
+                    String string = new String(newChars);
+                    games.add(string);
                 }
             }
         }
         return games;
     }
 
-    private static char[] rotateTilePart(int tileX, int tileY, int dir, char[] serChar) {
-        int startI = tileX * 18 + tileY * 9;
-        char c0 = serChar[startI],
-                c1 = serChar[startI + 1],
-                c2 = serChar[startI + 2],
-                c3 = serChar[startI + 3],
-                c4 = serChar[startI + 4],
-                c5 = serChar[startI + 5],
-                c6 = serChar[startI + 6],
-                c7 = serChar[startI + 7],
-                c8 = serChar[startI + 8];
+    private static int translateTileIndex(int i, int dir) {
+        int x = i % 3, y = i / 3;
+        int[] newCoordinates;
         if (dir == 1) {
-            serChar[startI] = c6;
-            serChar[startI + 1] = c3;
-            serChar[startI + 2] = c0;
-            serChar[startI + 3] = c7;
-            serChar[startI + 5] = c1;
-            serChar[startI + 6] = c8;
-            serChar[startI + 7] = c5;
-            serChar[startI + 8] = c2;
+            newCoordinates = Tile.translateCoordinates(x, y, Direction.CLOCKWISE, 3);
         } else if (dir == 2) {
-            serChar[startI] = c2;
-            serChar[startI + 1] = c5;
-            serChar[startI + 2] = c8;
-            serChar[startI + 3] = c1;
-            serChar[startI + 5] = c7;
-            serChar[startI + 6] = c0;
-            serChar[startI + 7] = c3;
-            serChar[startI + 8] = c6;
+            newCoordinates = Tile.translateCoordinates(x, y, Direction.COUNTER_CLOCKWISE, 3);
+        } else {
+            throw new IllegalArgumentException("Invalid direction!");
         }
-        return serChar;
+        return newCoordinates[1] * 3 + newCoordinates[0];
     }
 
-    private static String[] getGamesAfterMarbleInsertion(String s, char symbol) {
-        ArrayList<String> gamesBeforeRotation = new ArrayList<>();
+    private static DynamicArray<String> getGamesAfterMarbleInsertion(String s, char symbol) {
+        DynamicArray<String> gamesBeforeRotation = new DynamicArray<>();
         for (int i = 0; i < 36; i++) {
             if (s.charAt(i) == '0') {
                 char[] chars = s.toCharArray();
@@ -104,14 +94,16 @@ class PossibleGamesWithOneMove {
                 gamesBeforeRotation.add(new String(chars));
             }
         }
-        return gamesBeforeRotation.toArray(new String[gamesBeforeRotation.size()]);
+        return gamesBeforeRotation;
     }
 
-    private static char getMarbleXFromSerializationStringIndex(int i) {
-        return Character.forDigit(3 * (i / 18) + i % 3, 10);
+    static char getMarbleXFromSerializationStringIndex(int i) {
+        int x = (i % 18 / 9 * 3) + (i % 18) % 3; // TODO: simplify if possible
+        return Character.forDigit(x, 10);
     }
 
-    private static char getMarbleYFromSerializationStringIndex(int i) {
-        return Character.forDigit(i / 3 - 6 * (i / 18), 10);
+    static char getMarbleYFromSerializationStringIndex(int i) {
+        int y = i / 18 * 3 + i / 3 % 3; // TODO: simplify if possible
+        return Character.forDigit(y, 10);
     }
 }

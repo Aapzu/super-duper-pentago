@@ -50,12 +50,7 @@ public class Board implements Serializable {
         setLastRotatedTileDirection(other.getLastRotatedTileDirection());
         setLastMarbleX(other.getLastMarbleX());
         setLastMarbleY(other.getLastMarbleY());
-        // To get the right Marble we must first rotate the Tile back and then to the same spot again
-        if (getLastRotatedTileDirection() != null && other.getLastRotatedTile() == other.getTileByCoordinates(other.getLastMarbleX(), other.getLastMarbleY())) {
-            getLastRotatedTile().rotate(Direction.getOpposite(getLastRotatedTileDirection()));
-            setLastMarble(getMarble(getLastMarbleX(), getLastMarbleY()));
-            getLastRotatedTile().rotate(getLastRotatedTileDirection());
-        }
+        setLastMarble(other.getLastMarble() != null ? new Marble(other.getLastMarble()) : null);
     }
 
     /**
@@ -404,11 +399,12 @@ public class Board implements Serializable {
     @Override
     public boolean deserialize(String s) {
         if (s.length() == 41) {
+            setLastMarbleX(Character.getNumericValue(s.charAt(36)));
+            setLastMarbleY(Character.getNumericValue(s.charAt(37)));
+            setLastRotatedTileY(Character.getNumericValue(s.charAt(39)));
+            setLastRotatedTileX(Character.getNumericValue(s.charAt(38)));
             setLastRotatedTileDirection(s.charAt(40) != '0' ? (s.charAt(40) == '1' ? Direction.CLOCKWISE : Direction.COUNTER_CLOCKWISE) : null);
-            setLastRotatedTileY(Integer.parseInt(Character.toString(s.charAt(39))));
-            setLastRotatedTileX(Integer.parseInt(Character.toString(s.charAt(38))));
-            setLastMarbleX(Integer.parseInt(Character.toString(s.charAt(36))));
-            setLastMarbleY(Integer.parseInt(Character.toString(s.charAt(37))));
+            setLastRotatedTile(getTile(getLastRotatedTileX(), getLastRotatedTileY()));
             BoardTileIterator it = new BoardTileIterator(this);
             while (it.hasNext()) {
                 Tile t = it.next();
@@ -419,16 +415,20 @@ public class Board implements Serializable {
                     return false;
                 }
             }
-            setLastRotatedTile(getTile(getLastRotatedTileX(), getLastRotatedTileY()));
-            // To get the right Marble we must first rotate the Tile back and then to the same spot again
-            if (getLastRotatedTileDirection() != null) {
-                if (getLastRotatedTileX() == getTileXByXCoordinate(getLastMarbleX()) && getLastRotatedTileY() == getTileYByYCoordinate(getLastMarbleY())) {
-                    getLastRotatedTile().rotate(Direction.getOpposite(getLastRotatedTileDirection()));
-                    setLastMarble(getMarble(getLastMarbleX(), getLastMarbleY()));
-                    getLastRotatedTile().rotate(getLastRotatedTileDirection());
-                } else {
-                    setLastMarble(getMarble(getLastMarbleX(), getLastMarbleY()));
-                }
+            int x = getLastMarbleX(),
+                y = getLastMarbleY();
+            if (getLastRotatedTile() == getTileByCoordinates(getLastMarbleX(), getLastMarbleY())) {
+                int origX = getLastMarbleX(),
+                        origY = getLastMarbleY(),
+                        inTileX = origX % getTileSideLength(),
+                        inTileY = origY % getTileSideLength();
+                int[] newTileCoordinates = Tile.translateCoordinates(inTileX, inTileY, getLastRotatedTileDirection(), getTileSideLength());
+                x = origX - inTileX + newTileCoordinates[0];
+                y = origY - inTileY + newTileCoordinates[1];
+            }
+            setLastMarble(getMarble(x, y));
+            if (getLastMarble() == null) {
+                return false;
             }
             return true;
         }

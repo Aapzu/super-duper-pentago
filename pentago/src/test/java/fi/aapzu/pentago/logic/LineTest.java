@@ -67,7 +67,6 @@ public class LineTest {
                 "Symbol: O\n" +
                 "Line:\n" +
                 "\t[0, 0]";
-        System.out.println(line.toString());
         assertEquals(expected, line.toString());
     }
 }

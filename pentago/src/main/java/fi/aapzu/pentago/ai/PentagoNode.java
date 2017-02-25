@@ -7,7 +7,7 @@ import fi.aapzu.pentago.util.DynamicArray;
 /**
  * Wrapper between serialized Pentago and AlphaBetaPruning.
  */
-public class PentagoNode implements Node {
+public class PentagoNode extends Node {
 
     private final String serializationString;
 

@@ -1,6 +1,6 @@
 package fi.aapzu.pentago.ai;
 
-public class TestNode implements Node {
+public class TestNode extends Node {
 
     private final String name;
     private final Integer value;

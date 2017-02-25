@@ -31,6 +31,7 @@ public class AlphaBetaPruning {
         Node[] children = node.getChildren();
         for (Node n : children) {
             int score = maxValue(n, alpha, beta, 1, movesAhead);
+            n.setAlphaBetaValue(score);
             if (score > bestScore) {
                 bestNodeYet = n;
                 bestScore = score;
@@ -56,6 +57,7 @@ public class AlphaBetaPruning {
             value = minValue ?
                     Math.min(value, maxValue(n, alpha, beta, newDepth, maxDepth)) :
                     Math.max(value, minValue(n, alpha, beta, newDepth, maxDepth));
+            n.setAlphaBetaValue(value);
             if ((minValue && value > beta || value < alpha)) {
                 return value;
             }

@@ -3,10 +3,7 @@ package fi.aapzu.pentago.game;
 import fi.aapzu.pentago.logic.*;
 import fi.aapzu.pentago.logic.marble.Marble;
 import fi.aapzu.pentago.logic.marble.Symbol;
-import fi.aapzu.pentago.util.ArrayUtils;
 import fi.aapzu.pentago.util.Serializable;
-
-import java.util.Arrays;
 
 /**
  * The mother class of the game.
@@ -22,6 +19,9 @@ public class Pentago implements Serializable {
 
     private int whoseTurnIndex;
     private boolean allowedToRotate;
+
+    // Tells if no one has done anything in the game yet
+    private boolean gameStarted = false;
 
     /**
      * Creates a new game with a Board, two Players and the bookkeeping of whose
@@ -49,6 +49,7 @@ public class Pentago implements Serializable {
         }
         setWhoseTurnIndex(other.getWhoseTurnIndex());
         setAllowedToRotate(other.getAllowedToRotate());
+        setGameStarted(other.isGameStarted());
     }
 
     /**
@@ -124,6 +125,7 @@ public class Pentago implements Serializable {
         if (allowedToRotate) {
             throw new PentagoGameRuleException("A tile must be rotated first!");
         }
+        gameStarted = true;
         Player player = whoseTurn();
         Marble m = new Marble(player.getSymbol());
         boolean success = board.addMarble(m, x, y);
@@ -145,7 +147,7 @@ public class Pentago implements Serializable {
         if (!allowedToRotate) {
             throw new PentagoGameRuleException("A marble must be added first!");
         }
-        if (board.getLastRotatedTileX() == x && board.getLastRotatedTileY() == y && d == Direction.getOpposite(board.getLastRotatedTileDirection())) {
+        if (board.getLastRotatedTileDirection() != null && board.getLastRotatedTileX() == x && board.getLastRotatedTileY() == y && d == board.getLastRotatedTileDirection().opposite) {
             throw new PentagoGameRuleException("The tile cannot be rotated back to the direction it was just rotated from!");
         }
 
@@ -253,7 +255,7 @@ public class Pentago implements Serializable {
         return board;
     }
 
-    Player[] getPlayers() {
+    public Player[] getPlayers() {
         return players;
     }
 
@@ -277,20 +279,21 @@ public class Pentago implements Serializable {
     public String serialize() {
         String s = getBoard().serialize();
         s += getWhoseTurnIndex();
+        s += gameStarted ? '1' : '0';
         return s;
     }
 
     @Override
     public boolean deserialize(String s) {
-        boolean success = false;
-        if (s.length() == 42) {
-            setWhoseTurnIndex(Integer.parseInt(Character.toString(s.charAt(41))));
-            if (getBoard().deserialize(s.substring(0, 41))) {
-                success = true;
+        if (s.length() == 43) {
+            if (!getBoard().deserialize(s.substring(0, 41)) && s.charAt(42) == '1') {
+                return false;
             }
             setLineChecker(new LineChecker(getBoard()));
+            setWhoseTurnIndex(Character.getNumericValue(s.charAt(41)));
+            setGameStarted(s.charAt(42) == '1');
         }
-        return success;
+        return true;
     }
 
     @Override
@@ -307,7 +310,8 @@ public class Pentago implements Serializable {
         return whoseTurnIndex == pentago.getWhoseTurnIndex() &&
                 allowedToRotate == pentago.getAllowedToRotate() &&
                 board.equals(pentago.getBoard()) &&
-                lineChecker.equals(pentago.getLineChecker());
+                lineChecker.equals(pentago.getLineChecker()) &&
+                gameStarted == pentago.isGameStarted();
     }
 
     public LineChecker getLineChecker() {
@@ -316,5 +320,13 @@ public class Pentago implements Serializable {
 
     public void setLineChecker(LineChecker lineChecker) {
         this.lineChecker = lineChecker;
+    }
+
+    public void setGameStarted(boolean gameStarted) {
+        this.gameStarted = gameStarted;
+    }
+
+    public boolean isGameStarted() {
+        return gameStarted;
     }
 }

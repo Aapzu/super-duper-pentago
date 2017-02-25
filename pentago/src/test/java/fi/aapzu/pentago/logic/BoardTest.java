@@ -432,27 +432,31 @@ public class BoardTest {
     @Test
     public void serializationWorks() {
         board.setTiles(new Tile[][]{
-                {mock(Tile.class), mock(Tile.class)},
-                {mock(Tile.class), mock(Tile.class)}
+            {mock(Tile.class), mock(Tile.class)},
+            {mock(Tile.class), mock(Tile.class)}
         });
         when(board.getTile(0, 0).serialize()).thenReturn("");
         when(board.getTile(0, 1).serialize()).thenReturn("");
         when(board.getTile(1, 0).serialize()).thenReturn("");
         when(board.getTile(1, 1).serialize()).thenReturn("");
 
-        board.addMarble(new Marble(Symbol.X), 0, 0);
-        board.addMarble(new Marble(Symbol.O), 2, 2);
         board.addMarble(new Marble(Symbol.X), 4, 1);
-        board.addMarble(new Marble(Symbol.O), 0, 4);
-        board.addMarble(new Marble(Symbol.X), 5, 5);
-        board.rotateTile(0, 0, Direction.CLOCKWISE);
-        board.rotateTile(0, 1, Direction.CLOCKWISE);
-        board.rotateTile(1, 0, Direction.COUNTER_CLOCKWISE);
         board.rotateTile(1, 1, Direction.COUNTER_CLOCKWISE);
         assertEquals(5, board.serialize().length());
-        assertEquals(board.serialize(), "55112");
-        board.rotateTile(1, 0, Direction.CLOCKWISE);
-        assertEquals(board.serialize(), "55101");
+        assertEquals(board.serialize(), "41112");
+
+        board.addMarble(new Marble(Symbol.X), 3, 0);
+        board.rotateTile(1, 0, Direction.COUNTER_CLOCKWISE);
+        assertEquals(board.serialize(), "30102");
+    }
+
+    @Test
+    public void serializationWorksWithEmptyBoard() {
+        String s = board.serialize();
+        assertEquals(41, s.length());
+        for (int i = 36; i < 41; i++) {
+            assertEquals('0', s.charAt(i));
+        }
     }
 
     @Test

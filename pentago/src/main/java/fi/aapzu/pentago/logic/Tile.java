@@ -3,6 +3,7 @@ package fi.aapzu.pentago.logic;
 import fi.aapzu.pentago.game.PentagoGameRuleException;
 import fi.aapzu.pentago.logic.marble.Marble;
 import fi.aapzu.pentago.logic.marble.Symbol;
+import fi.aapzu.pentago.util.ArrayUtils;
 import fi.aapzu.pentago.util.Serializable;
 import fi.aapzu.pentago.util.iterator.MarbleIterator;
 
@@ -126,7 +127,7 @@ public class Tile implements Serializable {
      * @param d the Direction for the Tile to be rotated
      */
     void rotate(Direction d) {
-        if (!Arrays.asList(Direction.getRotateDirections()).contains(d)) {
+        if (!ArrayUtils.asList(Direction.getRotateDirections()).contains(d)) {
             throw new IllegalArgumentException("Invalid direction!");
         }
         Marble[][] rotatedTile = new Marble[tile.length][tile[0].length];
@@ -286,5 +287,20 @@ public class Tile implements Serializable {
             return true;
         }
         return false;
+    }
+
+    public static int[] translateCoordinates(int x, int y, Direction d, int sideLength) {
+        int newY;
+        int newX;
+        if (d == Direction.CLOCKWISE) {
+            newY = x;
+            newX = sideLength - y - 1;
+        } else if (d == Direction.COUNTER_CLOCKWISE) {
+            newY = sideLength - x - 1;
+            newX = y;
+        } else {
+            throw new IllegalArgumentException("Invalid direction!");
+        }
+        return new int[]{newX, newY};
     }
 }

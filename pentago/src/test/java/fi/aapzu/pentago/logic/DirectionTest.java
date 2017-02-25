@@ -23,16 +23,8 @@ public class DirectionTest {
     }
 
     @Test
-    public void getOppositeReturnsRight() {
-        assertEquals(Direction.CLOCKWISE, Direction.getOpposite(Direction.COUNTER_CLOCKWISE));
-        assertEquals(Direction.COUNTER_CLOCKWISE, Direction.getOpposite(Direction.CLOCKWISE));
-    }
-
-    @Test
-    public void getOppositeReturnsNullIfNoOpposite() {
-        assertNull(Direction.getOpposite(Direction.HORIZONTAL));
-        assertNull(Direction.getOpposite(Direction.VERTICAL));
-        assertNull(Direction.getOpposite(Direction.DOWNGRADING_DIAGONAL));
-        assertNull(Direction.getOpposite(Direction.UPGRADING_DIAGONAL));
+    public void directionOppositesAreCorrect() {
+        assertEquals(Direction.CLOCKWISE.opposite, Direction.COUNTER_CLOCKWISE);
+        assertEquals(Direction.COUNTER_CLOCKWISE.opposite, Direction.CLOCKWISE);
     }
 }

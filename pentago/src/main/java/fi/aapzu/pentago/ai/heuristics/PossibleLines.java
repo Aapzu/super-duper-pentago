@@ -7,9 +7,6 @@ import fi.aapzu.pentago.logic.marble.Symbol;
 
 public class PossibleLines implements Heuristic {
 
-    private static final int INITIAL_POINTS = 10;
-    private static final int POINT_FACTOR = 10;
-
     private static final int[][][] ALL_POSSIBLE_LINES = {
         {{0, 0}, {0, 1}, {0, 2}, {0, 3}, {0, 4}}, {{0, 1}, {0, 2}, {0, 3}, {0, 4}, {0, 5}},
         {{1, 0}, {1, 1}, {1, 2}, {1, 3}, {1, 4}}, {{1, 1}, {1, 2}, {1, 3}, {1, 4}, {1, 5}},
@@ -57,8 +54,8 @@ public class PossibleLines implements Heuristic {
                 }
             }
             t += HEURISTIC_ARRAY[my][opponents];
-            t = Math.min(Integer.MAX_VALUE, t);
         }
+        t = Math.max(Math.min(Integer.MAX_VALUE, t), Integer.MIN_VALUE);
         return Math.toIntExact(t);
     }
 }

@@ -1,6 +1,5 @@
 package fi.aapzu.pentago.util;
 
-import java.lang.reflect.Array;
 import java.util.Iterator;
 
 /**
@@ -83,6 +82,16 @@ public class DynamicArray<T> implements Iterable<T> {
             }
         }
         return false;
+    }
+
+
+    public int indexOf(T item) {
+        for (int i = 0; i < size(); i++) {
+            if (this.get(i) == item || this.get(i).equals(item)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     @Override
