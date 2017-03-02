@@ -30,7 +30,7 @@ public class AlphaBetaPruning {
         Integer beta = Integer.MAX_VALUE;
         Node[] children = node.getChildren();
         for (Node n : children) {
-            int score = maxValue(n, alpha, beta, 1, movesAhead);
+            int score = value(1, n, alpha, beta, 1, movesAhead);
             n.setAlphaBetaValue(score);
             if (score > bestScore) {
                 bestNodeYet = n;
@@ -40,7 +40,7 @@ public class AlphaBetaPruning {
         return bestNodeYet;
     }
 
-    private int value(boolean minValue, Node node, Integer alpha, Integer beta, int depth, int maxDepth) {
+    private int value(int meOrOpponent, Node node, Integer alpha, Integer beta, int depth, int maxDepth) {
         int newDepth = depth + 1;
 
         Node[] children = node.getChildren();
@@ -48,34 +48,21 @@ public class AlphaBetaPruning {
             return nodes.get(node);
         }
         if (depth >= maxDepth || children.length == 0) {
-            int value = node.getNodeValue();
+            int value = meOrOpponent * node.getNodeValue();
             nodes.put(node, value);
             return value;
         }
-        int value = minValue ? Integer.MAX_VALUE : Integer.MIN_VALUE;
+        int bestValue = Integer.MIN_VALUE;
         for (Node n : children) {
-            value = minValue ?
-                    Math.min(value, maxValue(n, alpha, beta, newDepth, maxDepth)) :
-                    Math.max(value, minValue(n, alpha, beta, newDepth, maxDepth));
+            int value = value(-meOrOpponent, n, -beta, -alpha, newDepth, maxDepth);
             n.setAlphaBetaValue(value);
-            if ((minValue && value > beta || value < alpha)) {
-                return value;
-            }
-            if (minValue) {
-                beta = Math.min(beta, value);
-            } else {
-                alpha = Math.max(alpha, value);
+            bestValue = Math.max(value, bestValue);
+            alpha = Math.max(alpha, value);
+            if (alpha >= beta) {
+                break;
             }
         }
-        return value;
-    }
-
-    private int maxValue(Node node, Integer alpha, Integer beta, int depth, int maxDepth) {
-        return value(false, node, alpha, beta, depth, maxDepth);
-    }
-
-    private int minValue(Node node, Integer alpha, Integer beta, int depth, int maxDepth) {
-        return value(true, node, alpha, beta, depth, maxDepth);
+        return bestValue;
     }
 
     /**
