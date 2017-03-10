@@ -157,10 +157,10 @@ public class AlphaBetaPruningTest {
         assertEquals(1, node.getChildren()[0].getAlphaBetaValue());
         assertEquals(0, node.getChildren()[1].getAlphaBetaValue());
         assertEquals(-1, node.getChildren()[2].getAlphaBetaValue());
-        assertEquals("a", ((TestNode) alphaBetaPruning.getBest(node, 9)).getName());
-        assertEquals(1, node.getChildren()[0].getAlphaBetaValue());
-        assertEquals(0, node.getChildren()[1].getAlphaBetaValue());
-        assertEquals(-1, node.getChildren()[2].getAlphaBetaValue());
+        assertEquals("c", ((TestNode) alphaBetaPruning.getBest(node, 9)).getName());
+        assertEquals(99, node.getChildren()[0].getAlphaBetaValue());
+        assertEquals(1, node.getChildren()[1].getAlphaBetaValue());
+        assertEquals(100, node.getChildren()[2].getAlphaBetaValue());
     }
 
 }

@@ -7,7 +7,6 @@ import fi.aapzu.pentago.util.ArrayUtils;
 import fi.aapzu.pentago.util.Serializable;
 import fi.aapzu.pentago.util.iterator.MarbleIterator;
 
-import java.util.Arrays;
 
 /**
  * One of the main instruments in the game. Can contain Marbles and be rotated.
@@ -252,7 +251,7 @@ public class Tile implements Serializable {
     @Override
     public int hashCode() {
         int result = sideLength;
-        result = 31 * result + Arrays.deepHashCode(tile);
+        result = 31 * result + ArrayUtils.deepHashCode(tile);
         return result;
     }
 

@@ -8,7 +8,6 @@ package fi.aapzu.pentago.logic;
 import fi.aapzu.pentago.logic.marble.Marble;
 import fi.aapzu.pentago.util.ArrayUtils;
 
-import java.util.Arrays;
 
 /**
  * This is a class for checking for lines on a Board.
@@ -65,7 +64,7 @@ public class LineChecker {
     Line checkLines(int length, Direction d) {
         // An empty line
         Line line = new Line();
-        if (!Arrays.asList(Direction.getLineDirections()).contains(d)) {
+        if (!ArrayUtils.asList(Direction.getLineDirections()).contains(d)) {
             throw new IllegalArgumentException("The direction is incorrect!");
         }
         // The default values

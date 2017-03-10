@@ -1,11 +1,10 @@
 package fi.aapzu.pentago.logic;
 
 import fi.aapzu.pentago.logic.marble.Marble;
+import fi.aapzu.pentago.util.ArrayUtils;
 import fi.aapzu.pentago.util.Serializable;
 import fi.aapzu.pentago.util.iterator.BoardTileIterator;
 import fi.aapzu.pentago.util.iterator.MarbleIterator;
-
-import java.util.Arrays;
 
 /**
  * The board of the Pentago. Contains Tiles and Marbles.
@@ -195,7 +194,7 @@ public class Board implements Serializable {
      * @param d     the Direction
      */
     public void rotateTile(int tileX, int tileY, Direction d) {
-        if (!Arrays.asList(Direction.getRotateDirections()).contains(d)) {
+        if (!ArrayUtils.asList(Direction.getRotateDirections()).contains(d)) {
             throw new IllegalArgumentException("Invalid direction!");
         }
         Tile t = getTile(tileX, tileY);
@@ -220,13 +219,13 @@ public class Board implements Serializable {
      * @return marbles
      */
     public Marble[][] toMarbleArray() {
-        Marble[][] mArr = new Marble[sideLength * tileSideLength][sideLength * tileSideLength];
-        for (int y = 0; y < sideLength * tileSideLength; y++) {
-            for (int x = 0; x < sideLength * tileSideLength; x++) {
-                mArr[y][x] = getMarble(x, y);
-            }
+        Marble[][] marbles = new Marble[getTotalSideLength()][getTotalSideLength()];
+        MarbleIterator it = new MarbleIterator(this);
+        while (it.hasNext()) {
+            Marble m = it.next();
+            marbles[it.getY()][it.getX()] = m;
         }
-        return mArr;
+        return marbles;
     }
 
     @Override
@@ -306,23 +305,8 @@ public class Board implements Serializable {
                 lastMarble.equals(board.getLastMarble())) &&
             lastMarbleX == board.getLastMarbleX() &&
             lastMarbleY == board.getLastMarbleY() &&
-            Arrays.deepEquals(tiles, board.tiles) &&
+            ArrayUtils.deepEquals(tiles, board.tiles) &&
             lastRotatedTileDirection == board.lastRotatedTileDirection;
-    }
-
-    /**
-     * Gives the Marbles on the Board in a single 2d array
-     *
-     * @return array of Marbles
-     */
-    Marble[][] getMarbleArray() {
-        Marble[][] marbles = new Marble[getTotalSideLength()][getTotalSideLength()];
-        MarbleIterator it = new MarbleIterator(this);
-        while (it.hasNext()) {
-            Marble m = it.next();
-            marbles[it.getY()][it.getX()] = m;
-        }
-        return marbles;
     }
 
     public Direction getLastRotatedTileDirection() {

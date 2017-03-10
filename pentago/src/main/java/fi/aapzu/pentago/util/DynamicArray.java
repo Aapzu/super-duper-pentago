@@ -1,6 +1,8 @@
 package fi.aapzu.pentago.util;
 
 import java.util.Iterator;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * An Array that expands when needed.
@@ -133,6 +135,17 @@ public class DynamicArray<T> implements Iterable<T> {
         arrayIndex = 0;
         arrayLength = 20;
         itemArray = new Object[arrayLength];
+    }
+
+    /**
+     * Adds all the items in Set to DynamicArray.
+     *
+     * @param setToBeAdded set of which items are added to DynamicList
+     */
+    public void addAll(Set<T> setToBeAdded) {
+        for (T t : setToBeAdded) {
+            add(t);
+        }
     }
 
     private void doubleArraySize() {

@@ -5,8 +5,6 @@ import fi.aapzu.pentago.logic.Tile;
 import fi.aapzu.pentago.util.ArrayUtils;
 import fi.aapzu.pentago.util.DynamicArray;
 
-import java.util.ArrayList;
-
 /**
  * A class to determine the possible games one can get from a game state with a single move.
  */

@@ -3,6 +3,8 @@ package fi.aapzu.pentago.ai;
 import fi.aapzu.pentago.ai.heuristics.Heuristics;
 import fi.aapzu.pentago.game.Pentago;
 import fi.aapzu.pentago.util.DynamicArray;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * Wrapper between serialized Pentago and AlphaBetaPruning.
@@ -20,14 +22,6 @@ public class PentagoNode extends Node {
         this.serializationString = serializationString;
     }
 
-    /**
-     * Creates new instance of the PentagoNode for given Pentago game.
-     *
-     * @param game to be used
-     */
-    public PentagoNode(Pentago game) {
-        this(game.serialize());
-    }
 
     @Override
     public int getNodeValue() {

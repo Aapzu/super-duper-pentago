@@ -76,6 +76,7 @@
                     </targetTests>
                     <excludedClasses>
                         <param>fi.aapzu.pentago.app*</param>
+                        <param>fi.aapzu.pentago.PerformanceTester</param>
                     </excludedClasses>
                 </configuration>
             </plugin>

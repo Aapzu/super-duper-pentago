@@ -343,7 +343,7 @@ public class TileTest {
         t1.addMarble(new Marble(Symbol.O), 0, 2);
         t1.addMarble(new Marble(Symbol.X), 2, 1);
         Tile t2 = new Tile();
-        assert (t2.deserialize("000001201"));
+        assertTrue(t2.deserialize("000001201"));
         assertEquals(t1, t2);
         assertFalse(t2.deserialize("0000012012")); // Too long
     }

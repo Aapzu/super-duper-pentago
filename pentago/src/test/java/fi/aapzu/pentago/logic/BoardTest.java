@@ -9,9 +9,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Map;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
@@ -100,7 +98,7 @@ public class BoardTest {
 
     @Test
     public void getTileByCoordinatesReturnsRightTile() {
-        Map<Integer, Tile> tiles = new HashMap<>();
+        HashMap<Integer, Tile> tiles = new HashMap<>();
         tiles.put(0, board.getTiles()[0][0]);
         tiles.put(1, board.getTiles()[0][1]);
         tiles.put(2, board.getTiles()[1][0]);
@@ -351,29 +349,6 @@ public class BoardTest {
     }
 
     @Test
-    public void getMarbleArrayWorks() {
-        Marble O = new Marble(Symbol.O);
-        Marble X = new Marble(Symbol.X);
-        board.addMarble(O, 0, 0);
-        board.addMarble(O, 1, 1);
-        board.addMarble(O, 2, 1);
-        board.addMarble(X, 4, 0);
-        board.addMarble(X, 4, 1);
-        board.addMarble(X, 4, 2);
-        board.addMarble(O, 1, 4);
-        board.addMarble(O, 2, 4);
-        board.addMarble(O, 4, 4);
-        assert(ArrayUtils.deepEquals(new Marble[][]{
-                {O,     null,   null,   null, X,    null},
-                {null,  O,      O,      null, X,    null},
-                {null,  null,   null,   null, X,    null},
-                {null,  null,   null,   null, null, null},
-                {null,  O,      O,      null, O,    null},
-                {null,  null,   null,   null, null, null}
-        }, board.getMarbleArray()));
-    }
-
-    @Test
     public void equalsWorks() {
         board.addMarble(new Marble(Symbol.X), 0, 0);
         board.addMarble(new Marble(Symbol.O), 2, 2);
@@ -477,7 +452,7 @@ public class BoardTest {
                 board.getTile(1, 1).serialize() +
                 "35112";
         Board b2 = new Board();
-        assert (b2.deserialize(s));
+        assertTrue(b2.deserialize(s));
         assertEquals(board, b2);
     }
 }

@@ -66,10 +66,11 @@ public class MarbleTest {
 
     @Test
     public void deserializationWorks() {
-        assert (m.deserialize("2"));
+        assertTrue(m.deserialize("2"));
         assertEquals(m.getSymbol(), Symbol.O);
-        assert (m.deserialize("1"));
+        assertTrue(m.deserialize("1"));
         assertEquals(m.getSymbol(), Symbol.X);
         assertFalse(m.deserialize("moi"));
     }
+
 }

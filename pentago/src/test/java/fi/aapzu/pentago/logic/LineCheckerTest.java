@@ -1,20 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package fi.aapzu.pentago.logic;
 
 import fi.aapzu.pentago.game.PentagoGameRuleException;
 import fi.aapzu.pentago.logic.marble.Marble;
 import fi.aapzu.pentago.logic.marble.Symbol;
-import fi.aapzu.pentago.util.ArrayUtils;
 import fi.aapzu.pentago.util.DynamicArray;
 import org.junit.*;
 import org.junit.rules.ExpectedException;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 import static org.junit.Assert.*;
 
@@ -63,8 +55,9 @@ public class LineCheckerTest {
     @Test
     public void checkLinesThrowsExceptionIfNoRows() {
         exception.expect(PentagoGameRuleException.class);
-        for (int i = 2; i < 6; i++)
+        for (int i = 2; i < 6; i++) {
             assertNull(lineChecker.checkLines(i));
+        }
         Marble m = new Marble(Symbol.X);
         board.addMarble(m, 0, 0);
         board.addMarble(m, 2, 1);
@@ -78,7 +71,7 @@ public class LineCheckerTest {
     }
 
     // This is not meant to be a test. This is just a help-method for the tests below.
-    private void checkLinesWorks(ArrayList<Integer[]> points, ArrayList<Symbol> symbols, int length) {
+    private void checkLinesWorks(DynamicArray<Integer[]> points, DynamicArray<Symbol> symbols, int length) {
         for (int i = 0; i < points.size(); i++) {
             Integer[] point = points.get(i);
             Marble m;
@@ -96,19 +89,13 @@ public class LineCheckerTest {
         assertEquals(Symbol.O, line.getSymbol());
         assertEquals(length, line.getCoordinates().size());
 
-        // Needed because ArrayList.contains(T[]) doesn't work
-        DynamicArray<DynamicArray<Integer>> copyOfPoints = new DynamicArray<>();
-        for (Integer[] point : points) {
-            copyOfPoints.add(ArrayUtils.asList(point));
-        }
-
         for (Integer[] point : line.getCoordinates()) {
-            assertTrue(copyOfPoints.contains(new DynamicArray<>(point)));
+            assertTrue(points.contains(point));
         }
     }
 
     // This is not meant to be a test. This is just a help-method for the tests below.
-    private void checkLinesReturnsNull(ArrayList<Integer[]> points, ArrayList<Symbol> symbols) {
+    private void checkLinesReturnsNull(DynamicArray<Integer[]> points, DynamicArray<Symbol> symbols) {
         for (int i = 0; i < points.size(); i++) {
             Integer[] point = points.get(i);
             Marble m;
@@ -125,7 +112,7 @@ public class LineCheckerTest {
 
     @Test
     public void checkLinesWorksHorizontally() {
-        ArrayList<Integer[]> points = new ArrayList<>();
+        DynamicArray<Integer[]> points = new DynamicArray<>();
         points.add(new Integer[]{1, 4});
         points.add(new Integer[]{2, 4});
         points.add(new Integer[]{3, 4});
@@ -136,14 +123,14 @@ public class LineCheckerTest {
 
     @Test
     public void checkLinesWorksHorizontally2() {
-        ArrayList<Integer[]> points = new ArrayList<>();
+        DynamicArray<Integer[]> points = new DynamicArray<>();
         points.add(new Integer[]{0, 4});
         points.add(new Integer[]{1, 4});
         points.add(new Integer[]{2, 4});
         points.add(new Integer[]{3, 4});
         points.add(new Integer[]{4, 4});
         points.add(new Integer[]{5, 4});
-        ArrayList<Symbol> symbols = new ArrayList<>();
+        DynamicArray<Symbol> symbols = new DynamicArray<>();
         symbols.add(Symbol.X);
         symbols.add(Symbol.O);
         symbols.add(Symbol.O);
@@ -155,7 +142,7 @@ public class LineCheckerTest {
 
     @Test
     public void checkLinesWorksHorizontally3() {
-        ArrayList<Integer[]> points = new ArrayList<>();
+        DynamicArray<Integer[]> points = new DynamicArray<>();
         points.add(new Integer[]{0, 4});
         points.add(new Integer[]{1, 4});
         points.add(new Integer[]{2, 4});
@@ -167,7 +154,7 @@ public class LineCheckerTest {
 
     @Test
     public void checkLinesWorksVertically() {
-        ArrayList<Integer[]> points = new ArrayList<>();
+        DynamicArray<Integer[]> points = new DynamicArray<>();
         points.add(new Integer[]{3, 0});
         points.add(new Integer[]{3, 1});
         points.add(new Integer[]{3, 2});
@@ -178,14 +165,14 @@ public class LineCheckerTest {
 
     @Test
     public void checkLinesWorksVertically2() {
-        ArrayList<Integer[]> points = new ArrayList<>();
+        DynamicArray<Integer[]> points = new DynamicArray<>();
         points.add(new Integer[]{3, 0});
         points.add(new Integer[]{3, 1});
         points.add(new Integer[]{3, 2});
         points.add(new Integer[]{3, 3});
         points.add(new Integer[]{3, 4});
         points.add(new Integer[]{3, 5});
-        ArrayList<Symbol> symbols = new ArrayList<>();
+        DynamicArray<Symbol> symbols = new DynamicArray<>();
         symbols.add(Symbol.X);
         symbols.add(Symbol.O);
         symbols.add(Symbol.O);
@@ -197,7 +184,7 @@ public class LineCheckerTest {
 
     @Test
     public void checkLinesWorksDowngradingDiagonallyOverTwoTiles() {
-        ArrayList<Integer[]> points = new ArrayList<>();
+        DynamicArray<Integer[]> points = new DynamicArray<>();
         points.add(new Integer[]{1, 1});
         points.add(new Integer[]{2, 2});
         points.add(new Integer[]{3, 3});
@@ -208,14 +195,14 @@ public class LineCheckerTest {
 
     @Test
     public void checkLinesWorksDowngradingDiagonallyOverTwoTiles2() {
-        ArrayList<Integer[]> points = new ArrayList<>();
+        DynamicArray<Integer[]> points = new DynamicArray<>();
         points.add(new Integer[]{0, 0});
         points.add(new Integer[]{1, 1});
         points.add(new Integer[]{2, 2});
         points.add(new Integer[]{3, 3});
         points.add(new Integer[]{4, 4});
         points.add(new Integer[]{5, 5});
-        ArrayList<Symbol> symbols = new ArrayList<>();
+        DynamicArray<Symbol> symbols = new DynamicArray<>();
         symbols.add(Symbol.X);
         symbols.add(Symbol.O);
         symbols.add(Symbol.O);
@@ -227,7 +214,7 @@ public class LineCheckerTest {
 
     @Test
     public void checkLinesWorksDowngradingDiagonallyOverThreeTiles() {
-        ArrayList<Integer[]> points = new ArrayList<>();
+        DynamicArray<Integer[]> points = new DynamicArray<>();
         points.add(new Integer[]{1, 0});
         points.add(new Integer[]{2, 1});
         points.add(new Integer[]{3, 2});
@@ -238,14 +225,14 @@ public class LineCheckerTest {
 
     @Test
     public void checkLinesWorksUpgradingDiagonallyOverTwoTiles2() {
-        ArrayList<Integer[]> points = new ArrayList<>();
+        DynamicArray<Integer[]> points = new DynamicArray<>();
         points.add(new Integer[]{0, 5});
         points.add(new Integer[]{1, 4});
         points.add(new Integer[]{2, 3});
         points.add(new Integer[]{3, 2});
         points.add(new Integer[]{4, 1});
         points.add(new Integer[]{5, 0});
-        ArrayList<Symbol> symbols = new ArrayList<>();
+        DynamicArray<Symbol> symbols = new DynamicArray<>();
         symbols.add(Symbol.X);
         symbols.add(Symbol.O);
         symbols.add(Symbol.O);
@@ -257,7 +244,7 @@ public class LineCheckerTest {
 
     @Test
     public void checkLinesWorksUpgradingDiagonallyOverThreeTiles() {
-        ArrayList<Integer[]> points = new ArrayList<>();
+        DynamicArray<Integer[]> points = new DynamicArray<>();
         points.add(new Integer[]{1, 5});
         points.add(new Integer[]{2, 4});
         points.add(new Integer[]{3, 3});
@@ -268,13 +255,13 @@ public class LineCheckerTest {
 
     @Test
     public void checkLinesReturnsNullWhenTheLineHasDifferentSymbols() {
-        ArrayList<Integer[]> points = new ArrayList<>();
+        DynamicArray<Integer[]> points = new DynamicArray<>();
         points.add(new Integer[]{0, 1});
         points.add(new Integer[]{1, 1});
         points.add(new Integer[]{2, 1});
         points.add(new Integer[]{3, 1});
         points.add(new Integer[]{4, 1});
-        ArrayList<Symbol> symbols = new ArrayList<>();
+        DynamicArray<Symbol> symbols = new DynamicArray<>();
         symbols.add(Symbol.O);
         symbols.add(Symbol.X);
         symbols.add(Symbol.O);
@@ -285,7 +272,7 @@ public class LineCheckerTest {
 
     @Test
     public void checkLinesReturnsNullWhenTheLineIsNotLongEnough() {
-        ArrayList<Integer[]> points = new ArrayList<>();
+        DynamicArray<Integer[]> points = new DynamicArray<>();
         points.add(new Integer[]{0, 1});
         points.add(new Integer[]{1, 1});
         points.add(new Integer[]{2, 1});
@@ -295,7 +282,7 @@ public class LineCheckerTest {
 
     @Test
     public void checkLinesReturnsNullWhenTheLineGoesPastTheBoard() {
-        ArrayList<Integer[]> points = new ArrayList<>();
+        DynamicArray<Integer[]> points = new DynamicArray<>();
         points.add(new Integer[]{1, 3});
         points.add(new Integer[]{1, 4});
         points.add(new Integer[]{1, 5});
@@ -306,13 +293,13 @@ public class LineCheckerTest {
 
     @Test
     public void checkLinesReturnsNullWhenTheLineHasDifferentSymbolsPastTheBoard() {
-        ArrayList<Integer[]> points = new ArrayList<>();
+        DynamicArray<Integer[]> points = new DynamicArray<>();
         points.add(new Integer[]{1, 3});
         points.add(new Integer[]{1, 4});
         points.add(new Integer[]{1, 5});
         points.add(new Integer[]{2, 0});
         points.add(new Integer[]{2, 1});
-        ArrayList<Symbol> symbols = new ArrayList<>();
+        DynamicArray<Symbol> symbols = new DynamicArray<>();
         symbols.add(Symbol.O);
         symbols.add(Symbol.O);
         symbols.add(Symbol.O);
@@ -323,7 +310,7 @@ public class LineCheckerTest {
 
     @Test
     public void checkLinesWorksWithShorterLines() {
-        ArrayList<Integer[]> points = new ArrayList<>();
+        DynamicArray<Integer[]> points = new DynamicArray<>();
 
         points.add(new Integer[]{0, 1});
         points.add(new Integer[]{1, 0});

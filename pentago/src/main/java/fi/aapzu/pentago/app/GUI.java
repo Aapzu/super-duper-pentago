@@ -7,6 +7,7 @@ import fi.aapzu.pentago.logic.Direction;
 import fi.aapzu.pentago.logic.Line;
 import fi.aapzu.pentago.logic.marble.Marble;
 import fi.aapzu.pentago.logic.marble.Symbol;
+import fi.aapzu.pentago.util.DynamicArray;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -27,9 +28,6 @@ import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -43,7 +41,7 @@ public class GUI extends Application {
     private final Circle[][] circles = new Circle[6][6];
     private Scene baseScene;
     private Stage primaryStage;
-    private List<Node> rotateButtons;
+    private DynamicArray<Node> rotateButtons;
     private Label helpLabel;
     private Label errorLabel;
     private Pane lockPane;
@@ -104,7 +102,7 @@ public class GUI extends Application {
     private void loadGame() throws IOException {
         replaceSceneContent("fxml/Game.fxml");
 
-        rotateButtons = new ArrayList<>();
+        rotateButtons = new DynamicArray<>();
         rotateButtons.addAll(baseScene.getRoot().lookupAll(".counterClockwise"));
 
         helpLabel = (Label) (baseScene.getRoot().lookup("#helpLabel"));
@@ -122,9 +120,8 @@ public class GUI extends Application {
     }
 
     private void initTiles() {
-        Set<Node> tileSet = baseScene.getRoot().lookupAll(".tile");
         int i = 0;
-        for (Node n : tileSet) {
+        for (Node n : baseScene.getRoot().lookupAll(".tile")) {
             final int x = i % 2;
             final int y = i / 2;
             tiles[y][x] = (GridPane) (n);
@@ -152,9 +149,8 @@ public class GUI extends Application {
         for (int y = 0; y < 2; y++) {
             for (int x = 0; x < 2; x++) {
                 GridPane tile = tiles[y][x];
-                Set<Node> circleSet = tile.lookupAll("Circle");
                 int i = 0;
-                for (Node n : circleSet) {
+                for (Node n : tile.lookupAll("Circle")) {
                     int cX = x * 3 + i % 3;
                     int cY = y * 3 + i / 3;
                     circles[cY][cX] = (Circle) n;

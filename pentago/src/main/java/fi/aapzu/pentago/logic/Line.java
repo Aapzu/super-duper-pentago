@@ -7,10 +7,8 @@ package fi.aapzu.pentago.logic;
 
 import fi.aapzu.pentago.game.Player;
 import fi.aapzu.pentago.logic.marble.Symbol;
+import fi.aapzu.pentago.util.ArrayUtils;
 import fi.aapzu.pentago.util.DynamicArray;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * A line on a Board.
@@ -52,7 +50,7 @@ public class Line {
                 + "\nSymbol: " + getSymbol()
                 + "\nLine:";
         for (Integer[] a : coordinates) {
-            line += "\n\t" + Arrays.toString(a);
+            line += "\n\t" + ArrayUtils.toString(a);
         }
         return line;
     }

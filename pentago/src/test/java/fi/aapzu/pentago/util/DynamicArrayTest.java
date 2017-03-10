@@ -4,10 +4,13 @@ package fi.aapzu.pentago.util;
 import fi.aapzu.pentago.logic.marble.Marble;
 import org.junit.Test;
 
+import java.util.HashSet;
+
 import static fi.aapzu.pentago.logic.marble.Symbol.O;
 import static fi.aapzu.pentago.logic.marble.Symbol.X;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class DynamicArrayTest {
 
@@ -76,7 +79,7 @@ public class DynamicArrayTest {
         DynamicArray<String> da2 = new DynamicArray<>();
 
         assertFalse(da1.isEmpty());
-        assert(da2.isEmpty());
+        assert (da2.isEmpty());
     }
 
     @Test
@@ -85,27 +88,27 @@ public class DynamicArrayTest {
         for (int i = 0; i < 100; i++) {
             da.add((long) i);
         }
-        assertEquals((Long) 36L,da.get(36));
-        assertEquals((Long) 69L,da.get(69));
+        assertEquals((Long) 36L, da.get(36));
+        assertEquals((Long) 69L, da.get(69));
     }
 
     @Test
     public void containsWorksCorrectly() {
         DynamicArray<Long> da = new DynamicArray<>(new Long[]{1L, 3L, 5L});
-        assert(da.contains(1L));
+        assert (da.contains(1L));
         assertFalse(da.contains(2L));
-        assert(da.contains(3L));
+        assert (da.contains(3L));
         assertFalse(da.contains(4L));
-        assert(da.contains(5L));
+        assert (da.contains(5L));
 
         DynamicArray<Marble[]> da2 = new DynamicArray<>(new Marble[][]{
                 {new Marble(O), new Marble(X), null},
                 {null, new Marble(X), null},
                 {new Marble(O), new Marble(O), new Marble(O)},
         });
-        assert(da2.contains(new Marble[]{new Marble(O), new Marble(X), null}));
-        assert(da2.contains(new Marble[]{null, new Marble(X), null}));
-        assert(da2.contains(new Marble[]{new Marble(O), new Marble(O), new Marble(O)}));
+        assert (da2.contains(new Marble[]{new Marble(O), new Marble(X), null}));
+        assert (da2.contains(new Marble[]{null, new Marble(X), null}));
+        assert (da2.contains(new Marble[]{new Marble(O), new Marble(O), new Marble(O)}));
         assertFalse(da2.contains(new Marble[]{new Marble(X), new Marble(O), new Marble(O)}));
         assertFalse(da2.contains(new Marble[]{null, null, null}));
     }
@@ -142,13 +145,13 @@ public class DynamicArrayTest {
         DynamicArray<String> da5 = new DynamicArray<>();
         da5.add("test");
 
-        assert(da1.equals(da3));
+        assert (da1.equals(da3));
         assertFalse(da1.equals(da2));
         assertFalse(da2.equals(da3));
 
         assertFalse(da4.equals(da5));
         da5.add("test2");
-        assert(da4.equals(da5));
+        assert (da4.equals(da5));
     }
 
     @Test
@@ -157,11 +160,65 @@ public class DynamicArrayTest {
         da.add("moi");
         assertFalse(da.isEmpty());
         da.clear();
-        assert(da.isEmpty());
+        assert (da.isEmpty());
         for (int i = 0; i < 100; i++) {
             da.add(new Integer[]{1, 2, 3});
         }
         da.clear();
-        assert(da.isEmpty());
+        assert (da.isEmpty());
+    }
+
+    @Test
+    public void equalsWorks() {
+        DynamicArray da = new DynamicArray();
+        da.add(new Integer[]{1, 2, 3, 4});
+        da.add(2);
+        da.add(3);
+        da.add(4);
+        DynamicArray da2 = new DynamicArray();
+        da2.add(new Integer[]{1, 2, 3, 4});
+        da2.add(2);
+        da2.add(3);
+        da2.add(4);
+
+        assertFalse(da.equals(null));
+        assertFalse(da.equals("aapeli"));
+
+        assertTrue(da.equals(da2));
+        assertTrue(da2.equals(da));
+
+        da.add(new DynamicArray<>(new String[]{"moi", "moimoi"}));
+        assertFalse(da.equals(da2));
+
+        da2.add(new DynamicArray<>(new String[]{"moi", "moimoi"}));
+        assertTrue(da.equals(da2));
+        assertTrue(da2.equals(da));
+    }
+
+    @Test
+    public void indexOfWorks() {
+        DynamicArray<String> da1 = new DynamicArray<>(new String[]{"moi", "moimoi", "moimoimoi"});
+        assertEquals(0, da1.indexOf("moi"));
+        assertEquals(2, da1.indexOf("moimoimoi"));
+
+        DynamicArray<Integer> da2 = new DynamicArray<>();
+        for (int i = 0; i < 1000; i++) {
+            da2.add(i);
+        }
+        for (int i = 999; i >= 0; i--) {
+            assertEquals(i, da2.indexOf(i));
+        }
+    }
+
+    @Test
+    public void addAllWorks() {
+        HashSet<String> testSet = new HashSet<>();
+        testSet.add("1");
+        testSet.add("2");
+        testSet.add("3");
+        DynamicArray<String> da = new DynamicArray<>();
+        da.addAll(testSet);
+        DynamicArray<String> da2 = new DynamicArray<>(new String[]{"1", "2", "3"});
+        assertTrue(da.equals(da2));
     }
 }

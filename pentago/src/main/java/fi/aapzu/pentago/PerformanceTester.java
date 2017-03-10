@@ -44,7 +44,6 @@ public class PerformanceTester {
             alphaBetaPruning.getBest(n, moves);
             time = System.currentTimeMillis() - ts1;
             average += time / times;
-            alphaBetaPruning.clear();
         }
         System.out.println("average: " + average + "ms");
     }

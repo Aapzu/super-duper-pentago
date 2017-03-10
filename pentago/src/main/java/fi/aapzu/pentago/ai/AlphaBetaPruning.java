@@ -1,20 +1,10 @@
-package fi.aapzu.pentago.ai;
 
-import java.util.HashMap;
+package fi.aapzu.pentago.ai;
 
 /**
  * The core element of AI. Forms a game tree and tries to find the best possible move at the moment for the Bot.
  */
 public class AlphaBetaPruning {
-
-    private final HashMap<Node, Integer> nodes;
-
-    /**
-     * Creates new instance of AlphaBetaPruning.
-     */
-    public AlphaBetaPruning() {
-        nodes = new HashMap<>();
-    }
 
     /**
      * Calculates the best move.
@@ -44,12 +34,8 @@ public class AlphaBetaPruning {
         int newDepth = depth + 1;
 
         Node[] children = node.getChildren();
-        if (nodes.containsKey(node)) {
-            return nodes.get(node);
-        }
         if (depth >= maxDepth || children.length == 0) {
             int value = meOrOpponent * node.getNodeValue();
-            nodes.put(node, value);
             return value;
         }
         int bestValue = Integer.MIN_VALUE;
@@ -63,12 +49,5 @@ public class AlphaBetaPruning {
             }
         }
         return bestValue;
-    }
-
-    /**
-     * Clears the map of nodes.
-     */
-    public void clear() {
-        nodes.clear();
     }
 }
