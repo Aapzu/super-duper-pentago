@@ -14,12 +14,13 @@ public class DynamicArray<T> implements Iterable<T> {
     /**
      * Creates and initializes a new DynamicArray.
      */
-    public DynamicArray() {}
+    public DynamicArray() {
+    }
 
     /**
      * Creates new DynamicArray and adds the content of the array to it.
      *
-     * @param array
+     * @param array array of which items will be used
      */
     public DynamicArray(T[] array) {
         itemArray = array;
@@ -31,7 +32,7 @@ public class DynamicArray<T> implements Iterable<T> {
     /**
      * Adds a item into the list and expands its size if necessary.
      *
-     * @param item
+     * @param item item to be added
      */
     public void add(T item) {
         itemArray[arrayIndex] = item;
@@ -60,6 +61,7 @@ public class DynamicArray<T> implements Iterable<T> {
     }
 
     /**
+     * Gets the item of which index is given.
      *
      * @param index index of the Object
      * @return i:th Object in the list
@@ -77,14 +79,19 @@ public class DynamicArray<T> implements Iterable<T> {
     public boolean contains(T item) {
         for (Object o : itemArray) {
             if (o == item || (o instanceof Object[] && ArrayUtils.deepEquals((Object[]) o, (Object[]) item)) ||
-                    (item.equals(o)) ) {
+                    (item.equals(o))) {
                 return true;
             }
         }
         return false;
     }
 
-
+    /**
+     * Gives the index of given item.
+     *
+     * @param item item of which the index will be given
+     * @return -1 if item is not in the list, else index
+     */
     public int indexOf(T item) {
         for (int i = 0; i < size(); i++) {
             if (this.get(i) == item || this.get(i).equals(item)) {
@@ -110,7 +117,7 @@ public class DynamicArray<T> implements Iterable<T> {
                 continue;
             }
             if (a instanceof Object[] && b instanceof Object[] && !ArrayUtils.deepEquals((Object[]) a, (Object[]) b)) {
-               return false;
+                return false;
             }
             if (a != null && !(a instanceof Object[]) && !a.equals(b)) {
                 return false;
@@ -139,7 +146,7 @@ public class DynamicArray<T> implements Iterable<T> {
 
     @Override
     public Iterator<T> iterator() {
-        return new Iterator<T> () {
+        return new Iterator<T>() {
             private int iteratorIndex = 0;
 
             @Override

@@ -30,7 +30,7 @@ D = Diagonal, V = Vertical, H = Horizontal
 
 
 ### PossibleLines
-| No. in a row\*| For player	| For opponent  |
+| No. in a row\*| Points when mine	| Points when opponents  |
 | -             | -             |  -             |
 | 0             | 0         	| 0	    	|
 | 1             | 10         	| -10  		| 
@@ -38,4 +38,4 @@ D = Diagonal, V = Vertical, H = Horizontal
 | 3             | 1000       	| -1000      	|
 | 4             | 10000      	| -10000      	|
 | 5             | Infinity      | -Infinity     |
-\* Of a possible line
+\* Of a single possible line

@@ -111,8 +111,7 @@ public class PossibleLinesTest {
                 "------\n" +
                 "------\n" +
                 "------\n");
-        int points = 2 * initialPoints +
-                initialPoints * (int) Math.pow(pointFactor, 2);
+        int points = 2 * initialPoints + initialPoints * (int) Math.pow(pointFactor, 2);
         assertEquals(points, new PossibleLines().getScore(game, 0));
     }
 

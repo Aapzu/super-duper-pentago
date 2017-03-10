@@ -54,7 +54,7 @@ public class AlphaBetaPruning {
         }
         int bestValue = Integer.MIN_VALUE;
         for (Node n : children) {
-            int value = value(-meOrOpponent, n, -beta, -alpha, newDepth, maxDepth);
+            int value = -value(-meOrOpponent, n, -beta, -alpha, newDepth, maxDepth);
             n.setAlphaBetaValue(value);
             bestValue = Math.max(value, bestValue);
             alpha = Math.max(alpha, value);
@@ -66,7 +66,7 @@ public class AlphaBetaPruning {
     }
 
     /**
-     * Clears the map of nodes
+     * Clears the map of nodes.
      */
     public void clear() {
         nodes.clear();

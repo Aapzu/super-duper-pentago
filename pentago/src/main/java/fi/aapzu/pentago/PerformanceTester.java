@@ -5,11 +5,19 @@ import fi.aapzu.pentago.ai.AlphaBetaPruning;
 import fi.aapzu.pentago.ai.PentagoNode;
 import fi.aapzu.pentago.game.Pentago;
 
+/**
+ * A simple class to test and print some performance testing about the program.
+ */
 public class PerformanceTester {
 
     static Pentago game;
     static AlphaBetaPruning alphaBetaPruning;
 
+    /**
+     * Runs the PerformanceTester.
+     *
+     * @param args program arguments
+     */
     public static void main(String[] args) {
         game = new Pentago();
         alphaBetaPruning = new AlphaBetaPruning();
@@ -35,7 +43,7 @@ public class PerformanceTester {
             PentagoNode n = new PentagoNode(game.serialize());
             alphaBetaPruning.getBest(n, moves);
             time = System.currentTimeMillis() - ts1;
-            average += time/times;
+            average += time / times;
             alphaBetaPruning.clear();
         }
         System.out.println("average: " + average + "ms");

@@ -1,0 +1,1 @@
+mvn jxr:jxr && mvn checkstyle:checkstyle

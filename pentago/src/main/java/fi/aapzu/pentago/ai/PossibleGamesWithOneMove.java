@@ -8,9 +8,9 @@ import fi.aapzu.pentago.util.DynamicArray;
 import java.util.ArrayList;
 
 /**
- * A class to determine the possible games one can get from a game state with a single move
+ * A class to determine the possible games one can get from a game state with a single move.
  */
-class PossibleGamesWithOneMove {
+public class PossibleGamesWithOneMove {
 
     private static final int[][] ROTATION_TILE_DIRECTION_POSSIBILITIES = {
         {0, 0, 1}, {0, 0, 2}, {0, 1, 1}, {0, 1, 2},
@@ -27,12 +27,12 @@ class PossibleGamesWithOneMove {
     }
 
     /**
-     * Gives all the possible moves after one move
+     * Gives all the possible moves after one move.
      *
      * @param s serialization String of the Pentago game
      * @return gameStates
      */
-    static DynamicArray<String> get(String s) {
+    public static DynamicArray<String> get(String s) {
         char symbol = s.charAt(41) == '0' ? '1' : '2';
         return getGamesAfterRotationAndMarbleInsertion(s, symbol);
     }

@@ -9,7 +9,7 @@ I'm going to use the same repository for this course, as I used a year ago. For 
 e work I did for this course.
 
 ### Algorithms And Data Structures\*
-The algorithm I use will be alpha-beta pruning and some heuristics. It would be too slow (i.e. impossible) to calculate the whole game beforehand to know the absolute best move, so I have to use some kind of heuristics to assign points for every situation.
+The algorithm I use will be negamax pruned with alpha-beta pruning, and some heuristics. It would be too slow (i.e. impossible) to calculate the whole game beforehand to know the absolute best move, so I have to use some kind of heuristics to assign points for every situation.
 
 For alpha-beta pruning I'm going to need at least some kind of stack, maybe also some other data structures. These I will implement later on the course.
 

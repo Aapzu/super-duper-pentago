@@ -233,6 +233,8 @@ public class Pentago implements Serializable {
     }
 
     /**
+     * Tells the last Move done in the game.
+     *
      * @return move the last move of the game.
      */
     public Move getLastMove() {

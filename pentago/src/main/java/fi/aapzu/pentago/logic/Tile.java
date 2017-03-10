@@ -289,6 +289,15 @@ public class Tile implements Serializable {
         return false;
     }
 
+    /**
+     * Takes coordinates on Tile, and returns what they would be after a rotation.
+     *
+     * @param x x coordinate
+     * @param y y coordinate
+     * @param d Direction of rotation
+     * @param sideLength side length of Tile
+     * @return [newX, newY]
+     */
     public static int[] translateCoordinates(int x, int y, Direction d, int sideLength) {
         int newY;
         int newX;

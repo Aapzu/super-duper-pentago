@@ -163,34 +163,4 @@ public class AlphaBetaPruningTest {
         assertEquals(-1, node.getChildren()[2].getAlphaBetaValue());
     }
 
-    @Ignore
-    @Test
-    public void itWorksWithPentagoIfDepthIs2() {
-        Pentago game = new Pentago();
-        game.addHumanPlayer("b");
-        game.addBot("a");
-        game.addMarble(1, 1);
-        game.rotateTile(1, 1, Direction.CLOCKWISE);
-        String best = ((PentagoNode) alphaBetaPruning.getBest(new PentagoNode(game), 2)).getSerializationString();
-        game.deserialize(best);
-        Move m = game.getLastMove();
-        assertNotNull(m);
-        System.out.println(game.getBoard());
-        assertEquals(2, m.getMarbleX());
-        assertEquals(0, m.getMarbleY());
-        assertEquals(0, m.getTileX());
-        assertEquals(0, m.getTileY());
-        assertEquals(Direction.CLOCKWISE, m.getRotateDirection());
-        game.addMarble(2, 0);
-        game.rotateTile(0, 0, Direction.CLOCKWISE);
-        String best2 = ((PentagoNode) alphaBetaPruning.getBest(new PentagoNode(game), 2)).getSerializationString();
-        game.deserialize(best2);
-        Move m2 = game.getLastMove();
-        assertNotNull(m2);
-        assertEquals(0, m2.getMarbleX());
-        assertEquals(1, m2.getMarbleY());
-        assertEquals(0, m2.getTileX());
-        assertEquals(0, m2.getTileY());
-        assertEquals(Direction.CLOCKWISE, m2.getRotateDirection());
-    }
 }

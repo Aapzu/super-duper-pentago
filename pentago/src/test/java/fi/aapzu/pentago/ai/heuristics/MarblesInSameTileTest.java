@@ -53,6 +53,31 @@ public class MarblesInSameTileTest {
     }
 
     @Test
+    public void getScoreWorksWithLinesOfOne() {
+        setBoard("-X---\n" +
+                "------\n" +
+                "------\n" +
+                "------\n" +
+                "------\n" +
+                "------\n");
+        assertEquals(one, new MarblesInSameTile().getScore(game, 0));
+        setBoard("------\n" +
+                "------\n" +
+                "X-----\n" +
+                "------\n" +
+                "------\n" +
+                "------\n");
+        assertEquals(one, new MarblesInSameTile().getScore(game, 0));
+        setBoard("------\n" +
+                "------\n" +
+                "--X---\n" +
+                "------\n" +
+                "------\n" +
+                "------\n");
+        assertEquals(one, new MarblesInSameTile().getScore(game, 0));
+    }
+
+    @Test
     public void getScoreWorksWithLineInOneTile() {
         setBoard("XXX---\n" +
                 "------\n" +

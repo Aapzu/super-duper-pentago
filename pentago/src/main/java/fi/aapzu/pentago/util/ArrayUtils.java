@@ -5,6 +5,13 @@ package fi.aapzu.pentago.util;
  */
 public class ArrayUtils {
 
+    /**
+     * Tests if two arrays have equal items in them.
+     * If arrays contain other arrays, also tests if they are equal.
+     * @param a1 first array
+     * @param a2 another array
+     * @return true if equals, else false
+     */
     public static boolean deepEquals(Object[] a1, Object[] a2) {
         if (a1 == a2) {
             return true;
@@ -33,6 +40,15 @@ public class ArrayUtils {
         return true;
     }
 
+
+
+    /**
+     * Return a DynamicList which contains the same elements than the array.
+     *
+     * @param array array to be returned as a list
+     * @param <T> type of the items in list
+     * @return list containing the items
+     */
     public static <T> DynamicArray<T> asList(T[] array) {
         DynamicArray<T> list = new DynamicArray<>();
         for (T item : array) {
@@ -41,6 +57,12 @@ public class ArrayUtils {
         return list;
     }
 
+    /**
+     * Gives the same array but in reverse order.
+     *
+     * @param array array to be reversed
+     * @return reverse array
+     */
     public static int[] reverse(int[] array) {
         int[] rev = new int[array.length];
         for (int i = 0, j = array.length - 1; i < array.length; i++, j--) {
@@ -49,15 +71,12 @@ public class ArrayUtils {
         return rev;
     }
 
-    @SuppressWarnings("unchecked")
-//    public static <T> T[] clone(T[] array) {
-//        Object[] clone = new Object[array.length];
-//        for (int i = 0; i < array.length; i++) {
-//            clone[i] = array[i];
-//        }
-//        return (T[]) clone;
-//    }
-
+    /**
+     * Clones char array.
+     *
+     * @param array array to be cloned
+     * @return another array equal to the original one
+     */
     public static char[] clone(char[] array) {
         char[] clone = new char[array.length];
         for (int i = 0; i < array.length; i++) {
@@ -66,27 +85,4 @@ public class ArrayUtils {
         return clone;
     }
 
-//    public static int[] clone(int[] array) {
-//        int[] clone = new int[array.length];
-//        for (int i = 0; i < array.length; i++) {
-//            clone[i] = array[i];
-//        }
-//        return clone;
-//    }
-
-//    public static long[] clone(long[] array) {
-//        long[] clone = new long[array.length];
-//        for (int i = 0; i < array.length; i++) {
-//            clone[i] = array[i];
-//        }
-//        return clone;
-//    }
-
-//    public static boolean[] clone(boolean[] array) {
-//        boolean[] clone = new boolean[array.length];
-//        for (int i = 0; i < array.length; i++) {
-//            clone[i] = array[i];
-//        }
-//        return clone;
-//    }
 }

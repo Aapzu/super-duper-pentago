@@ -25,7 +25,7 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2017</copyright>
     <item>
-      <title>File: 27,
+      <title>File: 30,
              Errors: 4,
              Warnings: 0,
              Infos: 0
@@ -144,6 +144,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="${project.url}/checkstyle.html#fi.aapzu.pentago.util.DynamicArray.java">fi/aapzu/pentago/util/DynamicArray.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="${project.url}/checkstyle.html#fi.aapzu.pentago.game.Pentago.java">fi/aapzu/pentago/game/Pentago.java</a>
                 </td>
                 <td>
@@ -153,7 +167,21 @@ under the License.
                   0
                 </td>
                 <td>
-                  2
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="${project.url}/checkstyle.html#fi.aapzu.pentago.util.ArrayUtils.java">fi/aapzu/pentago/util/ArrayUtils.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
                 </td>
               </tr>
                           <tr>
@@ -173,6 +201,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="${project.url}/checkstyle.html#fi.aapzu.pentago.ai.AlphaBetaPruning.java">fi/aapzu/pentago/ai/AlphaBetaPruning.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="${project.url}/checkstyle.html#fi.aapzu.pentago.PerformanceTester.java">fi/aapzu/pentago/PerformanceTester.java</a>
                 </td>
                 <td>
                   0
@@ -251,7 +293,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  0
+                  1
                 </td>
               </tr>
                           <tr>
